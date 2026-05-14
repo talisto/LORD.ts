@@ -1,0 +1,10 @@
+{
+    "name": "`4The Red Dragon`2",
+    "str": 2000,
+    "gold": 1000,
+    "weapon": "`)Scorching Flame`2",
+    "exp": 1000,
+    "hp": 15000,
+    "death": "  The earth shakes as the mighty beast falls.",
+    "is_dragon": true
+}

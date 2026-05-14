@@ -1,0 +1,8 @@
+FROM node:22-alpine
+
+# Build tools required for native npm modules (e.g. better-sqlite3)
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /app
+
+EXPOSE 80 2323

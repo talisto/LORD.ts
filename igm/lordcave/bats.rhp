@@ -1,0 +1,76 @@
+@;@ RHP_name: The Scary Bats
+@;@ For: The L.O.R.D. Cavern v1.5b+
+@;@ Written_by: Donald Tidmore
+@;@ Purpose:  Testing different RHP Codes
+@;@  Fidonet Email:  1:/123/450
+@;@  Email: donald.tidmore@fidotel.com, donald.tidmore@usa.net
+@;@  URL: http://www.fidotel.com/public/camelot/camelot5.htm
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.5b
+@;@@NAME@ The Scary Bats
+@;@PERCENT@ 80
+@;@@SCRIPTVERSION@ 1.07
+
+  `#You are walking in the `$Underground Cavern `#when you see several
+  `#scary-looking `9Bats `#hanging from the `%roof `#not far ahead.
+
+  `!  Should you try to run past them?, `$`n `l
+@YESNO@
+@##N
+
+  `#You decide to take another route.
+  `!  Your `%Wisdom `!is rewarded.
+
+@EXPERIENCE@ +300*LEVEL
+
+  `%  You discover a small pile of `$Gold Coins!
+  `#And you quickly add them to your pouch.
+@GOLD@ +500*LEVEL
+
+  `%You happen across a small pile of `@Emeralds!
+@GEMS@ +5
+@MORE@
+
+  `%Quickly you snatch them up, and ...
+  `$  The gems magically enhance your `@Defense power.
+@DEFENSE@ +8
+
+  `!You feel the protective power of your `#`a `$increase.
+
+@GOTO@ @#ENDING
+
+@##Y
+
+`#T`%he bats never see you! You quickly pass under them safely.
+
+  `#  However, some of the bats start flying around you.
+  `#Scared that you'll get bitten, you wet yourself.
+
+  `%  Very un-charming behavior.  Looks like you lose some `#Charm.
+@CHARM@ %-5
+
+  `%You manage to snag your `2Gems pouch `%on a rock, and
+  `%some `#Gems `%fell out of it.
+@GEMS@ -3*LEVEL
+
+  `%You trip over another rock, and lose some `2Gold.
+@GOLD@ -600*LEVEL
+
+@#ENDING
+@END@
+
+@;@ 06/14/03: Minor editing, indentation of some lines.
+@;@ 06/14: Display player's name in yellow, in opening line.
+@;@ 06/14: Display line with player's Armour Name.
+@;@ 06/15: Gems loss.  Changed to 3 Gems * Level.
+@;@ 06/15: Small Gold loss added.  600 coins * level.
+@;@ 06/17: Changed title of script to "The Scary Bats".
+
+@;@ 06/20 Note: In order for RHPTest to process GEMS code properly
+@;@  in script, it is necessary to use 1.5a for VERSION code.
+@;@  Otherwise, Rhptest reports Gems going into negative value range.
+
+@;@ 07/01: Added code to give player 5 Gems. v1.06
+@;@        Changed defense reward to 8 points, from 5 points.
+@;@        Increased experience reward to 300 * level.
+@;@ 11/05/03: Removed version number from RHP_Name line.

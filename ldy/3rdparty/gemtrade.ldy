@@ -1,0 +1,1623 @@
+@#INSTALL
+@eventname The Gem Trader
+@author Donald Tidmore
+@authid GEM-TRADER-152
+@codebegin
+@runsub GEMTRADE &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@DEBUG SUPER ON     ; Added 04/16/06 for LORD/32 script use debugging
+
+; ===============================================================
+; The Gem Trader v1.52
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+;
+; Requires LORD v4.05+.  Fully tested using DOS LORD v4.07/4.08 beta.
+; ===============================================================
+;
+@#GEMTRADE
+
+;  06/03/2006. Can't run the DEBUG SUPER ON command at this point.
+
+@display
+`c  `!         Special Encounter in `0The Forest
+`l
+   `%While going through the `2Forest, `%you come across a beautiful
+   meadow.  Sitting beside a bubbling spring, you find a man stirring
+   four copper kettles filled with `0Red, Blue, Green, and Orange
+   `%liquids.  There are several hundred bottles lying around him.
+
+   Some are filled, and some are empty.  You introduce yourself, and
+   he tells you that his name is `#Peddler Jack. `%After engaging in
+   pleasant conversation for awhile, you ask what the bottles are for.
+
+   `#Jack `%replies, "Well, `$&nick, `%they contain potions that I
+   create here, and then sell to the Inn's Bartender.  I use magic
+   and special ingredients to convert the spring's water into the
+   Elixirs that enhance `!Hitpoints, `@Strength, `%or `#Defense.  `%I also
+   provide various merchants and magicians with `!Charm `$Elixirs.
+
+   `%In return for your help, and pleasant company, I'll let you buy
+   some at a discount price.  For each `$3 `0Gems `%that you have, I will
+   sell you `$2 `%of my `0magical elixir potions.
+@enddisplay
+@writeln `@  ------------------------------------------------------
+
+@hitakey      ; Restored 08-08-05. Required.
+@writeln
+
+; =====================================================================
+; Global Variables: Used by entire script.
+; ----------------------------------------------------------
+@math &N30 = &Pge + 0   ; Store Gems on Hand stat.
+@math &N31 = &Phx + 0   ; Store Max Hitpoints stat.
+@math &N32 = &Psr + 0   ; Store Strength points stat.
+@math &N33 = &Pde + 0   ; Store Defense points stat.
+@math &N34 = &Pht + 0   ; Store usable Hitpoints stat.
+@math &N35 = &Pch + 0   ; Store Charm Points stat.
+
+; 07/23: Revised usage of N36 variable.  Created N37, B1, and B2 vars.
+; 08/24: Removed B2 variable. Changed B1 to N24, for Lord 4.06 usage.
+; --------------------------------------------------------------------
+@math &N36 = &Pba + 0   ; Stores Gold in Bank stat.
+@math &N37 = &Pff + 0   ; Stores Forest Fights stat.
+
+@set &N24 to 0          ; Preset Horse handling variable to 0 (False).
+
+@math &N38 = &Pki + 0   ; Store Kids stat.  12/15/03.
+; =====================================================================
+
+
+@LABEL JACK_FREE-HP
+;  Determine if they have enough Gems for 1 pair of potions, or more.
+; ------------------------------------------------------------------
+@math &N1 = &N30 / 3    ; Store # of potion deals player can afford.
+
+@if &N30 < 3 1
+  @begin
+     @display
+   `%You look to see how many `0Gems `%you are carrying in your pouch,
+   and discover you don't have enough.  You thank him for his kind
+   offer, but you can't afford any right now, and start to leave.
+
+   `#Jack `%smiles, and gives you a Yellow vial. "Here is a `$Free
+   Hitpoint potion, `%for the companionship you've given me," he says.
+     @enddisplay
+
+     ; ------------------------------------------------------------------
+     @math &N3 = &N34 + 1         ; Gives player 1 free Hit Point.
+     @set &Pht to &N3             ; 03/19/03: changed to &Pht from &Phx.
+     @writeln
+     @writeln    `%After drinking the potion, you thank him and leave.
+     @writeln
+     @writeln      `#Your `$Hitpoints `#were raised `$to `0&N3 `%points.
+     @goto JACK_ENDING
+  @end
+@endif 1
+
+@display
+   `%Well, `$&nick," `#Peddler Jack `%says, `%I see that you are ready to
+   do some Gem Trading with me.  OK-dokey, there is an `$9,999 `0potion
+   limit `%since I have to keep some of my stock for the `#Bartender
+   `%and others to buy.
+@enddisplay
+
+
+;  Process player's request to receive potions - All types:.
+;        N2 variable stores the maximum potions they can afford.
+; ------------------------------------------------------------------
+ @LABEL JACK_POTIONS-SALE
+@writeln
+@math &N2 = &N1 * 2
+
+@display
+   `#Jack `%smiles, and says "You may buy my potions, which are for
+   `@(H)`$itPoints, `@(S)`$trength points, `@(D)`$efense Points, or for
+   `@(C)`$harm Points.
+
+   `%Or you may pay an `$4 `0Gems `#Admission Fee `%and check out my
+   `@(T) `$Special Deals.  `%Or you can `@(P)`$ass on my offers, `%and leave
+    my camp to look for more adventure in the `#Forest.
+@enddisplay
+
+@writeln
+@choice HSDCTP `$What is your choice? `#[`0H`2S`$D`@C`#T`0P]
+
+@case response 1
+;  Process Player's choice - Hitpoint potions:
+; ------------------------------------------------------------------
+H: @begin
+     @display
+   `#You can afford to purchase up to `$&N2 `#Potions.
+
+   `%He says, "So you want some `@Hit-Points `!Potions. `%OK, `$&nick,
+   `%how many of them do you wish to purchase today from me?" `@
+     @enddisplay
+
+   ;  Limit variable size to 4 digits;  allows up to 9,999.  (11/02/2002)
+     @promptn 20 4           ; Stores # of potions requested.
+
+     @if &N20 = 0 2               ; Test for player entering zero.
+       @goto JACK_ZERO-POTIONS
+     @endif 2
+
+     @math &N4 = &N20 / 2    ; Compute # of 2-potion "deals".
+
+   ; Process user who wants only 1 Hitpoint potion.
+     @if &N20 = 1 3          ; Process 1 potion request.
+       @set &N4 to 1
+     @endif 3
+
+     @math &N5 = &N4 * 3     ; Determines # of Gems to deduct.
+     @math &N6 = &N2 + 1     ; Checks for valid purchase request.
+
+     @if &N20 < &N6 4
+       @goto JACK_HITMAX        ;Player gave an honest, valid request.
+     @else 4                 ; Added needed identifier. M. Preslar. 04/12/05.
+       @goto JACK_POTION-PENALTY   ;Player lied to Peddler Jack. Very BAD!
+     @endif 4
+   @end            ; Ending of Hitpoint potion request code section.
+   ; ===================================================================
+
+
+   ; Honesty Test: Hitpoints Routine:
+   ; ------------------------------------------------------------------
+   @label JACK_HITMAX               ; Compute new Gems on Hand total.
+   @math &N8 = &N30 - &N5         ; Deduct Gems used in potions purchase.
+   @set &Pge to &N8               ; Reset Gems on Hand stat.
+   @math &N30 = &N8 + 0
+   @math &N31 = &Phx + 0          ; Store their current Max Hitpoints.
+
+   ; N9 stores number of Potion Deals to sell.  If request was for 1
+   ; potion, sell 2 potions to player.  And deduct 3 Gems.
+
+   ; N20 is how many Max Hitpoint Potions the player requested.
+   ; ------------------------------------------------------------------
+   @if &N4 = 1 5                 ; 02/13/05 code block
+     @begin
+       @GOTO ONE_HITMAX_TRADE
+     @end
+   @endif 5
+   ; ==========================================================
+
+   ; -------------------------- 02/13/2005 code:
+   ; Process Multiple potions trade:  VERIFIED 11:55 pm 02/13/05
+
+   @math &N9 = &N31 + &N20    ; Sell # of Max HP potions requested.
+
+   @set &Phx to &N9               ; Resets Max Hitpoints to N9 Var's value.
+   ; -------------------------- End of 02/13/05 revision block.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink each of the
+   @writeln    `$&N20 `!Blue bottles `%that `#Peddler Jack `%hands you.  You feel a
+   @writeln    surge of `2Health `%sweep over your body.
+   @writeln                      ; 02/14/05: blank line added.
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin                      ; 12/18: changed comparison # to 32000.
+       @set &N25 to 1
+       @set &Phx to 32000        ; 11/16/02 fix
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ============================================================
+
+
+   ; Single Max HitPoint Sale Routine:  Created 02/13/2005
+   ; ------------------------------------------------------------------
+   @label ONE_HITMAX_TRADE        ; Compute new Gems on Hand total.
+   @math &N8 = &N30 - &N5         ; Deduct Gems used in potions purchase.
+   @set &Pge to &N8               ; Reset Gems on Hand stat.
+   @math &N30 = &N8 + 0
+   @math &N31 = &Phx + 0          ; Store their current Max Hitpoints.
+
+   ; N9 stores number of Potion Deals to sell.  If request was for 1
+   ; potion, sell 2 potions to player.  And deduct 3 Gems.
+
+   @math &N9 = &N31 + 2           ; Sell 2 HitPoint Potions
+   @set &N20 to 2                 ; Set potions requested to 2
+
+   @set &Phx to &N9               ; Resets Max Hitpoints to N9 Var's value.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink both of the
+   @writeln    `!Blue bottles `%that `#Peddler Jack `%hands you.  You feel a
+   @writeln    tiny surge of `2Health `%inside your body.
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin                      ; 12/18: changed comparison # to 32000.
+       @set &N25 to 1
+       @set &Phx to 32000        ; 11/16/02 fix
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ============================================================
+
+
+;  Process player's choice of Strength Potions:
+; ------------------------------------------------------------------====
+S: @begin
+     @display
+   `#You can afford to purchase up to `$&N2 `#Potions.
+
+   `%He says, "So you want some `@Strength `!Potions. `%OK, `$&nick,
+   `%how many of them do you wish to purchase today from me?" `@
+     @enddisplay
+
+     @promptn 20 4
+
+     @if &N20 = 0 2               ; Test for player entering zero.
+       @goto JACK_ZERO-POTIONS
+     @endif 2
+
+     @math &N4 = &N20 / 2         ; Compute # of 2-potion deals requested.
+
+     @if &N20 = 1 3
+       @set &N4 to 1
+     @endif 3
+
+     @math &N5 = &N4 * 3
+     @math &N6 = &N2 + 1          ; Used for Honesty testing.
+
+     @if &N20 < &N6 4
+       @goto JACK_STRENGTH
+     @else 4                 ; Added needed identifier. M. Preslar. 04/12/05.
+       @goto JACK_POTION-PENALTY
+     @endif 4
+   @end            ; Ending of Strength potion request code section.
+   ; ===================================================================
+
+
+   ; Honesty Test: Strength Potions Routine:
+   ; ------------------------------------------------------------------
+   @label JACK_STRENGTH
+   @math &N8 = &N30 - &N5
+   @set &Pge to &N8
+   @math &N30 = &N8 + 0
+   @math &N32 = &Psr + 0
+
+   ; ----------------------------------------------------------
+   @if &N4 = 1 5                 ; 02/14/05 code block
+     @begin
+       @GOTO ONE_STRENGTH_TRADE
+     @end
+   @endif 5
+   ; ==========================================================
+
+   ; -------------------------- 02/14/2005 code:
+   ; Process Multiple potions trade:  VERIFIED Feb. 2005.
+
+   @math &N9 = &N32 + &N20    ; Sell # of Strength potions requested.
+
+   @set &Psr to &N9           ; Resets Strength points to N9 Var's value.
+   ; -------------------------- End of 02/14/05 revision block.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink each of the
+   @writeln    `$&N20 `0Green bottles `%that `#Peddler Jack `%hands you.  You feel that
+   @writeln    `%a surge in the offensive power of your `2&Pwe.
+   @writeln
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin
+       @set &N25 to 2
+       @set &Psr to 32000        ; 11/16/02 fix
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ============================================================
+
+
+   ; Single Strength Point Sale Routine:  Created 02/14/2005
+   ; ------------------------------------------------------------------
+   @label ONE_STRENGTH_TRADE      ; Compute new Gems on Hand total.
+   @math &N8 = &N30 - &N5         ; Deduct Gems used in potions purchase.
+   @set &Pge to &N8               ; Reset Gems on Hand stat.
+   @math &N30 = &N8 + 0
+   @math &N32 = &Psr + 0          ; Store their current Strength Points.
+
+   ; N9 stores number of Potion Deals to sell.  If request was for 1
+   ; potion, sell 2 potions to player.  And deduct 3 Gems.
+
+   @math &N9 = &N32 + 2           ; Sell 2 HitPoint Potions
+   @set &N20 to 2                 ; Set potions requested to 2
+
+   @set &Psr to &N9               ; Resets Strength Points to N9 Var's value.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink both of the
+   @writeln    `0Green bottles `%that `#Peddler Jack `%hands you.  You feel a
+   @writeln    `%tiny increase in your expertise in wielding your `2&Pwe .
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin                      ; 12/18: changed comparison # to 32000.
+       @set &N25 to 1
+       @set &Psr to 32000        ; 11/16/02 fix
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ============================================================
+
+
+;  Process player's choice of Defense Potions:
+; ------------------------------------------------------------------====
+D: @begin
+     @display
+   `#You can afford to purchase up to `$&N2 `#Potions.
+
+   `%He says, "So you want some `@Defense `!Potions. `%OK, `$&nick,
+   `%how many of them do you wish to purchase today from me?" `@
+     @enddisplay
+
+     @promptn 20 4
+
+     @if &N20 = 0 2               ; Test for player entering zero.
+       @goto JACK_ZERO-POTIONS
+     @endif 2
+
+     @math &N4 = &N20 / 2         ; Compute # of 2-potion deals requested.
+
+     @if &N20 = 1 3
+       @set &N4 to 1
+     @endif 3
+
+     @math &N5 = &N4 * 3
+     @math &N6 = &N2 + 1          ; Used for Honesty testing.
+
+     @if &N20 < &N6 4
+       @goto JACK_DEFENSE
+     @else 4                 ; Added needed identifier. M. Preslar. 04/12/05.
+       @goto JACK_POTION-PENALTY
+     @endif 4
+   @end            ; Ending of Defense potion request code section.
+   ; ===================================================================
+
+
+   ; Honesty Test: Defense Potions Routine:
+   ; ------------------------------------------------------------------
+   @label JACK_DEFENSE
+   @math &N8 = &N30 - &N5
+   @set &Pge to &N8
+   @math &N30 = &N8 + 0
+   @math &N33 = &Pde + 0
+
+   ; ----------------------------------------------------------
+   @if &N4 = 1 5                 ; 02/14/05 code block
+     @begin
+       @GOTO ONE_DEFENSE_TRADE
+     @end
+   @endif 5
+   ; ==========================================================
+
+   ; -------------------------- 02/14/2005 code:
+   ; Process Multiple potions trade:  VERIFIED Feb. 2005.
+
+   @math &N9 = &N33 + &N20    ; Sell # of Defense potions requested.
+
+   @set &Pde to &N9           ; Resets Defense points to N9 Var's value.
+   ; -------------------------- End of 02/14/05 revision block.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink each of the
+   @writeln    `$&N20 `@Red bottles `%that `#Peddler Jack `%hands you.  When you are
+   @writeln    finished, you realize that the protective power of your
+   @writeln    `@&Par `%has increased.
+   @writeln                      ; 02/14/05: blank line added.
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin
+       @set &N25 to 3
+       @set &Pde to 32000        ; 11/16/02 fix
+
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ============================================================
+
+
+   ; Single Defense Point Sale Routine:  Created 02/14/2005
+   ; ------------------------------------------------------------------
+   @label ONE_DEFENSE_TRADE      ; Compute new Gems on Hand total.
+   @math &N8 = &N30 - &N5         ; Deduct Gems used in potions purchase.
+   @set &Pge to &N8               ; Reset Gems on Hand stat.
+   @math &N30 = &N8 + 0
+   @math &N33 = &Pde + 0          ; Store their current Defense Points.
+
+   ; N9 stores number of Potion Deals to sell.  If request was for 1
+   ; potion, sell 2 potions to player.  And deduct 3 Gems.
+
+   @math &N9 = &N33 + 2           ; Sell 2 HitPoint Potions
+   @set &N20 to 2                 ; Set potions requested to 2
+
+   @set &Pde to &N9               ; Resets Defense Points to N9 Var's value.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink both of the
+   @writeln    `@Red bottles `%that `#Peddler Jack `%hands you.  When you are done,
+   @writeln    `%you feel the protective power of your `@&Par `%increase slightly.
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin                      ; 12/18: changed comparison # to 32000.
+       @set &N25 to 1
+       @set &Pde to 32000        ; 11/16/02 fix
+
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ============================================================
+
+
+C: @begin                    ; Added on 11/16/2002.
+     @display
+   `#You can afford to purchase up to `$&N2 `#Potions.
+
+   `%He says, "So you want some `@Charm `!Potions. `%OK, `$&nick,
+   `%how many of them do you wish to purchase today from me?" `@
+     @enddisplay
+
+   ;  Limit variable size to 4 digits;  allows up to 9,999.
+     @promptn 20 4           ; Stores # of potions requested.
+
+     @if &N20 = 0 2               ; Test for player entering zero.
+       @goto JACK_ZERO-POTIONS
+     @endif 2
+
+     @math &N4 = &N20 / 2    ; Compute # of 2-potion "deals".
+
+   ; Process user who wants only 1 Charm Point potion.
+     @if &N20 = 1 3          ; Process 1 potion request.
+       @set &N4 to 1
+     @endif 3
+
+     @math &N5 = &N4 * 3     ; Determines # of Gems to deduct.
+     @math &N6 = &N2 + 1     ; Checks for valid purchase request.
+
+     @if &N20 < &N6 4
+       @goto JACK_CHARM        ;Player gave an honest, valid request.
+     @else 4                  ; Added needed identifier. M. Preslar. 04/12/05.
+       @goto JACK_POTION-PENALTY   ;Player lied to Peddler Jack. Very BAD!
+     @endif 4
+   @end            ; Ending of Charm Point potion request code section.
+   ; ===================================================================
+
+
+   ; Honesty Test: Charm Points Routine:
+   ; ------------------------------------------------------------------
+   @label JACK_CHARM               ; Compute new Gems on Hand total.
+   @math &N8 = &N30 - &N5         ; Deduct Gems used in potions purchase.
+   @set &Pge to &N8               ; Reset Gems on Hand stat.
+   @math &N30 = &N8 + 0
+   @math &N35 = &Pch + 0          ; Store their current Charm Points.
+
+   ; ----------------------------------------------------------
+   @if &N4 = 1 5                 ; 02/14/05 code block
+     @begin
+       @GOTO ONE_CHARM_TRADE
+     @end
+   @endif 5
+   ; ==========================================================
+
+   ; -------------------------- 02/14/2005 code:
+   ; Process Multiple potions trade:  VERIFIED Feb. 2005.
+
+   @math &N9 = &N35 + &N20    ; Sell # of Charm potions requested.
+
+   @set &Pch to &N9           ; Resets Charm points to N9 Var's value.
+   ; -------------------------- End of 02/14/05 revision block.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink each of the
+   @writeln    `$&N20 `@Orange bottles `%that `#Peddler Jack `%hands you.  You feel
+   @writeln    a surge in your personality's `$Charm power `%sweep over you.
+   @writeln                      ; 02/14/05. blank line added.
+
+   @if &N9 > 32000 6             ; Range error-control checking.
+     @begin
+       @set &N25 to 4
+       @set &Pch to 32000        ; 11/16/02 fix
+
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ===================================================================
+
+
+   ; Single Charm Point Sale Routine:  Created 02/14/2005
+   ; ------------------------------------------------------------------
+   @label ONE_CHARM_TRADE      ; Compute new Gems on Hand total.
+   @math &N8 = &N30 - &N5         ; Deduct Gems used in potions purchase.
+   @set &Pge to &N8               ; Reset Gems on Hand stat.
+   @math &N30 = &N8 + 0
+   @math &N35 = &Pch + 0          ; Store their current Charm Points.
+
+   ; N9 stores number of Potion Deals to sell.  If request was for 1
+   ; potion, sell 2 potions to player.  And deduct 3 Gems.
+
+   @math &N9 = &N35 + 2           ; Sell 2 HitPoint Potions
+   @set &N20 to 2                 ; Set potions requested to 2
+
+   @set &Pch to &N9               ; Resets Charm Points to N9 Var's value.
+
+   @writeln
+   @writeln    `%You hand over `$&N5 `0Gems `%to him. Then you drink both of the
+   @writeln    `@Orange bottles `%that `#Peddler Jack `%hands you.  You feel a
+   @writeln    `%tiny surge in your personality's `$Charm power.
+
+   @if &N9 > 32000 6             ; 10/25: Error-control code added.
+     @begin                      ; 12/18: changed comparison # to 32000.
+       @set &N25 to 1
+       @set &Pch to 32000        ; 11/16/02 fix
+
+       @goto JACK_MAX-STATS
+     @end
+   @endif 6
+
+   @goto JACK_CHECK_GEMS    ; Determine if they have any Gems left.
+   ; ===================================================================
+
+
+; Special Deals section - Check to see if they can afford Horse, Admission Fee.
+; ===============================================================
+T: @begin
+     @if &N30 < 4 2          ; Can they pay Admission Fee?
+       @begin
+         @writeln
+         @display
+   `#Peddler Jack `%watches you check your `0Gems `%pouch. "Sorry, `$&nick,
+   `%but you can't afford my `$4 `0Gems `%Admission Fee.  So you may not see
+   the `#Special Deals `%today.  Thanks for visiting, and come back when you
+   have plenty of `0Gems `%to trade for my merchandise."
+         @enddisplay
+         @goto JACK_ENDING
+       @end
+     @endif 2
+
+      @if &N30 < 20 3         ; Can they pay the Fee, and Buy Horse?
+       @begin
+         @writeln
+         @display
+   `%After watching you count your `0Gems, `#Jack `%says, "Sorry, `$&nick,
+   `%but you must have `$20+ `0Gems `%in order to make a purchase in my
+   `#Special Deals `%section.  You may keep your `@4 `0Gems `%Admission Fee,
+   and you may consider buying some `#Potions `%instead.
+         @enddisplay
+         @goto JACK_CHECK_GEMS
+       @end
+     @endif 3
+
+     @math &N8 = &N30 - 4       ; Collect the 4-Gems Admission Fee
+     @set &Pge to &N8
+     @math &N30 = &N8 + 0       ; Resets the Gems handling variable.
+
+     @writeln
+     @display
+   `%"Thank you for the `$4 `0Gems," `#Jack `%says, as he collects them from
+   you.  "Now then, we can do some `!Special Deals `%business."
+     @enddisplay
+     @writeln
+     @goto JACK_DEALS-MENU
+   @end
+   ; ===================================================================
+
+;  Process Player's choice to skip any purchase.
+;  --------------------------------------------------
+P: @begin
+     @writeln
+     @writeln  `%You choose to keep your `0Gems `%for a future use.
+     @writeln  Thanking him for the pleasant company, you move on.
+     @goto JACK_ENDING
+   @end
+@endcase 1         ; Ending of script's main menu processing area.
+; ===================================================================
+
+
+;  Penalty section for dishonesty while buying Potions:
+;  Take 95% usable Hitpoints, 50% Gems, and 10% Charm from player.
+;  ------------------------------------------------------------------
+@label JACK_POTION-PENALTY
+  @writeln
+  @writeln     `#Jack `@glares at you, `%Asking me for `$&N20 `0potions! `%I told you
+  @writeln     that you could only afford `$&N2 `0potions!  `%Well, `$&nick,
+  @writeln     `%your dishonesty is going to cost you `@BIG-TIME!
+  @writeln  `@ - - - - - - - - - - - - - - - - - - - - - - - - - -
+  @writeln
+
+  ;     Hitpoint penalty computation:
+  @math &N12 = &N34 / 100
+  @math &N13 = &N12 * 95
+  @math &N14 = &N34 - &N13   ; Deduct Hitpoint penalty.
+  @set &Pht to &N14
+
+  ;     Charm point penalty computation:
+  @math &N15 = &N35 / 10
+  @math &N16 = &N35 - &N15   ; Deduct Charm penalty.
+  @set &Pch to &N16
+
+  ;     Gems confiscation penalty computation:
+  @math &N17 = &N30 / 2
+  @math &N18 = &N30 - &N17   ; Deduct Gems penalty..
+  @set &Pge to &N18
+
+  ;     Give player their punishment:
+  @hitakey
+  @display
+   `#Peddler Jack `%rolls up his sleeves, and with a mean look in his
+   eyes, he lets you have it!  `@BAM WHAM ZAP CRUNCH THWACK 
+
+   `%He beats you senseless, but doesn't kill you.  You `#LOSE &N13 
+   `$Hitpoints `%during the beating.  The bruises, loss of blood, broken
+   bones, wounds, two black eyes, and bloody nose cost you `$&N15 
+   `$Charm points.
+
+   `%As you lie there groaning, `#Jack `%picks up your `0Gems `%bag.  "`$&nick,
+   `%I am confiscating half of your `0Gems.  `%After removing `$&N18 `0Gems
+   `%from the pouch, he tosses it down on top of you.   `@"Now then, get
+   out of my camp, and get lost!" 
+
+   `%You manage to stand up, and stumble away from the camp in pain.
+   Time to find the Healers and hope they can relieve your suffering.
+
+   `%You vow that you will `@NEVER try to cheat `#Peddler Jack `%again!
+  @enddisplay
+  @goto JACK_ENDING
+; ===================================================================
+
+
+;  Created for displaying specific Menus to players - 07/24/02.
+;  ------------------------------------------------------------
+@label JACK_DEALS-MENU
+  @hitakey
+  @clrscr
+
+  @writeln            `$PEDDLER JACK'S SPECIAL DEALS: `@
+  @writeln   ----------------------------------------------------------
+  @writeln      `%FOR SALE TODAY:   Select letter in ( ) to choose option.
+  @writeln
+  @writeln  `$(A) Horse `%- Buy one for `$16 `0Gems.
+
+  @if &Pho is true 2
+    @begin
+      @writeln       `#Note: You already have a `0Horse.
+      @set &N24 to 1        ; Set var. for Horse to True (1).
+    @end
+  @endif 2
+  @writeln
+
+;  ==================================================================
+  @if &N30 > 31 3     ; Must have 32+ gems to see Fairy option lines.
+    @begin
+      @writeln  `$(B) Fairy `%- Buy one for `$32 `0Gems.
+      @if &Pfa is true 4
+        @begin
+          @writeln        `#Note: You already have a `0Fairy. `%
+          @set &B2 to 1        ; Set Boolean var. for Fairy to True (1).
+          @writeln
+        @end
+      @endif 4
+
+      @writeln      `%---------------------------------------------------------
+      @writeln      `@Notice: `!The Fairy trade will ONLY work if you are using
+      @writeln      `!a post-April 2002 compilation of LORD v4.07 beta.
+      @writeln      `% --------------------------------------------------------
+    @end
+  @endif 3
+  @writeln
+
+; ==================================================================
+  @if &N30 > 39 5      ; Must have 40+ gems to see Fairy option lines.
+    @begin
+      @writeln  `$(C) Adopt Orphan Kids `%- Each one costs `$40 `0Gems.
+      @writeln        `#Notes: `%You currently have `$&N38 `!Kids.
+      @WriteLn        `%And you can do up to `$600 `%adoptions per gems trade. `%
+    @end                     ;06/17/06: fixed error. Changed 99 to 250.
+  @endif 5                   ;06/17/06: Changed 250 to 400.
+              ;10/18/06: Changed per-trade Adoptions limit to 600.
+
+  @writeln              ; added WriteLn statement 12/17/03.
+;  ===================================================================
+
+  @writeln   `%You have `#&N30 `0Gems `%left in your Gems Pouch.
+  @writeln
+  @writeln   `%Please enter the `#LETTER `%of your choice below:
+
+  @if &N30 > 39 6                 ; Revised 12/15/03
+    @choice QABC `$(`#Q `0- Exit menu, `#A `0- Horse, `#B `0- Fairy, `#C `0- Adoption)
+  @else 6               ; Added needed identifier. M. Preslar. 04/12/05.
+    @if &N30 > 31 7               ; Added 12/15/03
+      @choice QAB `$(`#Q `0- Exit menu, `#A `0- Buy Horse, `#B `0- Buy Fairy)
+    @else 7             ; Added needed identifier. M. Preslar. 04/12/05.
+      @choice QA `$(`#Q `0- Exit menu, `#A `0- Buy Horse)
+    @endif 7
+  @endif 6
+
+  @case response 3
+  Q: @begin
+       @writeln
+       @display
+   `%Thank you for viewing my `!Special Deals `%today.  You may now
+   take another look at the Potions selections, or you may choose 
+   to leave my camp," `#Peddler Jack `%tells you.
+       @enddisplay                     
+       @goto JACK_CHECK_GEMS
+     @end
+
+  A: @begin
+       @goto JACK_HORSE-SALE
+     @end
+
+  B: @begin
+       @runsub GEMFAIRY gemfairy.ldy
+     @end
+
+  C: @begin                       ; Added case section 12/15/03
+       @goto JACK_ADOPTIONS
+     @end
+  @endcase 3
+
+  @writeln   INVALID response.  Ending script now.
+  @goto JACK_ENDING
+; ===================================================================
+
+
+; ====================================================================
+;  Revised section to contain Children Adoption material. 12/15/2003.
+;  ------------------------------------------------------------
+@label JACK_ADOPTIONS
+  @writeln                  ;06/17/06: Changed 250 to 400.
+         ;10/18/06: Changed per-trade Adoptions limit to 600.
+
+  @display          ; Wording revised 05/11/05
+  `%OK, tell me how `#MANY `!Orphans `%you wish to trade Gems for
+  today. There is a limit of `$600 `0Kids `%per Multiple purchase.
+
+    `!(Enter number at following prompt:)  `@
+  @enddisplay
+
+  @promptn 20 3     ; Allows player to type two-digit number.
+                    ; 04/09/06: Revised to allow up to 250 value.
+                    ; 06/17/06: Revised to allow up to 400 value.
+         ;10/18/06: Changed per-trade Adoptions limit to 600.
+
+  @if &N20 = 0 8
+    @begin
+      @writeln
+      @display
+  `2"Jack `%looks at you.  "So you changed your mind about `$adopting `!Orphans?
+  `%All right then, I'm not interested in doing business with you any  
+  more today."  You leave `2Jack's `%camp, and head off into the `#Forest.
+      @enddisplay
+
+      @goto JACK_ENDING      ; Terminates script execution
+    @end
+  @endif 8
+
+  @if &N20 = 1 9             ; New code block. 05/11/05
+    @begin
+      @goto SINGLE_ADOPTION       ; Fully tested as of 05/11/05.
+    @end
+         ;10/18/06: Changed per-trade Adoptions limit to 600.
+
+  @else 9
+    @begin
+      @if &N20 > 600 10      ; 04/09/06: Limit to 250 Kids/trade.
+        @begin               ; 06/17/06: Limit is 400 kids/trade.
+          @set &N20 to 600
+          @writeln
+          @WriteLn  `!Reduced your request to `$600 `%Orphans.
+          @WriteLn  `!Adoptions are limited to `$600 `%Kids per trade.
+        @end
+      @endif 10              ; end of 04/09/06 code block.
+
+      @goto MULTIPLE_ADOPTIONS    ; Fully tested as of 05/11/05.
+    @end
+  @endif 9
+
+
+; ============================================================
+@label SINGLE_ADOPTION   ; Section created 05/11/2005.
+  @writeln               ; Fully tested as of 05/11/05.
+
+  @display
+  `%"So you want to adopt just `!ONE `$Orphan `%today?   `$OK, pay
+  me `#40 `0Gems `%now," `#Jack `%says.  `!(Enter `$0 `!to Cancel purchase.)  `@
+  @enddisplay
+
+  @promptn 20 2
+
+  @if &N20 = 0 8
+    @begin
+      @writeln
+      @display
+  `2"Jack `%looks at you.  "So you changed your mind about `$adopting an `!Orphan?
+  `%All right then, I'm not interested in doing business with you any  
+  more today."  You leave `2Jack's `%camp, and head off into the `#Forest.
+      @enddisplay
+      @goto JACK_ENDING      ; Terminates script execution
+    @end
+  @endif 8
+
+  @if &N20 < 40 9
+    @begin                   ; Player is dishonest, offers <40 Gems
+      @writeln
+      @display          ; Rewrote using IGM code 05/11/05.
+   `$Uh Oh, you made `@Jack `$mad.  You are either `%STUPID `$or you
+   `$tried to `@CHEAT `$him!  For Pete''s sake, the price is `@40 GEMS!
+   `$to `!Adopt an `0Orphan Child!  `$You are in `@BIG TROUBLE `$now.
+      @enddisplay
+      @writeln
+
+      @goto JACK_PUNISH-CHEATERS
+    @end
+  @endif 9
+  ; --------------------------------------------------------
+
+  @if &N20 > 40 10                ; Process Extra Gems payment
+    @begin
+      @math &N8 = &N20 - 40       ; Collect price for 1 Orphan.
+      @math &N9 = &N30 - &N20
+      @set &Pge to &N9            ; Reset Gems on Hand stat.
+      @math &N30 = &N9 + 0
+      @writeln
+
+        @display
+   `#Jack `%collects the `$&N20 `0Gems `%that you gave him for an `!Orphan.
+
+   `%After counting them, he looks at you and smiles.  "`$&nick, 
+   `%are you feeling OK today?  You gave me `$&N8 `0Gems `%too many.  Well
+   thank you, and here is an extra bottle of `2Milk `%for the `!Child,
+   `%in exchange for those extra `0Gems."
+
+    `@ --------------------------------------------------------------
+      @enddisplay
+
+      ;  08/16: Add code for Charm point handling:
+      ;  10/02/06: Added use of &N14 in following code lines.
+      @math &N13 = &N8 * 3          ; 10/02/06: 3 Charm per Extra Gem paid.
+      @math &N14 = &N35 + &N13      ; 10/02/06: recompute value of Charm.
+      @set &Pch to &N14
+      @math &N35 = &Pch + 0         ; Reset Charm handling variable.
+
+      @writeln    `$Since I'm in a nice mood today, you get `#&N13 `!Charm points
+      @writeln    `$for those extra `0Gems `$also.
+      @writeln    `@ -------------------------------------------------------
+      @hitakey
+    @end
+  @else 10                 ; Added needed identifier. M. Preslar. 04/12/05.
+    @begin             ; Player offered 40 Gems exactly, for Child.
+      @math &N9 = &N30 - &N20
+      @set &Pge to &N9
+      @math &N30 = &N9 + 0
+      @writeln
+
+      @display
+   `#Peddler Jack `%collects your `$&N20 `0Gems `!Adoption fee, `%and says,
+   `!"Thanks for doing business with the `#Gem Trader `!today."
+   `@ -----------------------------------------------------------
+      @enddisplay
+      ; @hitakey
+    @end
+  @endif 10
+     
+  @math &N10 = &N38 + 1           ;Increment temp Kids variable by 1
+  @set &Pki to &N10               ;Update LORD Kids stats
+  @writeln
+
+  @display
+   `!Jack `%takes your `@&N20 `0Gems, `%and leads you through some bushes and trees
+   to a large, rustic-looking, brick cottage.  The place is chock-full
+   of kids - all having lots of fun playing all over the place.
+
+   `!Jack `0calls one of them over to you, and tells the child that you
+   are now their new parent.  `%Together, the three of you walk back to
+   the camp, ready to make more deals, or to seek new Forest adventures.
+
+     `0You `@GAIN `$ONE `0Child.
+  @enddisplay
+  @hitakey
+
+   @if &N10 > 31999 11             ; 12/17/03: Error-control code.
+     @begin                        ; Confirmed 12/19/03 2:29 am
+       @set &N25 to 5
+       @set &N10 to 32000
+       @set &Pki to 32000
+
+       @goto JACK_MAX-STATS
+     @end
+   @endif 11
+
+  @goto JACK_CHECK_GEMS
+; ===================================================================
+
+
+;  ------------------------------------------------------------
+@label MULTIPLE_ADOPTIONS   ; Created/Verified 05/11/2005
+                            ; Fully tested as of 05/11/05.
+
+  ; Uses N20 variable obtained in JACK_ADOPTIONS, which indicates
+  ; how many Orphan Children the player said they want.
+  ; 04/09/2006: revised script to allow up to 250 Kids per trade.
+  ; 06/17/06: Revised script to allow 400 kids per trade.
+  ; 10/18/06: Changed per-trade Adoptions limit to 600.
+
+  @if &N20 = 0 12           ; Code block verified 05/11/05
+    @begin
+      @writeln
+      @display
+  `2"Jack `%frowns, `!"So you changed your mind about `$adopting `!Orphans?
+  `%All right then, I'm not interested in doing business with you
+  any more today."  You leave his camp, and head into the `#Forest.
+      @enddisplay
+
+      @goto JACK_ENDING      ; Terminates script execution
+    @end
+  @endif 12
+
+     ; Determine how many Orphans the player can pay gems for:
+  @math &N21 = &N20 * 40          ; How many Gems requested kids will cost.
+
+  @if &N30 < &N21 13     ; Code block verified 05/11/05
+    @begin                    ; Player tried to cheat Jack.
+      @writeln
+      @display
+  `@OOPS. `%You asked for `$&N20 `!Orphans, which costs `$&N21 `0Gems.
+  `%and you suddenly realize that you don't have that many Gems.
+
+  `!"Jack `%looks angrily at you.  `!"I `$TOLD `!you how many `0Gems
+  `%you had in your `0Gems pouch.  Now you just tried to `@CHEAT `%me!!
+      @enddisplay
+      @writeln
+
+      @goto JACK_PUNISH-CHEATERS
+    @end
+  @endif 13
+
+    ; Compute Number of Orphans player is able to purchase with
+    ; amount of Gems (&N20) that they have offered to Jack.
+  @math &N22 = &N21 / 40     ; Number of Orphan kids Sold.
+
+    ; Player asked for &N20 Kids. Jack collects &N21 Gems from
+    ; him/her.  Then he hands over &N22 Kids to the player.
+
+  @math &N9 = &N30 - &N21     ; Subtract Kids Gems Cost from Gems on Hand
+  @set &Pge to &N9            ; Reset Gems on Hand stat.
+  @math &N30 = &N9 + 0        ; Reset Gems LADY variable.
+  @writeln
+
+  @display                    ; code block VERIFIED 05/11/05
+   `%So you are buying `$&N20 `!Orphans `%from me today.  That number of
+   `%Kids is worth `$&N21 `0Gems, `%which I know you are able to pay me.
+
+   `#Peddler Jack `%collects your `0Gems `!Adoptions fee, `%and says,
+   `!"Thanks for doing business with the `#Gem Trader `!today."
+   `@ -----------------------------------------------------------
+  @enddisplay
+
+  @hitakey
+
+    ; Process turning over the purchased kids to player:
+    ; code block VERIFIED 05/11/05
+  @math &N10 = &N38 + &N20   ; Give player the kids they bought.
+  @set &Pki to &N10          ; Update LORD Kids stats
+
+  @math &N38 = &Pki + 0      ; Reset LADY Kids variable.
+  @writeln
+
+  @display                  ; code block VERIFIED 05/11/05
+   `!Jack `%leads you through some bushes and trees to a clearing
+   that is filled with guardian warrior ladies, and a large bunch
+   of babies and small children all over the place.
+
+   `!Jack `0calls `$&N20 `!Orphans `0over to where you are standing, and
+   tells them that you are have just adopted all of them.  You
+   give each child a good hug, and accept `!Jack's `0offer to have
+   some of his warriors escort them to your home.
+
+   `%Then the two of you go back to `!Jack's `%camp, where you think
+   about doing more business with him, or returning to the `#Forest
+   `%to seek new adventures.
+
+     `0You now have `$&N38 `!Kids `0in your family.
+  @enddisplay
+  @hitakey
+
+  @if &N10 > 31999 14             ; Error-control code.
+     @begin
+       @set &N25 to 5         ; Error-control Kids variable code.
+       @set &N10 to 32000     ; Temp LADY Kids variable.
+       @set &Pki to 32000     ; LADY's Kids stat is reset to 32000
+
+       @goto JACK_MAX-STATS
+     @end
+   @endif 14
+
+  @goto JACK_CHECK_GEMS
+; ===================================================================
+
+
+; ===================================================================
+;  Revised section to contain Horse Sale material. 07/24/02.
+;  ------------------------------------------------------------
+@label JACK_HORSE-SALE
+  @writeln
+  @display
+  `%"So you want to buy one of my `!Trusty Steeds?  `$Well, hand
+  over `#16 `0Gems," `#Jack `%says.  `!(Enter `$0 `!to Cancel purchase.)  `@
+  @enddisplay
+
+  @promptn 20 2
+
+  @if &N20 = 0 9
+    @begin
+      @writeln
+      @display
+  `#"Jack `%looks at you.  "So you changed your mind about `$buying a Horse?
+
+  `%All right then, I'm not interested in doing business with you any  
+  more today."  You leave `#Jack's `%camp, and head off into the `#Forest.
+      @enddisplay
+      @goto JACK_ENDING
+    @end
+  @endif 9
+
+  @if &N20 < 16 10
+    @begin
+      @writeln
+      @display
+   `$Uh Oh, you made `#Jack `$mad.  You are either `@STUPID `$or you
+   tried to `@CHEAT `$him!  For pete's sake, the price is `@16 `0GEMS!
+   `$to buy a `0Horse!
+      @enddisplay
+      @writeln
+      @goto JACK_PUNISH-CHEATERS
+    @end
+  @endif 10
+
+  @if &N20 > 16 11
+    @begin
+      @math &N8 = &N20 - 16       ; Collect price for 1 Horse.
+      @math &N9 = &N30 - &N20
+      @set &Pge to &N9            ; Reset Gems on Hand stat.
+      @math &N30 = &N9 + 0
+      @writeln
+
+        @display
+   `#Jack `%collects the `$&N20 `0Gems `%that you gave him for a `!Horse.
+
+   `%After counting them, he looks at you and smiles.  "`$&nick, 
+   `%are you feeling OK today?  You gave me `$&N8 `0Gems `%too many.  Well
+   thank you, and here is an `$extra bag of Oats `%for your `!Horse `%in
+   exchange for those extra `0Gems."
+    `@ --------------------------------------------------------------
+      @enddisplay
+
+      ;  08/16: Add code for Charm point handling:
+      @math &N13 = &N35 + 3         ; Grant 3 charm points for extra Gems
+      @set &Pch to &N13
+      @math &N35 = &Pch + 0         ; Reset Charm handling variable.
+
+      @writeln
+      @writeln    `$Since I'm in a nice mood today, you get `#3 `0Charm points
+      @writeln    `$for those extra `0Gems `$also.
+      @writeln    `@ -------------------------------------------------------
+      @hitakey
+    @end
+  @else 11           ; Added needed identifier. M. Preslar. 04/12/05.
+    @begin
+      @math &N9 = &N30 - &N20
+      @set &Pge to &N9
+      @math &N30 = &N9 + 0
+      @writeln
+      @hitakey
+
+      @display
+   `#Peddler Jack `%collects your `$&N20 `0Gems `!Horse Fee, `%and says,
+   `!"Thanks for doing business with the `#Gem Trader `!today."
+   `@ -----------------------------------------------------------
+      @enddisplay
+      @hitakey
+    @end
+  @endif 11
+     
+  @if &N24 = 1 12                   ; Changed for Lord 4.06 usage.
+    @begin
+      @math &N10 = &N34 / 100     ; Compute 1% of Current Hitpoints
+      @math &N11 = &N10 * 60      ; Compute 60% injury
+      @math &N12 = &N34 - &N11    ; Deduct Hitpoints for horse bite.
+      @set &Pht to &N12           ; Reset Current Hitpoints.
+
+      @writeln
+      @display
+   `#SURPRISE!  `%Just at that moment, your `!Horse `%comes up behind you,
+   and takes a `@HUGE bite `%out of your butt -- very PAINFUL!  `@OUCH!
+
+   `%Oops.  `#Jack `%can't help but laugh at the incident.  "Looks like
+   you just got reminded that you already `#HAVE `%a `!Horse!  `%He seems
+   `#VERY `%upset with you, `$&nick."
+
+   `#Jack `%looks at the horse-bite for you.  "Uh Oh, looks like he bit
+   into you pretty deep.  You better get to the Healer IMMEDIATELY, 
+   before the loss of blood `@KILLS `%you!"  `%You agree with him and
+   leave quickly.
+      @enddisplay
+      @hitakey
+
+      @writeln
+      @display
+   `%As you ride off, your bleeding rump has you wondering `@WHY `%you 
+   were `@SO STUPID `%as to forget about your `#FAITHFUL `!Horse!  `%You hope
+   that you don't run into any `2Forest Monsters, `%like the `@Troll,
+   `%before you are able to get healed.  You feel `#extremely weak
+   `%from the loss of blood.
+
+  `0 &N11 `!Hitpoints `@LOST `$due to painful Horse bite injury.
+      @enddisplay
+
+      ;   08/16: Add code for Charm point handling:
+      @if &N35 > 99 13
+        @begin
+          @math &N13 = &N35 / 100      ; Compute 1% of player's charm
+          @math &N14 = &N13 * 5        ; Deduct 5% for stupidity
+          @math &N15 = &N35 - &N14     ; Subtract charm loss amount
+        @end
+      @else 13         ; Added needed identifier. M. Preslar. 04/12/05.
+        @begin
+          @math &N15 = &N35 - 5        ; Deduct 5 charm point loss
+        @end
+      @endif 13
+
+      @set &Pch to &N15                ; Reset player's Charm
+      @math &N35 = &Pch + 0            ; Reset Charm stat variable
+
+      @if &N15 > 0 14
+        @begin
+          @writeln   `0 &N15 `!Charm Points `@LOST `$due to embarassment.
+        @end
+      @endif 14
+      @goto JACK_ENDING
+    @end
+  @endif 12
+
+  ; @hitakey
+  ; @clrscr
+
+  @set &Pho to true
+  @set &N24 to 1
+  @writeln
+
+  @display
+   `#Jack `%takes your `@&N20 `0Gems, `%and leads you through some bushes and
+   trees to a hidden corral.  It is filled with many beautiful `0horses,
+   `%including several `!Black Stallions.
+              ; 06/17/06: Show "Black Stallions" in Light blue.
+
+   `#Jack `%selects one of his best steeds, and leads him to you.  You
+   lead the `0new `$Horse `%back to camp, ready to make new deals
+   with him, or to find new Adventures in the `#Forest.
+
+  @enddisplay
+  @hitakey
+
+  @goto JACK_CHECK_GEMS
+
+;  =========================================================
+;  08/24/02: Moved JACK_FAIRY-SALE code to GemFairy.ldy file.
+;  =========================================================
+
+
+;  Penalty section for dishonesty while buying Horse or Fairy:
+;  Used also with dishonesty when adopting Kids:
+;
+;  Beat them nearly to death, take 20% Gold in Bank, 15% Charm,
+;  and confiscate all Gems from player.
+;
+;  12/15/03: Renamed section from "Horse_Penalty" to "JACK_PUNISH-CHEATERS".
+;  ------------------------------------------------------------------
+@label JACK_PUNISH-CHEATERS
+  @display
+   `!"Jack `%frowns at you, and says, `#"Why you `@WORTHLESS `#skunk! `%
+
+   `#You made a `@BIG `#mistake when you tried to cheat me!
+  `@ - - - - - - - - - - - - - - - - - - - - - - - - - -
+  @enddisplay           ; Changed color codes 05/11/05.
+  @writeln
+
+;       Player loses all but 1 usable Hitpoint:  Tested - WORKED
+  @math &N12 = &N34 + 1       ; Adds 1 to Current Hitpoint amount.
+  @math &N13 = &N12 - 2       ; Subtracts 2 from that amount.
+  @math &N14 = &N13 + 0       ; Amount of Hitpoints taken from player.
+  @set &Pht to 1              ; Reset usable Hitpoints to 1.
+
+;       Player loses 20% of their Bank account:  07/24 change from 15% loss.
+  @math &N15 = &N36 / 5
+  @math &N16 = &N36 - &N15    ; Deduct 20% Gold in Bank penalty.
+  @set &Pba to &N16           ; Reset player's Bank Balance
+
+;       Player loses 15% of their Charm:
+  @math &N18 = &N35 / 100
+  @math &N19 = &N18 * 15      ; Compute Charm penalty of 15 percent.
+  @math &N20 = &N35 - &N19
+  @set &Pch to &N20           ; Reset Charm stat.
+
+;       Punishment #4 - Confiscation of half of player's Gems.
+;       07/25 change from 100% loss.
+  @math &N21 = &N30 / 2       ; Compute 50% of Gems on Hand.
+  @math &N22 = &N30 - &N21    ; deduct gems penalty.
+  @set &Pge to &N22           
+  
+;       Give player their punishment:
+  @hitakey
+  @display
+    `#Peddler Jack `%reaches out and grabs you.  Then he proceeds to
+    beat you nearly to death.  `@BAM! WHAM! ZAP! CRUNCH! THWACK! CRACK!
+
+    `%Tossing you to the ground unconscious, `#Jack `%picks up your `$Gems
+    pouch `%and empties it into his own.  Next, he chants a spell, and
+    there is a `$Yellow flash of light.  `%When it clears, a large pile
+    of `$Gold Coins `%from `#YOUR `0Bank account `%lies at his feet.  Lastly,
+    you feel a sudden `$loss of Charm, `%due to being untrustworthy.
+    
+    `#You `$LOSE `!&N14 `0Hitpoints.   `#You `$LOSE `!&N15 `0Gold in Bank.
+    `#You `$LOSE `!&N19 `0Charm Points.  `#And you `$LOSE `!&N21 `0Gems.
+
+    `%Jack kicks you back to consciousness, and tells you to get lost.
+
+    `%Looking back a moment at what you've lost, you stagger out of the
+    camp.  As you do, you hear `#Jack `%say, "I hope the `@Troll `%gets you!,
+    you `@lousy, good for nothing, cheat!!"
+   @enddisplay
+   @goto JACK_ENDING
+
+
+; Added Max stats handling routine - 10/25/2002.  Revised 11/16/2002.
+@label JACK_MAX-STATS
+@writeln 
+@writeln    `@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+@case &N25 4
+1: @writeln    `@Notice: `%Unable to raise `!Maximum Hitpoints `%past 32,000 points.
+2: @writeln    `@Notice: `%Unable to raise `!Strength points `%past 32,000 points.
+3: @writeln    `@Notice: `%Unable to raise `!Defense points `%past 32,000 points.
+4: @writeln    `@Notice: `%Unable to raise `!Charm points `%past 32,000 points.
+5: @writeln    `@Notice: `%Unable to raise `!Kids `%past 32,000.
+@endcase 4
+
+@writeln    `!But thanks for the `0Gems `!-- Remember, I have a "No Refunds" policy.
+@goto JACK_CHECK_GEMS
+
+
+; Determine if player has enough Gems to do new round of business.
+; ----------------------------------------------------------------
+@label JACK_CHECK_GEMS
+@if &N30 > 2 9           ; Player has 3+ Gems left, go to JACK_NEW-SALE code.
+  @goto JACK_NEW-SALE
+@endif 9
+
+@math &N31 = &Phx + 0     ; Reset Max Hitpoints
+@math &N32 = &Psr + 0     ; Reset Strength points
+@math &N33 = &Pde + 0     ; Reset Defense points
+@math &N35 = &Pch + 0     ; Reset Charm points - 11/16/02.
+
+@math &N38 = &Pki + 0     ; Reset Kids stat.  12/17/03.
+
+@writeln
+@writeln    `%You thank `#Peddler Jack `%for his hospitality and great
+@writeln    deal, and return to the `2Forest, `%to seek new Adventures.
+@writeln    `@ - - - - - - - - - - - - - - - - - - - - - - - - - -
+@writeln
+@writeln         `%Your current statistics are:
+@writeln    `!--- `$&N31 `@Maximum Hitpoints.
+@writeln    `!--- `$&N32 `@Strength `$Points.
+@writeln    `!--- `$&N33 `@Defense `$Points.
+@writeln    `!--- `$&N35 `@Charm `$Points.        ; Added 11/16/02.
+
+@if &Pho is true 10
+  @begin
+    @writeln
+    @writeln    --- `%You are riding a `0Horse.
+  @end
+@endif 10
+
+@if &Pki > 0 11              ; 12/17/03: show stats on Kids.
+  @begin
+    @writeln
+    @writeln    --- `%You have `$&Pki `0Children.
+  @end
+@endif 11
+
+@if &Pfa is true 12          ; Added 06/18/2006
+  @begin
+    @writeln
+    @writeln    --- `%You have a `0Fairy `%in your pocket.
+  @end
+@endif 12
+
+@writeln    `% - - - - - - - - - - - - - - - - - - - - - - - - - -
+@hitakey              ; Needed for viewing screen under LORD 4.06
+@goto JACK_ENDING
+
+
+
+; Reset any needed variables for player computations.
+; --------------------------------------------------------------
+@label JACK_NEW-SALE                ; Added to Script on 04/23/2002.
+  @math &N30 = &Pge + 0     ; Reset Gems on Hand var with current info.
+  @math &N1 = &N30 / 3      ; Re-determine Max potions deals allowed.
+
+  @math &N31 = &Phx + 0     ; Reset Max Hitpoints
+  @math &N32 = &Psr + 0     ; Reset Strength points
+  @math &N33 = &Pde + 0     ; Reset Defense points
+  @math &N35 = &Pch + 0     ; Reset Charm points - 11/16/02
+
+  ; Display current Hitpoints, Strength, and Defense stats.
+  ; --------------------------------------------------------------
+  @writeln    `@ - - - - - - - - - - - - - - - - - - - - - - - - - -
+  @writeln
+  @writeln      `!You have `#&N30 `$Gems on Hand.     ; 01/19/04 Color change.
+  @writeln    `%You have `@&N31 `$Max Hitpoints.
+  @writeln    `%You have `@&N32 `$Strength Points.
+  @writeln    `%You have `@&N33 `$Defense Points.
+  @writeln    `%You have `@&N35 `$Charm Points.       ; 11/16/02
+  @writeln
+
+  @if &Pho is true 10
+    @begin
+      @writeln    `#--- `%You are riding a `0Horse.   ; 01/19/04 Color change.
+    @end
+  @endif 10
+
+  @if &Pki > 0 11              ; 12/17/03: show stats on Kids.
+    @begin
+      @math &N38 = &Pki + 0    ; Store Kids stat.  12/20/03.
+      @writeln    `#--- `%You have `$&N38 `0Children. ; 01/19/04 Color change.
+    @end
+  @endif 11
+
+@if &Pfa is true 12          ; Added 06/18/2006
+  @begin
+    @writeln
+    @writeln    --- `%You have a `0Fairy `%in your pocket.
+  @end
+@endif 12
+
+; -------------------------------------------------------------------
+; 12/20: use &N38 since &Pki does not display on-screen using commas.
+; -------------------------------------------------------------------
+
+  @writeln    `% - - - - - - - - - - - - - - - - - - - - - - - - - -
+  @writeln
+  @writeln   `%"So, `!&nick," `#Peddler Jack `%says, "I see you still have
+  @writeln   some `0Gems `%left.  `%Would you like to make another purchase?
+  @choice YN `$(Y)es or (N)o? `#[`0Y`2N]
+
+  @case response 2
+  Y: @begin
+       @goto JACK_POTIONS-SALE       ; Return to Potion Choice code block.
+     @end
+
+  N: @begin
+       @writeln
+       @display
+   `!"Nope, `#Jack, `!that's all I wanted to get right now." `$you say. `%
+
+   `#Jack `%responds, `0"Well, thank you for the pleasant company." `%You
+   `%turn and leave to look for new adventures in the `#Forest `%...
+           ; 06/17/06: Show "Forest" in Light Violet.
+       @enddisplay
+
+       @goto PEDDLER_EXIT          ; Revised 02/14/05 from GOTO JACK_ENDING.
+     @end
+  @endcase 2             ; Ends New Sale Processing code section.
+
+  @goto PEDDLER_EXIT               ; Revised 02/14/05 from GOTO JACK_ENDING.
+  ; ==============================================================
+
+
+; Added Zero potion request handling code - 07/23/2002.
+; -----------------------------------------------------------
+@label JACK_ZERO-POTIONS
+  @if &N20 = 0 2
+     @begin
+       @writeln
+       @writeln  "You entered `!0 `%for potions wanted.  So you don't
+       @writeln  wish to do business today.  Goodbye, `#Jack `%says."
+       @writeln
+
+       @goto JACK_ENDING
+     @end
+  @endif 2
+
+@goto PEDDLER_EXIT
+; ===================================================================
+
+
+
+; -----------------------------------------------------------
+@label PEDDLER_EXIT    ; Label section created 02/14/05
+
+   ; Usage access. Player who has cheated Jack does not get to
+   ; ever use this code section.  Players who waste Jack's time
+   ; asking for zero potions also are excluded from this section.
+
+   ; ---------------- Valentine's Day 2005 coding:
+   ;  New coding will only run when player needs healing.
+   ;  At some point, if I figure out how to do it randomly,
+   ;  other players will get to have the special code work for them.
+   ; =================================================================
+
+@math &N31 = &Phx + 0       ; Reset variable for Max Hitpoints
+@math &N34 = &Pht + 0       ; Reset variable for Hit-Points
+
+@Set &N11 to 0              ; Reset N11 VAR to zero
+
+@if &N34 < &N31 15
+  @begin           ; Player has wounds, or un-healed new Max HPs.
+     @math &N11 = &N31 - &N34  ; # of HitPoints to heal.
+     @math &N34 = &N34 + &N11  ; Heal the wounded/new Hit-Points.
+
+     @set &Pht to &N31         ; Reset variable used for HitPoints.
+
+     @if &Psx is True 16      ; If true, player is Female.
+       @begin
+         @goto SEXY_PEDDLER_EVENT
+       @end
+     @endif 16
+
+     @goto SEXY_SAMANTHA_EVENT
+  @end
+@endif 15
+
+@goto JACK_ENDING
+; ===================================================================
+
+
+; Free Healing after Potions Trade - for Female players:
+; Valentine's Day code present for everyone. 02/14/2005.
+; ------------------------------------------------------------------
+@label SEXY_PEDDLER_EVENT
+
+@display
+`c  `!         Special Event in the Peddler's Camp
+`l
+
+   `$Peddler Jack `!suddenly grows amorous and starts kissing you.
+   `!This goes on for several long minutes.  He's a much better
+   `!kisser than that bard, `$Seth Able`%!  `!You allow him to caress
+   `!your breasts inside your blouse for a short while.
+
+     `0After a few minutes, he lets you go and acts like nothing
+     `0special just happened.  Your heated body gradually cools down.
+     
+   `!Suddenly, you realize that all of your wounds have `%VANISHED.
+
+   `!You had `$&N11 `0Hit-Points `!healed magically by the power of the
+   `0Peddler Jack's `!passionate behavior.  You thank him for the
+   `!healing, and then return to hunting monsters in the `#Forest.
+   `#==========================================================
+
+@enddisplay      ; On-screen wording verified 02/14/05.
+@set &N11 to 0
+
+@goto JACK_ENDING
+; ===================================================================
+
+
+; Free Healing after Potions Trade, for Male players:
+; Valentine's Day code present for everyone. 02/14/2005.
+; ------------------------------------------------------------------
+@label SEXY_SAMANTHA_EVENT     ; Verified 4:30 am 02/14/05
+
+@hitakey                     ; keyboard pause. needed here.
+@clrscr                      ; Clear the screen.
+
+@writeln
+
+@display
+`c  `!         Special Meeting in Forest Meadow
+`l
+
+   `0You hear a woman say, `!"Hello `$&nick," `0from behind you.
+   You turn around, and see a well-endowed, young, tall, and very
+   beautiful woman standing in the trees.  You walk over to where
+   she is, and stand together in a sun-lit meadow for a visit.
+
+     `!"I'm `$Samantha," `0she says, `!"and I just love to surprise
+     my father's `!customers sometimes."  `0She then steps right
+     into your arms.  The red-hot babe then `0proceeds to give you
+     one of the best kissing sessions you `0have `%EVER `0experienced!
+
+   `0After caressing her beautiful breasts inside her blouse for
+   several minutes, you are feeling `%VERY HORNY, `0and are nearly
+   blind for a few minutes.  She's `%FAR `0better looking `0than
+   `$Violet, `0you think to yourself, as she re-fastens her blouse`%!
+
+@hitakey                     ; keyboard pause. needed here.
+     `!"Well you sure know how to kiss a lady," `%she says.  `!"Look
+     `!me up some time over at `$Kiteria's LORD Bank, `!and maybe you
+     `!will get `%MORE `!from me some day."  `%Then she vanishes in a
+     `%bright explosion of emerald green light.
+
+   `0You realize that all of your wounds disappeared, and you are
+   `0now back to `%full health `0once more.  You turn your attention
+   `0back to resuming your hunt for monsters in the `#Forest.
+
+     `%You had `$&N11 `0Hit-Points `%healed by `#Samantha.
+   `!==========================================================
+@enddisplay
+
+   ; Wording layout for code section verified 04:40 am 02/14/05.
+
+@goto JACK_ENDING
+; ===================================================================
+
+
+; -----------------------------------------------------------
+@label JACK_ENDING
+;  Note to user.  Send comments to donald.tidmore (at) fidotel.com.
+;  Or you can use donald.tidmore@usa.net or ktidmore@bellsouth.net.
+;  Thanks, Donald Tidmore.
+
+@writeln
+@hitakey                 ;Keep for screen viewing under LORD 4.06.
+
+@DEBUG SUPER OFF    ; Added 04/16/06 for LORD/32 script use debugging
+
+@DEBUG ON           : 04/16/06: restore normal script debugging.
+
+@endquest
+
+; ==============================================================
+; 10/18/06 Notes: Archived most of old comments in auxiliary
+; text file GT_LADY.TXT, which is stored inside DGT-LADY.ZIP.
+
+; ==============================================================
+; Fairy code in Special Deals section requires LORD v4.07+.
+;
+; Advisory to end-user:  This script is VERY complex.  It should be
+; run as a SEPARATE script!  If you ignore my warning, I am NOT
+; responsible if your LORD game crashes as a result, from it being
+; run from another script, containing other scripts!! 08/16/2002 Note.
+;
+; Testing Notes:  This script has been tested under DOS LORD v4.05pb,
+; DOS LORD v4.06, DOS LORD v4.07, and DOS LORD v4.08 beta.  It is
+; *NOT* usable with September 2006 compilations of LORD/32 for Windows,
+; v4.08 beta - that I am aware of.
+;
+; Comment notes from 2002-2005 period are in GT_LADY.TXT file,
+; which is stored inside the dgt-lady.zip archive.
+; ====================================================================
+
+; 04/09/2006: Revised script to allow up to 250 Kids/Trade.
+; 04/09/2006: Changed script version to 1.45 from 1.40.
+;
+; 06/17/2006: Revised script to allow 400 kids per trade.
+; 06/17/2006: Changed script version to 1.48 from 1.45.
+; 10/02/2006: Changed to v1.49. Fixed Horse Extra Gems event
+;    so it grants 3 charm points PER extra gem paid.
+;
+; 10/18/2006: v1.50. Allows up to 600 Adoptions per gems trade.
+; Moved all 2002-2005 comment notations into GT_LADY.TXT file.
+
+; 05/31/07: v1.52: Revised Email/WWW info;  Changed version #.
+;   If you want the Gem Trader IGM's latest version, it is
+;   available from this URL, as version 2.50:
+;      http://www.filegate.net/camelot/lordfile/gemtr250.zip
+
+

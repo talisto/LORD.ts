@@ -1,0 +1,14 @@
+{
+    "fightsPerDay": 10,
+    "playFights": 3,
+    "levelFight": 2,
+    "leveljump": 1,
+    "everyday": false,
+    "havekids": false,
+    "marryViolet": true,
+    "logMonster": true,
+    "logLaid": true,
+    "logSlaughter": true,
+    "logDragon": true,
+    "logMaster": true
+}

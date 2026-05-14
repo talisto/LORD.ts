@@ -1,0 +1,18 @@
+[
+  {"name": "Fists", "price": 0, "num": 0},
+  {"name": "Stick", "price": 200, "num": 5},
+  {"name": "Dagger", "price": 1000, "num": 10},
+  {"name": "Short Sword", "price": 3000, "num": 20},
+  {"name": "Long Sword", "price": 10000, "num": 30},
+  {"name": "Huge Axe", "price": 30000, "num": 40},
+  {"name": "Bone Cruncher", "price": 100000, "num": 60},
+  {"name": "Twin Swords", "price": 150000, "num": 80},
+  {"name": "Power Axe", "price": 200000, "num": 120},
+  {"name": "Able's Sword", "price": 400000, "num": 180},
+  {"name": "Wans' Weapon", "price": 1000000, "num": 250},
+  {"name": "Spear of Gold", "price": 4000000, "num": 350},
+  {"name": "Crystal Shard", "price": 10000000, "num": 500},
+  {"name": "Nira's Teeth", "price": 40000000, "num": 800},
+  {"name": "Blood Sword", "price": 100000000, "num": 1200},
+  {"name": "Death Sword", "price": 400000000, "num": 1800}
+]

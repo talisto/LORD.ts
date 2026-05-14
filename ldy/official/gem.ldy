@@ -1,0 +1,23 @@
+@#INSTALL
+@eventname GEM
+@author Seth Able
+@authid GEM1
+@codebegin
+@runsub GEM &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#GEM
+@verreq 407
+@writeln `c  `%Event In The Forest`0
+@writeln `l
+@writeln
+@writeln   `2Fortune smiles, and you find a gem!
+@writeln
+@set &Pge to +1
+@hitakey
+@clrscr
+@endquest
+

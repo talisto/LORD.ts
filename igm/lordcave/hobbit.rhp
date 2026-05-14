@@ -1,0 +1,87 @@
+@;@ RHP_name: A Random Hobbit (02/07/99)
+@;@ For: The L.O.R.D. Cavern v1.3c+
+@;@ Written_by: Michael Everett
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.3c
+
+`@A small Hobbit jumps from behind a rock!
+
+`@Try and talk to the Hobbit?`l
+@YESNO@
+@##N
+
+`%You decide it best to kill the little pest.
+@EXPERIENCE@ %+1
+@END@
+@##Y
+
+`@What would you like to talk to the Hobbit about?
+  `9(`@E`9)`@xperience
+  `9(`@C`9)`@harm
+  `9(`@H`9)`@it Points
+@PROMPT@ ECH
+@##E
+@RANDOM@ 3
+@##1
+@CLEAR@
+
+`%I'm too tired to talk right now, maybe another time.
+@END@
+@##2
+@CLEAR@
+
+`%Yes my son, I know much about experience...
+
+`%You absorb The Hobbit's every word.
+@EXPERIENCE@ +1
+@END@
+@##3
+@CLEAR@
+
+`%There is nothing I could teach you on this subject,
+`%I am sorry my friend.
+@END@
+@##C
+@RANDOM@ 3
+@##1
+@CLEAR@
+
+`%I'm too tired to talk right now, maybe another time.
+@END@
+@##2
+@CLEAR@
+
+`%I love this subject and you look
+`%as though you need my advice.
+
+`%You listen carefully to The Hobbit.
+@CHARM@ 3
+@END@
+@##3
+@CLEAR@
+
+`%There is nothing I could teach you on this subject,
+`%I am sorry my friend.
+@END@
+@##H
+@RANDOM@ 3
+@##1
+@CLEAR@
+
+`%I'm too tired to talk right now, maybe another time.
+@END@
+@##2
+@CLEAR@
+
+`%The Hobbit tells you how to
+`%fight longer while in battle.
+@HITPOINTS@ 4*LEVEL
+
+@END@
+@##3
+@CLEAR@
+
+`%There is nothing I could teach you on this subject,
+`%I am sorry my friend.
+@END@
+

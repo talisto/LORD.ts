@@ -1,0 +1,12 @@
+{
+  "name": "@lordts/igm-lotto",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./main.ts",
+  "dependencies": {
+    "@lordts/core": "*",
+    "@lordts/storage": "*",
+    "@lordts/igm": "*",
+    "@lordts/util": "*"
+  }
+}

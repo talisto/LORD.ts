@@ -1,0 +1,6 @@
+# Caddy serves the minimal webclient (static HTML/CSS/JS - no build step)
+FROM caddy:2-alpine
+
+COPY docker/Caddyfile /etc/caddy/Caddyfile
+COPY webclient/ /srv/client/
+COPY data/rip/ /srv/data/rip/

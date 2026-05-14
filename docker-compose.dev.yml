@@ -1,0 +1,51 @@
+# Development Docker Compose
+#
+# Starts the game server + Caddy to serve the minimal static webclient.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build
+#
+# The webclient is served at http://localhost:<HTTP_PORT> (default 8080).
+# WebSocket (/ws) and API (/api) calls are proxied to the game server.
+#
+# HOT RELOAD for server code - no container restart needed:
+#   Server: tsx watch runs on raw TypeScript sources from the bind-mounted
+#   project directory. Any change to a .ts file causes the server process
+#   to restart automatically inside the running container.
+#
+# The minimal webclient is plain HTML/CSS/JS - reload the browser to see changes.
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    command: sh -c "npm install && npx tsx watch server.ts"
+    env_file:
+      - .env
+    environment:
+      - "HTTP_PORT=80"
+      - "TELNET_PORT=${TELNET_PORT:-2323}"
+      - SENTRY_DSN
+      - NODE_ENV=development
+    ports:
+      - "${TELNET_PORT:-2323}:${TELNET_PORT:-2323}"
+    volumes:
+      - .:/app
+      - server_node_modules:/app/node_modules
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - ./webclient:/srv/client
+      - ./data/rip:/srv/data/rip
+    depends_on:
+      - server
+    restart: unless-stopped
+
+volumes:
+  server_node_modules:

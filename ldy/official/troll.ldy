@@ -1,0 +1,83 @@
+@#INSTALL
+@eventname TROLL
+@author Michael Preslar
+@authid TROLL1
+@codebegin
+@runsub TROLL &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#TROLL
+@verreq 407
+; Ive always wondered why a random event couldnt kill you..
+; Ive also wondered why there arent as many bad guys in the random
+; events.. Another funny thought. This must be a huge forest.. How
+; else could there be soo many monsters? :)
+
+; The player will lose 1 to 10 hitpoints..
+@if &Pcl = 3 1
+@begin
+   @set &N1 to 0
+@end
+@else 1
+@begin
+   @set &N1 to &rnd10
+@end
+@endif 1
+
+@writeln
+@writeln
+@writeln   `%MEGA EVENT IN THE FOREST
+@writeln `0-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+@writeln   `2An ugly troll jumps out from behind and tries to steal
+@writeln   your coin purse!
+@writeln
+@set &Pht to -&N1
+@if &Pht > 0 1
+ @begin
+    @if &Pcl = 3 2
+    @begin
+       @writeln   But being the sly theif that you are, you
+       @writeln   fend him off easily!
+    @end
+    @else 2
+    @begin
+       @writeln   You fend him off, but you lose `%&N1`2 hitpoints!
+       @writeln
+    @end
+    @endif 2
+ @end
+@else 1
+ @begin
+; If the player is smart, he wont "look for something to kill" while
+; he's low on hitpoints.. If he isnt keen on the idea of protecting
+; himself, well, the troll will get him..
+   @set &Pgo to 0
+   @set &Pge to 0
+   @set &Pdd to true
+; Lord will save the player's data when he gets back from the event,
+; but some unscrupulous people will drop carrier when they see that theyve
+; been killed. So save the player data now so they cant cheat the game.
+   @saveplayer
+   @writeln   You valiantly try to fend off the little troll, but at the
+   @writeln   last moment, he pulls a dagger out of his boot and gives you
+   @writeln   final blow!
+   @writeln
+   @writeln   `2The troll made off with you coin purse and gem sack!
+   @writeln
+   @writeln   `4You have been killed by the troll!
+   @writeln
+; @endgame really isnt needed here since lord will check the player's
+; hitpoints when they get back from the event.. But, its still an example
+; of how it could be used..
+   @endgame
+ @end
+@endif 1
+; psst: one day, this lil bugger of a troll is going to try and make off
+; with your weapon.. your armor? nah. its hard enough to take off as it is.
+; but not hard to grab your spear of gold and take off running...
+@hitakey
+@endquest
+

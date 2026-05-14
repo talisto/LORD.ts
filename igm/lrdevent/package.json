@@ -1,0 +1,11 @@
+{
+  "name": "@lordts/igm-lrdevent",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./lrdevent.ts",
+  "dependencies": {
+    "@lordts/core": "*",
+    "@lordts/igm": "*",
+    "@lordts/util": "*"
+  }
+}

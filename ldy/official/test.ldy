@@ -1,0 +1,27 @@
+@#TEST
+@display
+
+A) OldMan
+B) BagOGold
+C) HammerStone
+D) Gem
+E) Horse
+F) UglyStick
+G) MerryMen
+H) Hag
+I) Troll
+
+@enddisplay
+@choice ABCDEFGHI Your Command [ABCDEFGHI]
+@case response 1
+A: @runsub OLDMAN oldman.ldy
+B: @runsub BAGOGOLD bagogold.ldy
+C: @runsub HAMMERSTONE hamstone.ldy
+D: @runsub GEM gem.ldy
+E: @runsub HORSE horse.ldy
+F: @runsub UGLYSTICK ugly.ldy
+G: @runsub MERRYMEN merrymen.ldy
+H: @runsub HAG hag.ldy
+I: @runsub TROLL troll.ldy
+@endcase 1
+@endquest

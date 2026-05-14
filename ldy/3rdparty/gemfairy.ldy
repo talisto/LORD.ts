@@ -1,0 +1,349 @@
+@#INSTALL
+@eventname Gem Fairy Trade
+@author Donald Tidmore
+@authid GEMFAIRY-114
+@codebegin
+@runsub GEMFAIRY &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@DEBUG SUPER ON          ;Added 06/03/2006 for LORD/32 testing use.
+
+; ==============================================================
+; Gem Fairy Trade v1.14
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+;
+; Requires DOS LORD v4.07 or DOS LORD v4.08 beta.
+;
+; Requires GemTrade.ldy v1.12+ Lady script.
+;
+; WARNING:  Do NOT run this script on its own.  It HAS to be run
+; from GEMTRADE.LDY so it inherits script variables from its parent
+; that contain the player's current LORD stats values.
+; ==============================================================
+;
+@#GEMFAIRY
+@verreq 407
+
+; Global Variables:  Used by GemTrade.Ldy.
+;
+; These values are inherited from GemTrade.  But are included here
+; just in case someone wants to know what they mean.
+; ----------------------------------------------------------
+@math &N30 = &Pge + 0   ; Store Gems on Hand stat.
+@math &N34 = &Pht + 0   ; Store usable Hitpoints stat.
+@math &N35 = &Pch + 0   ; Store Charm Points stat.
+@math &N36 = &Pba + 0   ; Stores Gold in Bank stat.
+@set &B1 to false       ; Preset Fairy handling variable to false.
+
+@if &Pfa is true 1
+  @set &B1 to true
+@endif 1
+
+@display
+`c  `$Forest Event:  `#Peddler Jack's `!Fairy Trade`0
+`l
+  `%"So you want to buy one of my `9precious `0Fairies?  `%Well, hand
+  over `$32 `0Gems," `#Peddler Jack `%says to you.
+
+  `!You check your `0Gems pouch.  `!There are `$&N30 `0Gems `!inside.
+          ;  Added statement to show user how many Gems they have. 06/18/06.
+
+  `%Enter `$0 `%to Cancel, or `$32 `%to buy a `!Fairy.
+  `$     (Note: Script will only accept up to `!50 `0Gems `$as payment.) `@
+@enddisplay
+
+@promptn 20 2
+@if &N20 = 0 2
+  @begin
+    @writeln
+    @display
+  `#"Jack `%looks at you.  "So you changed your mind about buying a `0Fairy?
+  `%All right then, I'm not interested in doing business with you any 
+  more today."  You leave his camp, and return to the `2Forest.
+    @enddisplay
+
+    @goto GEMFAIRY_ENDING
+  @end
+@endif 2
+
+@if &N20 < 32 3
+  @begin
+    @writeln
+    @display
+   `$Uh Oh, you made `#Jack `$mad.  You are either `#STUPID `$or you
+   tried to `@CHEAT `$him!  For pete's sake, the price is `@32 `0GEMS!
+   `$to buy a `!Fairy!
+    @enddisplay
+    @writeln
+
+    @goto GEMFAIRY_PENALTY
+  @end
+@endif 3
+
+@if &N20 > 32 4
+  @begin
+    ; Notation: from this point onward, all math uses April 2002
+    ; direct manipulation of LORD variables using +/- type commands.
+    ; --------------------------------------------------------------
+    @if &N20 > 50 5                ; Code added on 02/07/2003.
+      @begin
+         
+         @math &N9 = &N20 - 50      ; compute # of gems to "return"
+         @set &N20 to 50            ; Reset gems paid value to 50.
+         @writeln   `#Jack `%smiles and hands you back `@&N9 `%gems.
+         @writeln
+         @writeln   `$"If you really want true value for your gems, try buying
+         @writeln   `$some more of my `!elixir potions, `$or perhaps a `%Horse."
+         @writeln
+         @writeln   `0= = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+       @end
+    @endif 5
+
+    @math &N8 = &N20 - 32       ; Number of extra gems received.
+    @set &Pge to -%N20          ; Deduct Gems paid, Reset Gems stat.
+    @math &N30 = &Pge + 0       ; Reset Gems handling variable.
+
+    ; 11/23/06: disabled/deleted hitakey statement.
+    @writeln
+
+    @display
+   `#Jack `!collects the `$&N20 `0Gems `!that you gave him for a `!Fairy.
+
+         ;11/23/06: rewrote dialogue to be shorter lines.
+   `%He counts them, looks at you, and smiles.  "`$&nick,
+   `%are you feeling OK today?  You gave me `$&N8 `0Gems `%too many.
+
+   `$Well thank you, very much. I always appreciate free `0Gems!"
+
+    @enddisplay
+      ;   06/18/06: Grant 2 Charm points per Extra Gem paid.
+      @math &N12 = &N8 * 2          ; Compute Charm Points sold.
+
+      ;   08/16: Added code for Charm point handling:
+      @math &N10 = &N35 + &N12      ; Grant charm points for extra Gems
+      @set &Pch to &N10             ; Add new charm pts, Reset Charm stat
+                   ; 02/07: Fixed error that was doubling player's charm.
+
+      @math &N35 = &Pch + 0         ; Reset Charm handling variable
+
+      @writeln
+      @writeln      `$Since I'm in a nice mood today, you get `#&N12 `!Charm points
+      @writeln      `$today for those extra `0Gems.
+      @writeln      `@ -------------------------------------------------------
+      @hitakey
+    @end
+  @else 4              ; Added identifier number. DGT
+    @begin
+      @set &Pge to -&N20             ; Deduct Gems paid; Reset Gems stat.
+      @math &N30 = &Pge + 0
+
+      @writeln
+      @display
+   `#Peddler Jack `%collects your `$&N20 `0Gems `!Fairy fee, `%and says
+   `!"Thanks for doing business with the `#Gem Trader `!today."
+   `@ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+       @enddisplay
+    @end
+  @endif 4
+   
+  @if &B1 is true 5
+    @begin
+      @writeln
+      @display
+   `#Jack `%starts to hand you a `!Fairy, `%but sees something wriggling
+   around in your Belt Pouch.  "Hey, `$&nick, `%you appear to 
+   already have a `!Fairy `%with you.  You're not allowed to have `#TWO
+   `%of them, you know.
+
+   `%Suddenly there is a loud buzzing noise from your pouch, and
+   a `@magical bolt of energy `%burns through your waist!  
+
+      @hitakey
+
+   `%As you stand there trying to stop the bleeding, `#Jack `%says, `!"Well,
+   I guess those `2Fairies `!can really punish a person for forgetting
+   about them!  I suggest that you go find a Healer."  `%You agree,
+   leave camp and start searching for `#medical aid.
+      @enddisplay
+
+      @math &N10 = &N34 / 100   ; Compute 1% of Current Hitpoints
+      @math &N11 = &N10 * 60    ; Compute 60% injury
+      @set &Pht to -&N11        ; Deduct HP injury; Reset Current HP stat.
+
+      @writeln
+      @display
+   `%As you ride off, your wounded waist has you wondering `@WHY `%you were
+   `#SO STUPID `%as to forget about having that `2Fairy `%in your pouch!  You
+   hope that you don't run into any `2Forest Monsters `%before you are able to
+   get healed.  You feel extremely weak from blood loss. 
+
+  `# &N11 `$Hitpoints `@LOST `$due to Fairy's `9lightning blast injury.
+
+  `0= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+  `$You feel lucky though that the `2Fairy `$chose to stay with you awhile
+  longer.  It is hard to face the monsters some days without the little
+  `!"life insurance policy" `$with you, after all!
+      @enddisplay
+      @writeln
+
+      ;   08/16: Add code for Charm point handling:
+      @if &N35 > 99 6         
+        @begin                          
+          @math &N13 = &N35 / 100       ; Compute 1% of charm.
+          @math &N14 = &N13 * 5         ; Take 5% of their charm.
+        @end
+      @else 6           ; Added identifier number. DGT
+        @begin
+          @set &N14 to 5                ; Take 5 Charm points.
+        @end
+      @endif 6
+
+      @math &N4 = &Pch - &N14          ; 02/07 fix. Deduct charm loss.
+      @set &Pch to &N4                 ; 02/07 fix. Reset Charm stat
+      @math &N35 = &Pch + 0
+      @set &N14 to &N4                 ; 02/07 fix.
+
+      @writeln    `2 &N14 `$Charm Points `@LOST `$due to embarassment.
+                            ;02/07 fix. changed to N4 code usage.
+      @writeln
+
+      @goto GEMFAIRY_ENDING
+    @end
+  @endif 5
+
+;  @hitakey
+  
+  @set &Pfa to true
+  @set &B1 to true
+  @writeln
+
+  @display
+   `#Jack `!picks up a small, emerald green pouch from a tree stump,
+   and removes a `$Fairy `!from it.  `#"Here you go, `#&nick,
+   `$1 `0Fairy."
+
+   `%You transfer the `!Fairy `%to your Belt Pouch, and feel
+   `!Much Safer.  `#Jack `%says, "Remember now to use the little
+   fellow wisely."
+  @enddisplay
+
+  @writeln
+  @writeln    `%You thank `#Peddler Jack `%for his hospitality and great deals,
+  @writeln    and return to the `#Forest, `%ready to seek new Adventures.  Your
+  @writeln    new `$Life Insurance policy `%gives you peace of mind.
+  @writeln
+
+; ======================= 06/03/2006 update: =================
+; Write short news message to the LORD game's LOGNOW.TXT file:
+; These commands did not work, so I've disabled them until Michael Preslar
+; has advised me what to do correctly.
+
+;  @appendfile %I1 lognow.txt
+;  @writeln %I1
+;  @writeln %I1 `!&nick `%bought a `0Fairy `%from `!Peddler Jack `%today.
+;  @writeln %I1      `#*---*   `#*---*   `#*---*   `#*---*   `#*---*
+;  @closefile %I1
+; =========================== End of 06/03/06 update.
+                                                     
+  @goto GEMFAIRY_ENDING
+
+
+;  Penalty section for dishonesty while buying Fairy:  Beat player
+;  nearly to death, take 20% Gold in Bank, 15% Charm, and confiscate
+;  all of their Gems.
+;  ------------------------------------------------------------------
+@label GEMFAIRY_PENALTY
+  @display
+   `#"Jack `%frowns at you, and says, `%"Why you `@WORTHLESS skunk! `%
+   You make a BIG mistake when you tried to cheat me!
+  `@ - - - - - - - - - - - - - - - - - - - - - - - - - -
+  @enddisplay
+  @writeln
+
+;       Player loses all but 1 usable Hitpoint:
+  @math &N12 = &N34 + 1       ; Adds 1 to Current Hitpoint amount.
+  @math &N13 = &N12 - 2       ; Subtracts 2 from that amount.
+  @math &N14 = &N13 + 0       ; Amount of Hitpoints taken from player.
+  @set &Pht to 1              ; Reset usable Hitpoints to 1.
+
+;       Player loses 20% of their Bank account:
+  @math &N15 = &N36 / 5       ; Compute 20% Gold in Bank penalty.
+  @set &Pba to -&N15          ; Deduct gold penalty, Reset Bank Balance
+
+;       Player loses 15% of their Charm:
+  @math &N18 = &N35 / 100
+  @math &N19 = &N18 * 15      ; Compute Charm penalty of 15 percent.
+  @set &Pch to -&N19          ; Deduct charm penalty, Reset Charm stat.
+
+;       Punishment #4 - Confiscation of half of player's Gems.
+;       07/25 change from 100% loss.
+  @math &N21 = &N30 / 2       ; Compute 50% of Gems on Hand.
+  @set &Pge to -&N21          ; Deduct gems penalty, Reset Gems stat.
+  
+;       Give player their punishment:
+  @hitakey
+  @display
+    `#Peddler Jack `%reaches out and grabs you.  Then he proceeds to
+    beat you nearly to death.  `@BAM! WHAM! ZAP! CRUNCH! THWACK! CRACK!
+
+    `%Tossing you to the ground unconscious, `#Jack `%picks up your `$Gems
+    pouch `%and empties it into his own.  Next, he chants a spell, and
+    there is a Yellow flash of light.  When it clears, a large pile
+    of `$Gold Coins `%from YOUR bank account `%lies at his feet.  Lastly,
+    you feel a sudden `$loss of Charm, `%due to being untrustworthy.
+    
+    `#You `$LOSE &N14 `#Hitpoints.   `#You `$LOSE &N15 `#Gold in Bank.
+    `#You `$LOSE &N19 `#Charm Points.  `#And you `$LOSE &N21 `#Gems.
+
+    `#Jack `%kicks you back to consciousness, and tells you to get lost.
+
+    Looking back a moment at what you've lost, you stagger out of the 
+    camp.  As you do, you hear `#Jack `%say, `!"I hope that nasty `@Troll
+    `!gets you!, you `@lousy, good for nothing, cheat!!"
+   @enddisplay
+   @goto GEMFAIRY_ENDING
+
+; -----------------------------------------------------------
+@label GEMFAIRY_ENDING
+;  Note to user.  Send comments to ktidmore@bellsouth.net.
+;  Or use either donald.tidmore@fidotel.com or donald.tidmore@usa.net.
+;  Thanks, Donald Tidmore.
+
+
+@hitakey
+@endquest
+
+; ==================================================================
+; Tested thoroughly using LORD v4.07 beta, July 2003 compilation.
+;
+; The Gem Trader v2.10 LORD IGM:  Available from this URL:
+; http://www.filegate.net/camelot/lordfile/gemtr210.zip - 10/07/03 note.
+;
+; The Gem Trader v2.20 LORD IGM:  Available from this URL:
+; http://www.filegate.net/camelot/lordfile/gemtr220.zip - 12/19/03 note.
+;
+; ===============================================================
+; v1.01. Minor editing changes. Tested under June-Sept 08, 2002 compile
+;        versions of LORD v4.07.
+; v1.02. * Found/fixed error, where player's charm was accidentally
+;        being Doubled by script, during handling of Extra Gems.
+;        * Payment of Gems for Fairy purchase now limited to 50 gems.
+;        Player will get Charm point credit for up to 18 extra gems paid.
+; v1.03. 12/19/03: color code tweaking.
+; v1.04. 12/05/04: Changed to version 1.04. Renamed script label
+;        FAIRY_END to GEMFAIRY_ENDING.  Renamed script label
+;        FAIRY_PENALTY to GEMFAIRY_PENALTY.
+; ==============================================================
+; 04/12/05: Added number identifier to the @else statements.
+;    Changed version up to 1.08. Donald
+; 07/24/05: Added INSTALL and UNINSTALL sections to script.
+; 06/18/06. v1.12. Added statement at start showing # of Gems
+;    that player has.  Tested script with LORD v4.07 off. release.
+
+; 05/31/07: v1.14: Revised Email/WWW info;  Changed version #.
+
+

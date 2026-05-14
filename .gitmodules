@@ -1,0 +1,9 @@
+[submodule "webclient/riptermjs"]
+	path = webclient/vendor/riptermjs
+	url = https://github.com/talisto/RIPtermJS.git
+[submodule "webclient/vendor/rpgui"]
+	path = webclient/vendor/rpgui
+	url = https://github.com/RonenNess/RPGUI
+[submodule "webclient/vendor/riptermjs"]
+	path = webclient/vendor/riptermjs
+	url = https://github.com/cgorringe/RIPtermJS.git

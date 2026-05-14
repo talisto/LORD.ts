@@ -1,0 +1,129 @@
+@#INSTALL
+@eventname HORSE
+@author Michael Preslar
+@authid HORSE1
+@codebegin
+ @begin
+    @if &rnd4 = 2 1
+     @runsub HORSE events.ldy
+    @else
+     @runsub LORD lord.ldy
+    @endif 1
+   @end
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#HORSE
+@verreq 407
+;set the price of a horse
+; note: you dont have to always use &N1 first. use them in whatever
+; order you want.
+@math &N10 = 10000 * &Plv
+@label topofhorse
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2Walking through the forest, you stumble across a clearing in the woods.
+  Looking around, you see a small man and a lot of horses. The man walks up
+  to you and asks you, "`0What can I do for you, mmhmm?`2"
+
+  `2(`0B`2)uy a horse
+  `2(`0S`2)ell your horse
+  `2(`0G`2)o back to the forest
+
+@enddisplay
+@choice GBS   `0Your command `2[`0GBS`2]
+@case response 1
+B: @begin
+@if &Pho is true 1
+@begin
+ @writeln
+ @writeln   `2"`0Now, now. You already have a horse and I cannot sell you another.`2"
+ @writeln
+ @hitakey
+ @goto topofhorse
+@end
+@endif 1
+@writeln
+@choice YN   `2"`0Buy one of my horses for`% &N10`0?`2"
+@case response 2
+N: @begin
+@writeln
+@writeln   `2"`0Okay, mmhmm, maybe some other time.`2"
+@writeln
+@hitakey
+@goto topofhorse
+@end
+Y: @begin
+@if &Pgo < &N10 1
+ @begin
+  @writeln
+  @writeln   `2Chuckling, the hairyfoot says to you `2"`0I am sorry, mmhmm, but I cannot
+  @writeln   make a deal with someone that does not have enough money.`2"
+  @writeln
+  @hitakey
+  @goto topofhorse
+ @end
+@else 1
+@begin
+@set &Pgo to -&N10
+@set &Pho to true
+@writeln
+@writeln   `2"`0Good deal! Mmhmm, there you are.`2"
+@writeln
+@hitakey
+@goto topofhorse
+@end
+@endif 1
+@endcase 2
+@end
+
+S: @begin
+ ;take the players horse
+ @if &Pho is false 1
+ @begin
+   @writeln
+   @writeln   `2The happy look on the gnome's face goes sour. "`0I am sorry, mmhmm,
+   @writeln   but I cannot make a deal with someone that does not have a horse.`2"
+   @writeln
+   @hitakey
+ @goto topofhorse
+ @end
+ @endif 1
+
+ @math &N10 = &Plv * 5000
+
+ @writeln
+ @choice YN   `2"`0Sell your horse for`% &N10`0?`2"
+ @case response 2
+  Y: @begin
+      @set &Pgo to +&N10
+      @set &Pho to false
+      @writeln
+      @writeln  `2"`0Thank you, kind person. Here is the `%&N10`0 gold I promised.`2"
+      @writeln
+      @hitakey
+     @end
+  N: @begin
+      @writeln
+      @writeln  `2"`0Okay.. Maybe some other time..`2"
+      @writeln
+      @hitakey
+     @end
+ @endcase 2
+ @goto topofhorse
+@end
+G: @begin
+@writeln
+@writeln   `0"Good day, kind person. May the Beast not play a deadly part in
+@writeln   your future, mmhmm."
+@writeln
+@hitakey
+@end
+@endcase 1
+@cls
+@endquest
+

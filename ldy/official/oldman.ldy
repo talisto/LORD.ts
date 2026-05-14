@@ -1,0 +1,62 @@
+@#INSTALL
+@eventname OLDMAN
+@author Seth Able
+@authid OLDMAN1
+@codebegin
+@runsub OLDMAN &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#OLDMAN
+@verreq 407
+;First thing first.. You dont have to space things out like I do. I space
+;things out like that so they're easier to read.
+
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2You come across an old man.  He seems confused and asks if
+  you would direct him to the Inn.  You know that if you do,
+  you will lose time for one fight today.
+
+@enddisplay
+@choice YN   Do you take the old man? [`0Y`2]
+@writeln
+@case responce 1
+Y: @begin
+    @writeln
+    ;give the player (500 * level)
+    @math &N1 = 500 * &Plv
+    @set &Pgo to +&N1
+    @writeln   `2You gladly take the old man to the Inn. He is pleased
+    @writeln   with you, and gives you `%&N1 `2gold!
+    ;give him a charm point
+    @set &Pch to +1
+    ;and take away one forest fight
+    @set &Pff to -1
+    @writeln
+    @writeln   `%**CHARM GOES UP BY 1**
+   @end
+N: @begin
+    @writeln
+    @if &Pch < 10 1
+     @begin
+      @writeln   `2"`0I don't have time for you old man..Goodbye..`2"
+      @writeln   You tell him coldly.  The old man shakes his head very sadly.
+     @end
+     @else 1
+     @begin
+      @writeln   `2"`0Old man, I think it's time you learned the way yourself.`2"
+      @writeln   You tell him coldly.  The old man shakes his head sadly.
+     @end
+    @endif 1
+   @end
+@endcase 1
+@writeln
+@hitakey
+@clrscr
+@endquest
+

@@ -1,0 +1,18 @@
+[
+  {"name": "Nothing!", "price": 0, "num": 0},
+  {"name": "Coat", "price": 200, "num": 1},
+  {"name": "Heavy Coat", "price": 1000, "num": 3},
+  {"name": "Leather Vest", "price": 3000, "num": 10},
+  {"name": "Bronze Armour", "price": 10000, "num": 15},
+  {"name": "Iron Armour", "price": 30000, "num": 25},
+  {"name": "Graphite Armour", "price": 100000, "num": 35},
+  {"name": "Erdricks Armour", "price": 150000, "num": 50},
+  {"name": "Armour Of Death", "price": 200000, "num": 75},
+  {"name": "Able's Armour", "price": 400000, "num": 100},
+  {"name": "Full Body Armour", "price": 1000000, "num": 150},
+  {"name": "Blood Armour", "price": 4000000, "num": 225},
+  {"name": "Magic Protection", "price": 10000000, "num": 300},
+  {"name": "Belars's Mail", "price": 40000000, "num": 400},
+  {"name": "Golden Armour", "price": 100000000, "num": 600},
+  {"name": "Armour Of Lore", "price": 400000000, "num": 1000}
+]

@@ -1,0 +1,485 @@
+@#AKASHA
+
+       `$í `0Talking To Akasha `$í`2
+
+          You notice wicked little fangs. You try to ignore
+       them. She appears to be quite beautiful. Her beauty
+       close to that of Violet's. Now what could you do with
+       this pretty little lady?
+
+       (`5K`2) Ask for a kiss
+       (`5B`2) Ask to be bitten
+       (`5L`2) Decide... Vamps are not for you.
+           Bye bye.
+
+@#ARCADEM
+  `$í `0In The Arcade `$í`2
+
+      As you enter the old clay hut you notice a very large glowing sign
+  flashing the word `$Arcade`2 over and over again. What type of wonderous
+  place is this!? A few places catch your eye as you step inside, such as
+  a the beautiful girl standing before you, and a strange glowing object at 
+  the back of the room.
+
+    (`5P`2) Play `%Warrior's Revenge.`2
+    (`5T`2) Talk to `@Scin`2 the Arcade Owners Daughter.
+    (`5V`2) View the Top Ten Immortals.
+    (`5L`2) Leave all this grandeur.
+                            
+@#ARCADEF
+
+  `$í `0In The Arcade `$í`2
+
+      As you enter the rickety old shack you notice a large glowing sign
+  flashing the word `$Arcade`2 over and over again. What type of wonderous
+  place is this!? A few places catch your eye as you step inside, such as
+  a the hunk of a man smiling at you, and a strange glowing object at the
+  back of the room.
+
+    (`5P`2) Play `%Warrior's Revenge.`2
+    (`5T`2) Talk to `#Glibbon`2 the Arcade Owner.
+    (`5V`2) View the Top Ten Immortals.
+    (`5L`2) Leave all this grandeur.
+
+@#BEHIND
+
+  `$í `0Behind the Temple `$í`2
+
+      As soon as you step behind the Temple you get a strong cold feeling,
+  like there is a strong evil presence watching over you. A few things back
+  here catch your attention, like the Large clay hut off to the right, or
+  how the whole place seems to be drowning with dense bushes.
+
+    (`5C`2) Checkout the Clay Hut.
+    (`5E`2) Explore the Bushes.
+    (`5L`2) Get outta Here!
+
+@#DEATH
+
+`%                              ** THE TEST **
+
+   `2You ignore the shrieks of pain, the suffering of this dungeon's
+   occupants. You are shown a man kneeling over a stained chopping block.
+
+   `0"This man is accused of a crime.  Is he innocent or guilty?"
+
+      `2(`01`2) Decapitate Him
+      `2(`02`2) Release Him
+
+
+@#ENDIN
+
+
+
+@#FAETHOR
+
+       `$í `0At The Statue of Faethor `$í `2
+
+             He is still alive, so therefore you know this
+          is only an imitation (`5albeit a good one`2) of him.
+          A sign reads: The last and current husband of Felicity.
+
+          (`5P`2) Pray to him.
+          (`5L`2) Leave statue.
+
+@#FEL
+
+       `$í `0Talking To Felicity `$í `2
+
+         You notice this blossoming youth greets you in her
+       pretty white dress. A face of innocence, yet much
+       more beautiful than that of the bar maid Violet.
+       She asks, "What have you come here for? Have you come
+       to see Akasha? My only female disciple?"
+
+           (`5A`2) I wanna see Akasha.
+           (`5F`2) No, I want to talk to Felicity more.
+           (`5L`2) I think I'll just leave.
+
+@#FOUNTAIN
+
+       `$í `0At the Fountain `$í`2
+
+           You walk into the room and notice a beautiful
+       fountain sitting in the middle. It's like a flowing 
+       rainbow! All colors of water shoot out of the fountain
+       from different parts, you wonder what this water tastes
+       like!
+
+       (`5B`2) Drink some of the `9BLUE `2water
+       (`5G`2) Drink some of the `0GREEN `2water
+       (`5R`2) Drink some of the `@RED `2water
+       (`5W`2) Drink some of the `%WHITE `2water
+       (`5L`2) Leave this Beautiful place.
+
+@#GLIBBON
+
+   `$í `0Talking to Glibbon `$í  `2
+
+         You walk over to the Arcade owner. You find him very attractive
+       even at his age! He smiles and introduces himself as `5Glibbon`2.
+       His bright white teeth sparkle in the sunshine...
+         What do you want to ask this hunk of a man!?
+
+      (`5W`2) What is this Place!?
+      (`5R`2) Rules of Play
+      (`5I`2) Immortals?
+      (`5O`2) Other Games
+      (`5F`2) Flirt with Glibbon
+      (`5L`2) Leave
+
+
+@#KARADOC
+
+       `$í `0At The Statue of Karadoc `$í `2
+       
+             Ah... Noble Mage Karadoc Meister who became
+           a God. Felicity married him because she was lonely
+           and her ex-husband who was dead told her to.
+           (`5Damn talking statues`2) So, thus began her life
+           with Noble Mage Karadoc Meister, until she decided,
+           "Hell, he can't help me at all. He's always in 
+           heaven! I need an earth man." So she divorced Karadoc,
+           and Karadoc as angry as he was turned himself into this
+           statue as a reminder of himself.
+
+           (`5P`2) Pray to the Noble Mage Karadoc Meister.
+           (`5L`2) Leave this no Good husband.
+
+@#MAIN
+  `$í `0The Main Hallway `$í  `2
+
+     As you enter the temple you can smell the burning of sweet sage, 
+   bringing back memories of your old warrior training. You look 
+   around... The marble floor and great stone columns seem to encompass 
+   you. You notice A Statue Room to your right And therealso appears
+   to be a passagway here that carries deep into the temple.
+     Apparently out of no where, the beauteuous Felicity
+   greets you.
+
+       (`5T`2) Talk to Felicity.
+       (`5R`2) Go to The Statue Room.
+       (`5F`2) Check out the Fountain.
+       (`5C`2) Continue down passage.
+       (`5L`2) Leave all this grandeur.
+
+@#PASSAGE
+
+   `$í `0Continue Through The Passage `$í `2
+   
+         You walk along, leaving Felicity to greet the next
+      person who comes along. As you reach the end you see
+      a marble statue of Felicity. There next to it is one
+      of the disciples. Turin looks at you questioningly. A
+      sign points to him saying, "Talk to me before you pray!"
+
+      (`5T`2) Talk to Turin.
+      (`5P`2) Pray to Felicity.
+      (`5L`2) Leave the room.
+
+@#PRAY
+
+       `$í `0At The Statue of Felicty `$í `2
+
+            You see an enormous statue of the woman who Greeted
+         you at the door. You hear the sweet and innocent voice
+         of Felicity in your head. She tells you your options.
+         You can pray, but do you dare?
+
+           (`5S`2) Pray for Strength.
+           (`5V`2) Pray for Vitality.
+           (`5L`2) Pray for Life.
+           (`5!`2) Pray for a child!
+           (`5G`2) Pray for Gems.
+           (`5C`2) Pray for Charm!
+           (`5Q`2) Leave this beutiful statue.
+
+@#READTEMPLE
+
+       `$í `0Sign At the Temple `$í `2
+
+           Before you lies a secret land known only to those who
+       must. Within you will find Beauty, Terror, and a `7Janitor`2!?
+       Only the `0Smart`2, and `0Brave `2of heart will be able to discover
+       all the `0Secrets `2that this `%Temple`2 has to offer. You may only
+       do things once a day in most places, so be carefull what
+       you ask for...you might be totally suprised!
+
+@#RIGHT
+
+   `$í `0The Right Doorway `$í  `2
+
+         Hmmm... There appears to be three statues. One of
+      each of her husbands. One is a thief, one a warrior,
+      and the last a mage. Who would you like to talk to?
+
+      (`5T`2) Vindicator, A Tricky warrior.
+      (`5W`2) Faethor, A Great warrior.
+      (`5M`2) Karadoc, A Mage warrior.
+      (`5L`2) Exit this room of Fools.
+
+@#SCIN
+
+   `$í `0Talking to Scin `$í  `2
+
+         As you walk towards the Arcade owners daughter, she introduces
+       herself as `@Scin`2. Her wonderous body, and the sweet smell of her
+       perfume are driving you mad!
+         What would you like to ask this babe!?
+
+      (`5W`2) What is this Place!?
+      (`5R`2) Rules of Play
+      (`5I`2) Immortals?
+      (`5O`2) Other Games
+      (`5F`2) Flirt with Scin
+      (`5L`2) Leave
+
+@#STARTOUT
+
+`%     Event In The Forest
+`0 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+   `$í `0Forest Clearing `$í  `2
+
+           During your brisk daily jog through the Forest you
+        you come accross a clearing. In the middle of the clearing
+        stands a huge Temple. A dark path winds around to the back 
+        of the temple. You also see a sign beside you.
+       
+           (`5E`2) Enter the Temple.
+           (`5G`2) Go Explore behind the Temple.
+           (`5R`2) Read the Sign!
+           (`5Q`2) Run back to the Town to share this story!
+
+@#TALKFEL
+
+       `$í `0Talking To Felicity `$í `2
+         
+           You approach her shyly. Adorned in white robes,
+        you are awestruck.
+           She gives you her hand to kiss her ring.
+
+        (`5K`2) Kiss the ring.
+        (`5A`2) Ask for a blessing.
+        (`5!`2) Kiss her!
+        (`5L`2) Nah, you decide you wanna go.
+
+@#THIEF
+
+`%   Event In The Forest
+`0 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+`2   You are innocently skipping through the forest, when you suddenly
+   notice you are surrounded by a group of rogues.
+
+`0   "Greetings, we are the members of the Master Thieves Guild. We
+   know you are struggling to learn our ways. We will give you a
+   lesson, for the price of one Gem."
+
+    `2(`0G`2)ive Them A Hard Earned Gem
+    `2(`0S`2)pit In Their Faces
+    `2(`0M`2)umble Appologies And Run
+
+@#TURIN
+
+       `$í `0Talking To Turin `$í `2
+
+           You see the mighty warrior Turin who later became
+       a god. (`5Much to the delight of Felicity`2)
+          "Anyhow, to make a looong story short, and here's why
+       I'm forced to stand here for eternity... Or until
+       someone challenged me... But I still have to come
+       back. I'm suppose to tell you that you may be
+       risking a lot in order to gain alot. The gamble
+       is your life."
+          Youch!
+          "To be precise, your stats. Well... that's all
+       I have to say. Please let me go back to standing here."
+
+@#VINDICAT
+
+       `$í `0At The Statue of Vindicator `$í `2
+
+             You see the mighty Vindicator, shunned by all
+          the gods! He tricked the Gods one too many times
+          and got stuck as a statue. Felicity moved him here
+          to fill space. (`5She did remarry afterall`2)
+
+          (`5P`2) Pray to Statue
+          (`5L`2) Leave Statue
+
+@#FAIRYHELP1
+
+  `2For doing the right thing, and letting your Fairy go to play with
+  `2her friends, she decides to help you out a little...
+  `2She flies up over you and sprinkles Fairy Dust on you...you feel
+  `2wierd .....
+
+@#FAIRYPOOL1
+
+  `2You notice a pool, where there are many Fairies playing. You decide
+  `2to go over and see what they are all doing. The man behind the counter
+  `2sprints over and assumes the role of Fairy Tender.
+
+@#FAIRYPOOL2
+
+  `2While you are watching the Fairies splash and play you feel a little
+  `2movement in you pocket...you look down and see that it's in fact
+  `2your Fairy! She is looking at you in a sad little way, and pointing
+  `2at the other Fairies....
+
+@#FAIRYPOOL3
+
+  `2You just tell your little Fairy to shutup! And shove her back
+  `2into your pocket. Geeze you're MEAN!!!!
+
+@#FAIRYPOOL4
+
+  `2For some reason your heart moves from seeing this little Fairy
+  `2cry. You do the right thing and let her go join her friends...
+
+@#FAIRYPOOL5
+
+  `2By seeing all these Fairies splashing and playing, you begin to
+  `2want one for your very own...you look at the Fairy Keeper with a
+  `2sad little expression...He just looks over...sighs...then says,
+  `0"If you really want one of these, I can sell you one, for a small fee.
+  `0750,000 Gold Coins should do it!"
+
+@#KIDS1
+
+  `2You walk over to where all the kids are. The man behind the counter
+  `2sprints over to greet you as the nursery nanny.`0 "Why the hell does
+  `0Felicity need all these kids!? I can understand the weapons and armour,
+  `0but why the kids!??"`2, you say, almost yelling. `0"Well Felicity keeps
+  `0all these kids here so she can train them at an early age to fight!"
+ 
+  `0"If you want, I can take one of your kids off your hands, or I could let
+  `0you adopt one of these for a price.
+ 
+  `2Do you want to :
+       `2(`0G`2) Give a Child up for Adoption.
+       `2(`0A`2) Adopt on of these children.
+       `2(`0N`2) Do Nuthin!
+
+@#KIDS2
+
+  `0"Are you sure you want to give a kid up for Adoption!??
+  `0The most I can give you is 250,000 gold...
+
+@#STABLE1
+
+  `2You step over to the stable area to have a look around. And to let
+  `0YOUR `2horse have a drink of water. Almost immediatly the man
+  `2Sprints over and assumes his role as a Stable hand.
+  `0"Wow! That's a fine looking animal you have there. Would you consider
+  `0selling it for say ...I dunno...5,000 Gold!?
+
+@#STABLE2
+
+  `2You step over to the stable area to have a look around.
+  `2Almost immediatly the man Sprints over and assumes his role as a
+  `2Stable hand.
+
+  `0"I see you didn't bring a horse with you! Well one shouldn't ever be
+  `0without one!!! Just cuz I like you kid, I'll sell you this fine
+  `0Stallion for a measly 1,000,000 Gold!!!"
+
+@#STORAGE1
+
+  `2While exploring this huge Temple you come across an un-marked
+  `2door. `0"Strange I haven't been here before"`2, you say to yourself
+  `2you wonder what is behind this heavy Oak door, so you decide to go in.
+
+  `%***** `0CONGRATULATIONS!!! YOU FOUND FELICITY'S STORAGE ROOM `%*****
+
+@#STORAGE2
+
+ `%In The Storage Room
+
+  `2  You look around this room and see that it is a storage room of
+ `2some sort. You see piles of gold coins and gems. You see A Pool where
+ `2there are Fairies playing. There is a Stable here, as well as a nursery
+ `2of some sort. `0"What a strange Room."`2, you think to yourself.
+ `2There is a man sitting behind a counter.
+
+       `2(`0T`2) Talk To The Man Behind The Counter
+       `2(`0S`2) Goto The Stable Area
+       `2(`0F`2) Goto The Fairy Pool
+       `2(`0K`2) Goto Where All The Kids Are
+       `2(`0L`2) Leave This Room.
+
+@#STORAGE3
+
+  `2You ask the man sitting behind the counter what this place is.
+  `0"Well Felicity stored all this stuff just incase the `4DRAGON `0ever
+  `0came around these parts. You don't know how hard it is to find a
+  `0good Horse when you need one! Well I'm in charge with the inventory
+  `0here, and also with all the buying. If you want I can sell you what
+  `0from here, I can also buy your unwanted things."
+
+@#JANITOR1
+
+   `2While looking around the Main Hall of the Temple you see what you
+   `2think is a crack in the wall.  The curious adventurer you are, you
+   `2decide to go closer and take a look.  The crack turns out not to
+   `2be a crack at all, but a `0Secret door!`2 You eventually after many
+   `2attempts manage to pry it open.
+
+   `%***** `0CONGRATULATIONS!!! YOU FOUND THE JANITOR'S SECRET ROOM `%*****
+
+@#JANITOR2
+
+  `%In The Janitor's Room
+
+   `2  The Janitor turns around obviously scared to death that someone
+  `2is in his room. `0"Damn! Now how did you find my secret room? I guess
+  `0you want something from me now. Don't you?!"`2 says the Janitor
+  `2obviously very upset with this intrusion.
+
+        `2(`0T`2) Talk To The Janitor
+        `2(`0S`2) Search The Lost And Found
+        `2(`0A`2) Ask For A Little Help.
+        `2(`0L`2) Leave The Janitor To His Cleaning.
+
+@#JANTALK1
+
+ `2What do you want to ask this poor soul about?
+   `2(`0O`2)ther Secrets
+   `2(`0F`2)elicity
+   `2(`0S`2)torage Room
+   `2(`0N`2)othing I Just Want To Leave!
+
+@#JANTALK2
+
+  `0"Other Secrets eh? Well you seen like a good kid, I guess I can share
+  `0some knowledge with you. Well theres me! Har! I'm proud of that!
+  `0You probably know about the Storage Room by now, damn I told Felicity
+  `0that she wouldn't be able to keep that place a secret! I guess that's
+  `0all I should tell you, but believe me there is alot to be found if you
+  `0just look around a little!
+
+@#JANTALK3
+
+  `0"The Storage room!? How'd y'know bout that!?"`2, says the Janitor in a
+  `2panic,`0 "I mean...ummm, ahhh, what storage room could you be talking about?
+  `2You just give the Janitor a look, and he comes clean. `0"Ohhhhh you mean
+  `0the storage room! Well that place is a secret. Felicity holds all her
+  `0stockpiles there. IF you ever find this place....you'll know about it!"
+
+@#JANTALK4
+
+  `0"So you want to know about Felicity eh?? Well she's a spunky
+  `0Whipper-Snapper if I ever knew one. She is said to feed off of people's
+  `0Strength!"`2 says the Janitor in fear.
+  `0"But all that I know is that she isn't the best looking girl that can be
+  `0found in these halls!"
+
+@#JANHELP1
+
+ `2You ask the Janitor for a little help, and he just stares at you!
+ `0"Now do I? Or don't I look busy to you??? Damn kids think that life is all
+ `0fun and games...WELL IT'S NOT!!! I hafta work for my living! But I'll
+ `0help you, you seem pitifull enuf."
+
+ `2The Janitor shoots some sort of wierd beam from his mop...you feel....
+
+@#

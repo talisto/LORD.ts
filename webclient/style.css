@@ -1,0 +1,170 @@
+/**
+ * Minimal webclient styles for LORD.
+ * No build step - pure CSS served as a static file.
+ */
+
+@font-face {
+    font-family: 'Web437-IBM-VGA';
+    src: url('font/Web437_IBM_VGA_9x16.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    background: #000;
+    color: #aaa;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+}
+
+#game {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 32px);
+    padding: 8px;
+}
+
+#terminal-container {
+    width: fit-content;
+    height: fit-content;
+}
+
+/* RIP overlay - canvas sits over the terminal */
+#rip-game-wrapper {
+    position: relative;
+}
+
+#rip-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 10;
+    background: #000;
+}
+
+#rip-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* When RIP is active, terminal floats over the canvas */
+#rip-game-wrapper.rip-active #terminal-container {
+    z-index: 20;
+}
+
+/* Controls bar */
+#controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: #111;
+    border-top: 1px solid #333;
+    font-size: 12px;
+    color: #888;
+    z-index: 100;
+}
+
+#controls label {
+    cursor: pointer;
+    user-select: none;
+}
+
+#controls input[type="checkbox"] {
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+#logout-btn {
+    background: #333;
+    color: #ccc;
+    border: 1px solid #555;
+    padding: 2px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#logout-btn:hover {
+    background: #555;
+    color: #fff;
+}
+
+/* Connection status indicator */
+#status {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    font-size: 11px;
+    color: #666;
+    z-index: 100;
+}
+
+#status.connected {
+    color: #0a0;
+}
+
+#status.disconnected {
+    color: #a00;
+}
+
+/* RIP pick list overlay */
+.rip-picklist-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.rip-picklist {
+    background: #111;
+    border: 2px solid #555;
+    padding: 8px;
+    max-height: 80%;
+    overflow-y: auto;
+    min-width: 200px;
+}
+
+.rip-picklist-item {
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #aaa;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.rip-picklist-item:hover {
+    background: #333;
+    color: #fff;
+}
+
+.rip-picklist-item.selected {
+    background: #004;
+    color: #5ff;
+}

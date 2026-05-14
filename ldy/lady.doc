@@ -1,0 +1,810 @@
+
+    ฒÛÛÛ   ฒÛÛÛ฿Û ฒÛÛÛ฿Ü ฒÛÛÛ Û
+    ฑÛÛÛ   ฑÛÛÛÜÛ ฑÛÛÛ Û ฑÛÛÛ฿฿        The Lady of the Lord Realm
+    ÛÛÛÛÜÛ ÛÛÛÛ Û ÛÛÛÛÜ฿ ÛÛÛÛ
+
+  ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+          (c) 2000 Metropolis, INC - Developed by Michael Preslar
+
+
+ This text file is an explanation of the command words, variables, and any
+     other information related to the Lord scripting language, "Lady".
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Quick Intro ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+  Lady is a scripting language that allows anyone to write their own random
+  events. The default random events can be found in EVENTS.LDY and can be
+  edited.
+
+- Each line is read, and unless told to, is not displayed.
+
+- Want to make a comment somewhere in your quests? All text after a ; will
+  be ignored.. There is an exception.. All text between a @display and
+  @EndDisplay pair is displayed.
+
+- Getting funny results from a script? Add /debug to your command line..
+  lady.log wil be created with a step by step run down of what all Lady did.
+  During beta testing, someone would tell me "such and such is saying:
+  ERROR".. Id get their lady.log from them, and be able to tell exactly
+  what the problem was.. Very useful if youre creating any scripts!
+
+- Want to see your script in action? Add /debug to the command line,
+  go into the forest and hit X.. This will look for the quest "TEST"
+  in the file "test.ldy" .. You can edit that event and make it do
+  whatever you want, including running your own events.
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Events - Files ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+Events, like IGMS, should each be distributed in their own files. This means
+that if you create 3 different events, you should put each one in their
+own file, and follow the EVENT formats that follow this section of the
+documentation.
+
+Also of note. There are a few reserved filenames. They are:
+
+- LORD.LDY .. This holds the controling event for the random forest events.
+- INN.LDY .. This holds the controlling event for leaving the Inn
+- BANK.LDY .. This holds the controlling event for leaving the bank
+- 3rdparty.dat .. This is obviously not a lady script file, however, events
+  can be run from here. So therefore, dont mess with it.
+
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Events - INSTALL ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+@#INSTALL
+
+Lets assume that Joe Smith writes his own event. It is in a file named
+bigjoe.ldy .. He passes that file around to other sysops for them to run.
+The other sysops will go into Lordcfg, into the Editors section, and choose
+the Events editor. From there, the sysop would choose to (A)dd an event.
+A new screen pops up with a blank event, but there is an option to (I)mport
+event. The sysop chooses this, lordcfg prompts for the filename of the event.
+The sysop puts in bigjoe.ldy .. Lordcfg will now look for and run the
+event named @#INSTALL .. If that event does NOT exist, the event cannot
+be imported! And if it cannot be imported, the sysop will have to manually
+add in all the data needed for your event. Not good. So use this event!
+
+Normal lady commands cannot be executed from the INSTALL event. Instead, only
+the following commands can be used:
+
+@eventname <string>
+
+   Once Lordcfg has completed importing the event, it will recreate the
+   right file. @eventname is the name of the actual event to run from
+   your file. Not used for Forest, Leaving Bank, or Leaving Inn events,
+   but _IS_ used (and thus required) for Other Places events.
+
+@author <string>
+
+   This is where you put your name or handle. This command is required.
+
+@authid <string>
+
+   This should be a unique string for your event and its version. For
+   example, your create an event named @#BIGJOE and this is the first
+   version of it, then @authid should be something like
+   @authid BIGJOE1 .. This command is VERY required. And do make sure
+   that you pick a unique string. It can be up to 255 characters long,
+   Im sure you can pick something unique, eh? :)
+
+@replace <string>
+
+   Now lets assume that you've fixed some bugs in @#BIGJOE. You pass
+   around a new file, bigjoe2.ldy .. You would use @replace to replace
+   version one of your event. Lets assume that your @authid is now
+   BIGJOE2 .. @replace BIGJOE1 would remove the BIGJOE1 event, and replace
+   it with BIGJOE2. .. If you don't have to (or want to) replace an
+   event, then you do not have to have this command.
+
+@makedir <string>
+
+   Lady scripts can create their own textfiles. Its a good idea to put
+   these files in a subdirectory under Lord's directory (There's already
+   a ton of files in the Lord dir, why add more to that collection?
+   Please organize your files!) .. Of course, if you don't need this
+   command, then you can leave it out.
+
+@codebegin
+@codeend
+
+   When lordcfg recreates LORD.LDY, it will create a @case statement
+   to handle all of the possible events. Everything between
+   @codebegin and @codeend (up to 10 lines) will be put into LORD.LDY
+   where your event is called.
+
+   For most people, only one line is needed
+   @runsub BIGJOE &filename
+
+   But you can get fancy, if you wanted:
+   @begin
+      if &Pht > &Phx 1
+        @runsub BIGJOE &filename
+      @else 1
+        @runsub LORD LORD.LDY
+      @endif 1
+   @end;
+
+   Note 1:
+
+   Something to take note of. Imagine that you create an event named
+   @#BIGJOE and put it in a file named bigjoe.ldy .. You pass it around,
+   and people install it. Okay. No problems there. But then someone else
+   (Bob, who doesnt know about your event) creates their own bigjoe.ldy
+   Now the sysop that already has yours installed, and is trying to install
+   Bob's event, will run into a problem. Two different events, but the same
+   filename. So, the sysop plays it safe and renames Bob's bigjoe.ldy to
+   bigbob.ldy .. Okay, Lordcfg wont have a problem with that. But.. What if
+   Bob referenced the actual filename "bigjoe.ldy" in his script? Bob's
+   event would then have problems.
+
+   Therefore. Use &filename in the code between @codebegin and @codeend
+   Lordcfg will replate it with the actual filename being installed.
+
+   Note 2:
+
+   If you do get fancy, and need a "fallback" event, do a:
+   @runsub LORD LORD.LDY
+   when needed. This will just restart the random event picker.
+
+@target <where>
+
+   Use this to specify where your event will be ran from. Possible values
+   are FOREST .. LEAVEINN .. LEAVEBANK .. OTHERPLACES
+
+   If you leave this command out, your event will default to the forest.
+
+@disp <some string>
+
+   This is only required if you your target is OTHERPLACES .. More
+   specifically, this will be the string displayed to the player.
+   Let me restate something: This is _required_ if your target
+   is OTHERPLACES.
+
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Events - UNINSTALL ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+The event @#UNINSTALL is called at 2 different times.
+
+1) When the sysop chooses the Uninstall option in Lordcfg
+
+2) When your version 2 replaces version 1.
+
+Normal Lady commands cannot be run here. Instead only the following commands
+work..
+
+@del <filename or filemask opr &filename>
+
+   If your event creates any files, its a good idea to remove them whenever
+   your event is uninstalled.
+
+   @del mydir/myfile.txt
+
+   or
+
+   @del mydir/*.*
+
+   or to remove the actual event file
+
+   @del &filename
+
+   Note the use of &filename .. See The last section of "EVENTS - INSTALL"
+   for the reasons to use this variable.
+
+@rmdir <dirname>
+
+   If you created and used a subdirectory for your event's files, make
+   sure to remove the directory when uninstalling. Please note: _You_
+   have to make sure the directory is empty before doing a @rmdir .. If
+   the directory is not empty, then the @rmdir will fail.
+
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Events - MAINT ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+Do you need to have maintenance run on your event? No problem! Add an event
+to your event file named @#MAINT and it will be ran when Lord runs its own
+daily maintenance.
+
+Any normal Lady command can be used here.
+
+
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Variables ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+These are case sensitive. Some, the numvars and player numvars, can be
+used with other @commands. Most others, however, are only used with
+@write and @writeln. See if you can come up with a new use for them!
+
+
+&rnd<num> - will give you a random number between 1 and <num>..
+            can be used for most everything.. make sure to drop the < >'s
+            the <num> can be a number, a &P var or a &N var..
+&S1..40   - displays 1 of 40 different string variables..
+            e.g. &S15 for the 15th..  max length: 79  default: empty
+&N1..40   - displays 1 of 40 different number variables..
+            e.g. &N24 for the 24th..  max amount: 2,147,483,647 default: 0
+&B1..40   - 40 different boolean (true/false) variables -  default: false
+
+&P - As of this writing, there are 38 player variables.. See the
+     "Player vars" section for a list, and a description of each.
+
+&I1 &I2 and &I3 - File handles.. To be used with @openfile, @rewritefile,
+        @appendfile, @closefile, and the @read's and @write's.
+
+&lorddir  - the directory where lord is installed (read only)
+&clean    - boolean.. Is the game in clean mode?  (read only)
+&file_created - boolean .. for use with @openfile, @rewritefile
+            and @appendfile (read only)
+&F        - displays user's first name (read only)
+&L        - displays user's last name (read only)
+&name     - The user's first and last name (read only)
+&nick     - users name in the game (read only)
+&time     - the users time left in minutes (read only)
+&ver      - will be replaced with the Lord's version number (read only)
+&rip      - true is RIP is enabled
+&hero     - the name of the last player to beat the dragon
+&play     - the player's number from player.dat
+&playedtoday - either 1 (true) or 0 (false).. whether the player has seen
+            this event today or not
+
+*note for the &S, &N, and &B var's.. if the specified number isnt between
+1 and 40, then itll default to 1. As in, &S1003 will do &S1 and &N862
+will do &N1 .. same for anything else that uses these variable sets.
+
+When &N vars are displayed, they will have commas in them..
+
+All number variables are of integer type.. Meaning, decimals not
+allowed.
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Screen Commands ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+Here are a list of the various screen control commands.. These are only used
+with @write, @writeln, and @display..
+
+foreground color -
+`1 dark blue     `6 brownish      `! light cyan     and seldom used
+`2 dark green    `7 grey          `@ light red      `^ black
+`3 dark cyan     `8 dark grey     `# light violet
+`4 dark red      `9 light blue    `$ yellow
+`5 dark violet   `0 light green   `% white
+
+** Note.. The black foreground here is only available here. Lady authors
+   are expected to use it wisely..
+
+background color -
+`r0 black               `r4 dark red
+`r1 dark blue           `r5 dark violet
+`r2 dark green          `r6 brownish
+`r3 dark cyan           `r7 grey
+
+Misc
+`c - clears the screen, goes down 2 lines
+`` - shows a `
+@@ - shows a @
+`l - displays the -=-=-=-=-=-=-=- line..
+`k <text> - will center <text> on that line.. `k has to be the first 2 chars
+   on that line..
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ @Commands (AT Commands) ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+
+While these arent case specific, they do have to be on their own line.
+Be sure to check the file "events.ldy" for examples.
+
+@#<questname> - signifies the beginning of the quest
+@clrscr - clears the screen
+@write <whatever> - writes whatever
+@writeln <whatever> - writes whatever and adds a carriage return
+@endquest - tells the quest engine its done with the file. should be
+            the very last line.
+@closequest - tells the quest engine its done with the quest. if the current
+              quest is the last quest in the file, its not needed.
+@display    - displays each line after it as the line is read (with color)
+@enddisplay - stops the @display command.
+@hitakey - waits for a keypress, even in @display mode.
+
+@delay <number>
+
+    This tells Lady to wait for <number> milliseconds. 100 is a second.
+    If you dont specify the number, it will wait for 100 milliseconds.
+
+@verreq <number>
+
+    So youve written an event that works great with the current version
+    of lord, but doesnt work with previous versions.. Use this to make
+    sure that the sysop is running the proper version. <number>
+    would be the lord version number, without periods, spaces, or anything.
+    For example. @verreq 407
+
+@endgame
+
+    This will kick the player out of the game.
+
+@choice - lemme see if i can explain this.. Itd be better if I gave you
+          an example, and tore it down for you..
+
+          @choice ABCD `2Whats your command? `8[`7A`8BCD]
+
+          Alright.. First, youve got the @command.. "@choice"
+          then youve got "ABCD" .. which are the acceptable keys the
+          user can hit. If the user hits a key thats not in that bunch,
+          the first letter will be used instead. The rest of the line is
+          what the user will actually see. SANSI commands can be used there.
+
+@case - @case response/responce/<numeric or boolean value> <case ID>
+
+        This command is meant to handle @choice commands, and &N vars..
+        Watch:
+
+@choice ABCD `2Whats your command? `8[ABCD]
+
+@case response 1
+A: @begin
+    @displayfile warrior.ans
+    @hitakey
+   @end
+B: @displayfile mystic.ans
+C: @begin
+    @writeln
+    @writeln `$Thats the right key!
+    @writeln
+   @end
+D: @displayfile thief.ans
+@endcase 1
+
+   or you could do something like..
+
+@set &N1 to &rnd10
+@case &N1 7
+1: @writeln its 1!
+2: @writeln its 2!
+3: @writeln its 3!
+@endcase 7
+
+   @case only works for response,numeric, or boolean values. "response"
+   can be "response" or "responce".. either works.. Notice in the &N
+   example that I didn't use all the numbers it could be. You dont have
+   to.. You dont have to with "response" either.. but you DO have to
+   have the @endcase and matching ID number!
+
+   Whats the deal with the ID number? That allows you to have as many
+   case statements nested within each other as you want.. example..
+
+   case &N1 1
+   12: @begin
+        @case &N2 2
+        23: @begin
+             @case &N3 3
+             @endcase 3
+            @end
+        @endcase 2
+      @end
+   @endcase 1
+
+   The above example is perfectly legal.. doesnt do much of anything tho.
+   No, the ID numbers do not have to be in sequential (1,2,3...) order..
+   They couldve been 1, 98, and  1000002 .. Just so much as theyre all
+   unique..
+
+
+@prompts <which &S var to save to> <max length> <true or false>
+
+   Used to get a string from the user. whatever the user types in will be
+   stored in one of the &S variables. Use it like so:
+
+   @prompt 3 60 true
+
+   Youve got the @prompt command.. then which &S var to put it into, then
+   the maximum length the user can go to.. If the last word is "true" then
+   a blue background will show up.. if the last is "false" or left off, the
+   blue background wont show up. Color codes are allowed, but dangerous ones
+   are striped off..
+
+@promptn <which &N var to save to> <max length of allowed numbers>
+
+   @promptn 21 2
+
+   Prompt for a number.. Store it in the 21st &N variable, and the number
+   entered will have a max length of 2 numbers. 99 = length of 2..
+   1234567890 = length of 10..
+
+@math <where the result should go> = <number> <+,-,*,/,!> <number>
+   If the result would go negative, then its ignored. "Divide by zero" is
+   also ignored.. The result has to go to a &N variable. You can use
+   &N vars, &P vars, and numbers to get that result..
+
+   examples:
+
+   @math &N1 = &N2 + &N3  ; addition
+   @math &N1 = &N2 - 50   ; subtraction
+   @math &N1 = 100 * &N3  ; multiplication
+   @math &N1 = &N2 / 2    ; divide, throw away remainder
+   @math &N1 = &N2 ! &N3  ; divide, only keep the remainder
+
+   *note: 15 / 2 equals 7.. 15 ! 2 equals 1
+
+@displayfile <name> <filename>
+   This is used to display an ansi or sansi file. If filename is left off,
+   then itll display the entire file. Otherwise, itd be treated as a
+   SANSI style database.. Where you have a bunch of screens in one file,
+   and each has an @#<screentitle>.. You dont have to add the @# .. The
+   engine will do it for you..
+
+@label <labelname>
+@goto <labelname>
+   Using these 2 commands, you can make a script return to a specific
+   place. the labels arent case specific... and yes, they can be used
+   within @case's..
+
+@if <operand 1> <comparison operator> <operand 2> <ID>
+@begin
+<block of code>
+@end
+@else <ID>
+@begin
+<block of code>
+@end
+@endif <ID>
+
+
+   Using @if, you can check the value of a &variable. If the comparison
+   is true, the first block of code is ran. If the comparison isn't true,
+   and there is a second block of code, the second block will be ran.
+
+   Comparison operators are, and the type of comparison:
+     is,=     : equal
+     <>,!=    : not equal
+     <        : less than
+     >        : greater than
+
+   &B, &P, &N, &S, &clean, &file_created are all acceptable operands.
+   If the first operand is not preceded by an &, it be treated as a number.
+
+   It is important to note that boolean values interpret to 1 for
+   true, or 0 for false. This also means that you could compare a
+   boolean to a number. For example: @if &B1 = &N1 ..
+   When comparing booleans, operand 2 could be 1, T, or true,
+   or 0, F, or false.
+
+   String variables can only be compared against string variables,
+   or one word strings. If you want to have a multiple word operand,
+   put it in a string variable. Lady will determine if you are doing
+   a string comparison based on the first operand.
+
+   When comparing strings, keep in mind that it is case sensitive.
+   'LORD' is not the same as 'lord'.
+
+   <ID> doesn't have to be a number, a letter.. They just have to match.
+
+   You do not have to have an @else, but you do have to have an @endif.
+
+   If <block of code> is only one line, you do not have to have the
+   @begin/@end pair.
+
+   Examples:
+
+   @if &B7 is true 1        @if &Psx is false sexcheck
+     @begin                      @writeln The player is female!
+       stuff                    @else sexcheck
+       stuff                     @begin
+     @end                          @display
+     @else 1                          You take Violet by the hand...
+     @begin                                  but she rejects you!
+       stuff                       @enddisplay
+       stuff                     @end
+     @end                      @endif sexcheck
+   @endif 1
+
+
+   * note .. You can have as many nested if/thens as you want..
+    Whats a nested if/then?
+
+   Example
+    @if &N2 = &Pwn A
+     @begin
+      @if &N2 != &N3 true B
+      ...
+      @endif B
+     @end
+    @endif A
+
+@upstr <&S var>
+   Will make the &S variable all upper case..
+
+@lowstr <&S var>
+   Will make the &S variable all lowercase..
+
+@set &B<num> to <true/false or t/f or 1/0>
+@set &B<num> to !<true/1 or false/0>
+@set &N<num> to +<a value>
+@set &N<num> to -<a value>
+@set &N<num> to <a value>
+@set &S<num> to <whatever you like>
+
+@set &P<which one> to <value>
+@set &P<which one> to +<value>
+@set &P<which one> to -<value>
+
+   @set allows you to change the value of a &variable.
+
+   If the variable that you are setting is a boolean and the value
+   is preceded by an exclamation point, you will set the opposite of
+   the value. In pascal, the equivalent would be &B := not <the value>
+
+   If you are setting a &N or &P variable, and the value is preceded by a
+   plus sign, you will increment the &variable with <the value>.
+
+   If you are setting a &N or &P variable, and the value is preceded by a
+   minus sign, you will decrement the &variable with <the value>.
+
+   If you are setting a &P variable, the value has to be within range.
+   If the value is not within range, the command will be ignored.
+
+@runsub <which one> <which file>
+
+   Need to chop your script into several different pieces? @RUNSUB will
+   let you do that.. <which one> is the quest to run, and <which file>
+   is the file the quest is in. You don't have to have a <which file>..
+   If you omit it, then the current file is assumed. <which one> does
+   not have to be in all capital letters.
+
+   A @RUNSUB command will end whatever quest its called from.
+
+   If you omit both the quest and the file, the LORD event will be ran from
+   the LORD.LDY file.
+
+   &variable values are inherited from the calling event. Meaning..
+   Event one sets &N1 to 100, and then @runsub's event 2. &N1 will
+   be equal to 100 in event 2. The only exception to this rule are the
+   &I variables. Files are closed before a sub-event is ran.
+
+
+@openfile &I<1,2,3> <filename>
+
+   Opens a file and sets the file's pointer to the beginning of the file.
+   If the file doesn;t exist, it will be created. You can have 3 different
+   files open at any one time. If the file variable is already assigned
+   to another file, you can't reassign it until your close it. @openfile
+   will not open an .exe, .ovr, .dll, .bat, .com, or .sh files.
+
+   If the file was created, the variable &file_created will be true.
+
+   The <filename> you specify will have the lord's directory pre-prended
+   onto it. This ensures that whatever files that Lady scripts create are
+   in the Lord directory or a subdirectory.
+
+   <filename> can contain a subdirectory. However, Lady will not create
+   the subdir for you. You have to do that yourself.
+
+   Note.. A system is limited in how many files it can have open at one
+   time. This number is usually signified in config.sys by the line
+   "FILES=10" or whatever. Obviously, the more files you have open,
+   the closer you'll get to the system's limit. This isn't something to
+   be overly concerned about, but it is something to keep in mind if
+   you use all 3 file variables at one time. Think about it.. You have
+   3 files open at once, on 10 nodes.. That'd be 30 open files.. Plus
+   the files that Lord has open.. Plus any files that any other programs
+   have open.. Again.. Not something to be overly concerned about..
+   Just something to keep in mind.
+
+@rewritefile &I<1,2,3> <filename>
+
+   Recreates the specified file. That is.. if <filename> exists when you
+   do a @rewritefile, it will be overwritten as a zero byte / empty file.
+
+   &file_created will always be true upon success.
+
+   As with @openfile, lord's directory will be pre-pended onto the front
+   of the filename.
+
+   As with @openfile, <filename> can contain a subdir. But you have to
+   create the directory yourself.
+
+@appendfile &I<1,2,3> <filename>
+
+   Opens a file and sets the file pointer to the end of the file. If the
+   file does not exist, it will be created.
+
+   If the file is created, the variable &file_created will be true
+
+   <filename> can contain subdirectories, but Lady will not create the
+   subdir for you. You have to do that yourself.
+
+   Lord's directory will be prepended onto the beginning of the filename.
+
+@closefile &I<1,2,3>
+
+   Closes a file that was previously open by @openfile. Lady will clean
+   up after you by closing any files you left open, but you should still
+   close the file yourself. Its good scripting mojo.
+
+@writeln &I<1,2,3> <anything>
+
+   After doing an @openfile, you can use @writeln to write to the file.
+
+@readline &I<1,2,3> &S1-40
+@readline &I<1,2,3> &N1-40
+
+   After doing an @openfile, you can use @readline to read either a
+   string or a number
+
+
+@saveplayer
+
+   This forces Lord to save the player's data.
+
+@changearm <1..15>
+@changewep <1..15>
+
+   These commands change the player's armour or weapon.
+
+@setbit &N1-40 1-32 on|off
+@setbit &N1-40 1-32 true|false
+@setbit &N1-40 1-32 1|0
+
+   Sometimes you need more boolean variables than the 40 thats
+   alloted by lady. Using a &N variable, you can use an additional
+   32 booleans for each &N thats used in a bitwise manner.
+
+   An example:
+
+   @set &N1 to 0 ; always zero it out first
+   @setbit &N1 1 true
+
+@isbitset &N1-40 1-32 &N1-40
+@isbitset <var to check> <bit to check> <var to save the result in>
+
+   Returns either a 1 (true) or 0 (false)
+
+   An Example:
+
+   @set &N1 to 0
+   @setbit &N1 1 true
+   @isbitset &N1 1 &N2
+   @if &N2 = 1 then 1
+     @writeln The bit is set!
+   @endif 1
+
+
+@DEBUG ON
+@DEBUG OFF
+@DEBUG SUPER ON
+@DEBUG SUPER OFF
+
+These commands toggle the logging done by Lady.
+
+Normal debug ("DEBUG ON" to turn it on, and "DEBUG OFF" to turn it off)
+only logs your normal things. This is the equivalent of adding /DEBUG to
+the command line.
+
+Super debug ("@DEBUG SUPER ON" and "@DEBUG SUPER OFF") turn on _major_
+logging. A lot more will be logged with this, however, this can create
+_Very_ large log files very quickly.
+
+Note: If your script does a @DEBUG ON or a @DEBUG SUPER ON, but does not
+turn it off, logging _Stays_ on until the program is exited.
+
+
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Player Stats ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+Want to modify the player's stats? Use the mail codes! The same mail codes
+that can be used by IGMs can be used in Lady! They have to be at the
+beginning of the line.. Check a Lady file, or a mailxx.dat for examples..
+Of course, you could use @set .. ;>
+
+`b<amount> this deposites the amount in the readers bank account.
+`G<amount> this puts the amount in the readers 'money in hand'.
+`E<amount> this adds to the readers experience by amount.
+`$<account num>  Makes user MARRIED to this person. (-1 for not married)
+`{ this increments the 'number of lays' stat of the reader.
+`} {this increments the readers charm.)
+`+<amount>  Users charm BECOMES this number. (Used in divorce mail-backs)
+`K this increments the amount of kids the reader has.
+`M<amount>  This increments readers Strength
+`D<amount>  This increments readers Defence
+`,<amount>  This increments forest fights per that day
+`:<amount>  This increments user fighters per that day
+`;<amount>  This increments readers Hitpoint Max
+
+   (Note, the above mail codes can decrement if a - is placed before num.
+   Checking is done to make sure user does not go below certain levels)
+
+`S This raises the readers SKILL in his current class.  Will not let the
+   skill pass 40.
+
+How to use these mail codes? Use them with a @write @writeln or @display
+command.. they have to be the only thing on the line, and they have to be
+at the beginning of the line. examples..
+
+@writeln `0Youve just defeated the Red Dragon!
+@write `E10000
+
+@display
+  `0Youve just defeated the Red Dragon!
+`E10000
+@enddisplay
+
+ษออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
+บ ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ Player Variables ฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐฐ บ
+ศออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+These are the player variables. They can be used most everywhere. Screen
+commands will display the value instead of the variables, where ever you
+could put a number, etc. If you try to set a variable outside of its range,
+it'll be ignored. In other words,
+
+@set &Pba to 2000000000
+
+would be fine, while
+
+@set &Pba to 5000000000
+
+would be ignored.
+
+numbers
+-------
+&Pan {armor num ..                                 Range: 1 to 15}
+&Pba {gold in bank ..                              Range: 0 to 2 billion}
+&Pch {charm ..                                     Range: 0.. 32,000}
+&Pcl {player's class.. 1 (warrior), 2 (mystic man), or 3 (thief)}
+&Pde {total def points ..                          Range: 0.. 32,000}
+&Pex {xp points ..                                 Range: 0 to 2 billion}
+&Pff {forest fights ..                             Range: 0.. 32,000}
+&Pgo {gold in hand ..                              Range: 0 to 2 billion}
+&Pge {# of gems on hand ..                         Range: 0.. 32,000}
+&Phf {human fights ..                              Range: 0.. 32,000}
+&Pht {current hit points ..                        Range: 0.. 32,000}
+&Phx {max hp ..                                    Range: 0.. 32,000}
+&Pki {# of kids ..                                 Range: 0.. 32,000}
+&Pkd {# of times player has killed the dragon ..   Range: 0.. 32,000}
+&Ply {player lays stat ..                          Range: 0.. 32,000}
+&Plv {hmmmm ..                                     Range: 1 to 12}
+&Plw {number of Death Knight uses left today ..    range: 0 to 100}
+&Plm {number of Mystical skill uses left today ..  range: 0 to 100}
+&Plt {number of Thieving skill uses left today ..  range: 0 to 100}
+&Ppk {# of player kills ..                         Range: 0.. 32,000}
+&Psr {total str points ..                          Range: 0.. 32,000}
+&Psw {number of Death Knight skill points ..       range: 0 to 100}
+&Psm {number of Mystical skill points ..           range: 0 to 100}
+&Pst {number of Thieving skill points ..           range: 0 to 100}
+&Pwn {wep num ..                                   range: 1 to 15}
+
+booleans (true or false)
+--------
+&Pam     {does player carry amulet of accuracy? 1=true, 0 = false}
+&Pdd     {true=dead}
+&Pdi     {did player divorce today?}
+&Pdr     {seen dragon today?}
+&Pse     {seen master today?}
+&Psx     {true=female}
+&Psb     {seen bard?}
+&Pho     {has a horse?}
+&Phi     {high spirits?}
+&Pfa     {true=player has a fairy}
+&Pfl     {if true, player has flirted that day}
+&Pfi     {flirted in inn?}
+&Pma     {is player married? cant set this.}
+
+strings (none of these can be set.)
+-------
+&Pmn     {name of person married to, cant set this..}
+&Pwe     {wep name}
+&Par     {armor name}
+
+numbers {that cant be changed}
+-------
+&Ppl     {player's record position in player.dat}

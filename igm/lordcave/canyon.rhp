@@ -1,0 +1,114 @@
+@;@ The Canyon #2 RHP
+@;@ Adaptation by Donald Tidmore.
+@;@ Original script created by Jason Brown
+@;@ For The L.O.R.D. Cavern v1.5+ and LORD v3.50+
+@;@  Fidonet Email:  1:/123/450
+@;@  Email: donald.tidmore@fidotel.com, donald.tidmore@usa.net
+@;@  URL: http://www.fidotel.com/public/camelot/camelot5.htm
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.5
+@;@@NAME@ The Canyon #2
+@;@@PERCENT@ 60
+@;@@SCRIPTVERSION@ 1.02
+
+`%You are wandering around, when you almost fall down a
+`%huge, deep canyon!  You stagger backwards.
+  `0Look over the edge, `$`n? `l
+@YESNO@
+
+@##N
+
+`%You compose yourself, and back away to the tunnel you
+`%came in from.
+@END@
+
+@##Y
+
+`%You carefully look over the edge, and see it's a long
+`%way down.  However, there looks to be a large ledge
+`%not that far from where you are... but you'll have to
+`%climb down there.
+
+  `0Climb down to the ledge?`l
+@YESNO@
+
+@##N
+`%You decide you've had enough looking down large canyons
+`%for one day and leave.
+@END@
+
+@##Y
+`%You start to carefully climb down the side of the canyon.
+@RANDOM@ 5
+
+@##3
+
+  `@ALL OF THE SUDDEN, THE ROCK WALL YOU'RE ON COLLAPSES!
+    `!You fall and splatter on the bottom of the canyon.
+
+@NEWS@
+`%  `n `@died while exploring the `!Cavern`@.
+`#  `%`s fell down a huge `0Canyon `%while trying to climb down it.
+@NEWSLINE@
+@KILLSAVE@
+
+@##1
+@##2
+@##4
+@##5
+
+`%You safely make it to the ledge.  You find a tunnel.  Seeing
+`%as you would rather not try and climb back up, you decide to
+`%follow it.  You find `l
+
+@RANDOM@ 4
+@##1
+`%  nothing.
+
+`%You continue onward until the tunnel meets with the main `%Cavern.
+@END@
+
+@##3
+@##4
+
+`9Gems `%scattered all over the tunnel floor.
+
+  `0In all, you find `%5 `$gems.
+@GEMS@ 5
+
+`%You wander around awhile, and find the main cavern again.
+@END@
+
+@##2
+`%  a skeleton.
+
+`%It appears to be holding a note... When you look at it, you find
+`%it's an Account number from the `%Bank.  `%You decide to take
+`%it to them, and see what you can get for it.
+
+@MAIL@
+`%                Ye Olde Bank - `$Lost Claims Department
+`0-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+`!  Thank you for your visit!  The Account number you gave us has
+`!  `$$2,000`! in it...  Seeing as the previous owner can not use it,
+`!  the money has been deposited into your account.  Have a nice day.
+`%     Signed, Albert H. Horrow, Manager.
+@BANK@ 2000
+
+@MAILEND@
+
+`%You skip back to the main tunnel.
+`#  Wondering how much `$Gold `#the bank will give you ...
+
+
+@END@
+
+@;@ color code tweaking.  Indentation of some lines.
+@;@ 06/16/03:  Tried version with KILLSAVE code.
+@;@ 06/16/03:  Changed gold amount to 2,000 coins.
+@;@ Verified script worked as redesigned 06/17.
+@;@ 06/17: Verified KILLSAVE worked - both scenarios tested.
+@;@ 06/17 v1.01 - Display player's name. Color coding changes.
+
+@;@ 06/16/2003: This version allows 50% survival if killed with a Fairy.
+@;@ 11/05/03: Removed version number from RHP_Name line.

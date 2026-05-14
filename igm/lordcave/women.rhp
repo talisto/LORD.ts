@@ -1,0 +1,156 @@
+@;@The Cavern Women RHP for LORD Cavern v1.3b
+@;@Written by James Stubbs
+@;@Fidonet 1:3651/12, Internet: stubbs@coker.edu
+@;@Thanks to Jason Brown for this awesome program!
+@;@ Modified: Added @IF@ MARRIED check - married players skip the encounter rewards
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.3b
+
+`7You suddenly stumble across a barely noticible opening in the cavern
+`7walls.  A faint glow of light spills out into the main tunnel and you
+`7can hear the faint peals of laughter from within.
+`7Do you enter the opening?`l
+@YESNO@
+@##N
+`4CHICKEN!
+@GOTO@ @#Ending
+@#Ending
+`7You walk around and come across the main tunnel.
+@END@
+@##Y
+`7You manage to squeeze yourself through the opening to find...
+@DELAY@
+`l
+@DELAY@
+`l
+@MORE@
+@CLEAR@
+@IF@ MALE @GOTO@ @#GENTS
+@IF@ FEMALE @GOTO@ @#LADIES
+@#GENTS
+`7Another cavern room gently bathed in candlelight.  You find yourself being
+`7hungrily eyed by three gorgeous women: A young elf girl, an oriental women
+`7in her twenties, and a very pale woman who's eyes seem to burn through you.
+`7One says, "`4Look girls...  fresh meat...`7"
+
+`7Pop Quiz, hotshot...  what do you do?
+`7(`4A`7) `4Kill 'em all!  Let God sort 'em out!
+`7(`4B`7) `4Three women??...  This is my dream!
+`7(`4C`7) `4Make a puddle and run!
+@PROMPT@ ABC
+@##A
+`7"`4Good going moron!  You've made them mad!`7"  All three of them jump you
+`7and chase you out of the cavern with their angry yells and fists.  You
+`7get the `2SNOT `7beaten out of you!
+@HITPOINTS@ %-25
+@GOTO@ @#Ending
+@##B
+@IF@ MARRIED @GOTO@ @#Married
+`7The three girls give you *THE LOOK*...  who's it gonna be stud?
+`7(`41`7) `2Lady Deedtress
+`7(`42`7) `!Lady Akiko Hizame
+`7(`43`7) `8Lady Muerte
+@PROMPT@ 123
+@##1
+`7You tenderly embrace Lady Deedtree and share a passionate kiss.  You
+`7cherish each other and enjoy a night of tender love.  You wish morning
+`7would never come.  With regret you leave her only to be surprised a few
+`7months later by her showing up with your child!  You couldn't be more
+`7proud knowing your child couldn't have a better mother.
+@KIDS@ 1
+@LAYS@ 1
+@GOTO@ @#Ending
+@##2
+`7Lady Hizame pulls you into a rough kiss and begins to tear at your
+`7clothes!  You've never seen such animalistic passion before and you shut
+`7your eyes enjoying the sensation.  Your eyes open to be staring into the
+`7eyes of a werewolf!  She puts her clawed hand tenderly on your lips.  Sensing
+`7no harm, you settle back for the wildest lovemaking you've ever had!
+`7You wake up next to her naked body feeling much stronger after the workout
+`7she gave you!
+@STRENGTH@ 5
+@LAYS@ 1
+@GOTO@ @#Ending
+@##3
+`7Lady Muerte sends a cold chill down your spine as she pulls you into
+`7her arms.  Her body is so cold - fortunately, she makes up for it with the
+`7 incredibly hot love she gives you.  You suddenly yell out in pain as she
+`7begins to scratch symbols into your chest with her fingernails!  She hushes
+`7you with a seductive smile and increases her tempo until the pleasure is too
+`7much for you and you pass out.  When you wake up in the morning you stare at
+`7the scarred symbols on your chest and are reminded of your passionate night.
+`7You feel like you could take on the world!
+@FOREST@ 5
+@LAYS@ 1
+@GOTO@ @#Ending
+@##C
+`4CRIPES MAN!  NO WONDER YOU CAN'T EVER GET A DATE!
+@CHARM@ -5
+@GOTO@ @#Ending
+@#Married
+`7You remember your spouse, and decide to be faithful.  You make an excuse
+`7and slip back out the opening.  You feel virtuous, if a little regretful.
+@GOTO@ @#Ending
+@#LADIES
+`7Another cavern room gently bathed in candlelight.  You find yourself being
+`7hungrily eyed by three handsome men: A young elf man, an exotic-looking man
+`7in his twenties, and a very pale man who's eyes seem to burn through you.
+`7One says, "`4Look guys...  fresh meat...`7"
+
+`7Pop Quiz, girly...  what do you do?
+`7(`4A`7) `4Kill 'em all!  Let God sort 'em out!
+`7(`4B`7) `4Three guys??...  This is my dream!
+`7(`4C`7) `4Make a puddle and run!
+@PROMPT@ ABC
+@##A
+`7"`4Good going moron!  You've made them mad!`7"  All three of them jump you
+`7and chase you out of the cavern with their angry yells and fists.  You
+`7get the `2SNOT `7beaten out of you for being such a tease!
+@HITPOINTS@ %-25
+@GOTO@ @#Ending
+@##B
+@IF@ MARRIED @GOTO@ @#Married
+`7The three men give you *THE LOOK*...  who's it gonna be dearie?
+`7(`41`7) `2Lord Malthos
+`7(`42`7) `!Lord Akira Saotome
+`7(`43`7) `8Lord Muerte
+@PROMPT@ 123
+@##1
+`7You tenderly embrace Lord Malthos and share a passionate kiss.  You
+`7cherish each other and enjoy a night of tender love.  You wish morning
+`7would never come.  With regret you leave him only to be surprised a few
+`7months later by him showing up with your child!  You couldn't be more
+`7proud knowing your child couldn't have a better father.
+@KIDS@ 1
+@LAYS@ 1
+@GOTO@ @#Ending
+@##2
+`7Lord Saotome pulls you into a rough kiss and begins to tear at your
+`7clothes!  You've never seen such animalistic passion before and you shut
+`7your eyes enjoying the sensation.  Your eyes open to be staring into the
+`7eyes of a werewolf!  He puts his clawed hand tenderly on your lips.  Sensing
+`7no harm, you settle back for the wildest lovemaking you've ever had!
+`7You wake up next to his naked body feeling much stronger after the workout
+`7he gave you!
+@STRENGTH@ 5
+@LAYS@ 1
+@GOTO@ @#Ending
+@##3
+`7Lord Muerte sends a cold chill down your spine as he pulls you into
+`7his arms.  His body is so cold - fortunately, he makes up for it with the
+`7 incredibly hot love he gives you.  You suddenly yell out in pain as he
+`7begins to scratch symbols into your chest with his fingernails!  He hushes
+`7you with a seductive smile and increases his tempo until the pleasure is too
+`7much for you and you pass out.  When you wake up in the morning you stare at
+`7the scarred symbols on your chest and are reminded of your passionate night.
+`7You feel like you could take on the world!
+@FOREST@ 5
+@LAYS@ 1
+@GOTO@ @#Ending
+@##C
+`4CRIPES GIRL!  NO WONDER YOU CAN'T EVER GET A DATE!
+@CHARM@ -5
+@GOTO@ @#Ending
+@#Ending
+`7You make your way back to the main tunnel.
+@END@

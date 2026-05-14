@@ -1,0 +1,11 @@
+{
+  "name": "@lordts/core",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "dependencies": {
+    "@lordts/util": "*",
+    "@lordts/storage": "*",
+    "@lordts/igm": "*"
+  }
+}

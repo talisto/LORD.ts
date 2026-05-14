@@ -1,0 +1,32 @@
+@#INSTALL
+@eventname HAMMERSTONE
+@author Seth Able
+@authid HAMSTONE1
+@codebegin
+@runsub HAMMERSTONE &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#HAMMERSTONE
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2You find a `%Hammer Stone`2!
+
+@hitakey
+  `2As is the tradition, you break it in two with your
+  `0&PWE`2. Your weapon tingles!
+
+  `%ATTACK STRENGTH RAISED.
+
+@enddisplay
+@set &Psr to +1
+@writeln
+@hitakey
+@clrscr
+@endquest
+

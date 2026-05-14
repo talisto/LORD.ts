@@ -1,0 +1,173 @@
+@#INSTALL
+@eventname The Outhouse
+@author Donald Tidmore
+@authid OUTHOUSE104
+@codebegin
+@runsub OUTHOUSE &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+; ===============================================================
+; The Outhouse v1.04.  Script Event by Donald Tidmore.
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+; ===============================================================
+;
+@#Outhouse
+@display
+`c  `%Event In The Forest`%
+`l
+
+   `0You realize you really do need to make a pit stop, so you head
+   towards the nearest `@Outhouse.  `0When you get there you see a very
+   long line.
+
+   `%If you wait in line, you''ll lose time for 1 forest fight today.
+   You also see some trees a fair distance away that look deserted.
+
+   `9What do you want to do?
+    `$[W]`%ait in line at the `@Outhouse.
+    `$[G]`%o behind the Trees.
+    `$[Q]`%uit, you can hold it in for awhile longer.
+@enddisplay
+
+@writeln
+@choice WGQ `#What is your choice? `9[`0W`0G`0Q]
+
+@case response 1
+;  Wait in line at Outhouse:
+; ------------------------------------------------------------------
+W: @BEGIN
+     @math &N1 = &Pff + 0;
+     @math &N2 = &N1 - 1;              ; Deducts 1 forest fight;
+     @set &Pff to &N2;
+
+     @math &N3 = &Pch + 0;
+     @math &N4 = &N3 + 4;              ; Gives player 4 charm points.
+     @set &Pch to &N4;
+
+     @writeln   `0After what seems like hours, you finally get to go.
+     @writeln   You also take the time to wash up and comb your hair.
+     @writeln   You look much better now.
+     @writeln
+     @writeln    `%You `@GAIN `$4 `#Charm Points!  `%And you `@LOSE `91 `#Forest Fight.
+
+     ; ----------------------------------------------------------------
+     @if &N4 > 32000 1                 ; 12/27/03 code block
+       @begin
+         @Set &N4 to 32000
+         @set &Pch to 32000
+       @end
+     @endif 1
+     @writeln
+     @writeln    `!You now have `$&N4 `#Charm Points.
+     @writeLn    `!And you have `$&N2 `#Forest Fights `!now.
+     ; ----------------------------------------------------------------
+
+     @writeln
+     @writeln   `%You turn, leave the `@Outhouse, `%and run back to the `2Realm.
+     @writeln
+     @goto Outh_Ending
+   @END
+
+;  Go behind the Trees:
+; ------------------------------------------------------------------
+G: @BEGIN
+     @writeln
+     @writeln  `0You wait until nobody is looking and run towards the trees.
+     @writeln  You really have to go bad.  And if you don't do something
+     @writeln  quick, you think you''ll explode.
+     @writeln
+     @writeln  `#You hear voices in the distance, but you can't tell if they
+     @writeln  are coming closer or not.
+     @writeln
+     @writeln  `!You grab some leaves off of the nearest tree, and think 
+     @writeln  about your options.  `#What do you want to do?
+     @goto OUTH_TREES
+   @END
+
+;  For Primary Quit option:
+; =====================================================================
+Q: @BEGIN
+      @writeln
+      @writeln  `0You are walking towards the `@Outhouse `0when you realize 
+      @writeln  you are tired.  So, you turn around and head back to Town.
+      @writeln
+      @writeln  `2You really didn''t have to go that bad anyways, maybe tomorrow.
+   @END
+@endcase 1         ; Ending of script's main menu processing area.
+
+
+;  Do Separate self-contained CASE structure for "Tree options".
+@LABEL OUTH_TREES
+@writeln
+@writeln  `$[G]`%o to the bathroom `#NOW, `%you can't wait any longer.
+@writeln  `$[Q]`%uit, you can hold it awhile longer.
+@writeln
+@choice GQ `#What is your choice? `9[`0G`0Q]
+
+@case response 2
+G: @BEGIN
+     @writeln
+     @writeln  `0You turn, and face a nearby tree. ...
+     @writeln
+     @writeln  `2As you drop your pants, a large group of people walk by. `@OOPS!
+     @writeln
+     @writeln  `%You hear laughter and look up to see 20 people pointing and
+     @writeln  laughing at you.
+     @writeln
+     @math &N3 = &Pch + 0;
+     @math &N4 = &N3 - 10;              ; Take away 10 charm points.
+     @set &Pch to &N4;
+
+     @writeln  `2In your rush to get away, you manage to step in the mess you made.
+     @writeln
+     @writeln    `%You `@LOSE `910 `%Charm Points!
+     ; ----------------------------------------------------
+     @writeln                          ; Added 12/27/03.
+     @writeln    `!You now have `$&N4 `#Charm Points.
+     ; ----------------------------------------------------
+     @writeln
+     @goto Outh_Ending
+   @end
+
+;  ------------------------ Secondary Quit section.
+Q: @BEGIN
+     @writeln 
+     @writeln  `0You change your mind about doing "it" ...
+     @writeln  `0Because you're too tired to think straight.
+     @writeln
+     @writeln  `%So, you turn around and head back to `@Town.
+     @writeln
+     @writeln  `#You really didn''t have to go that bad anyways, maybe tomorrow.
+     @writeln
+   @END
+
+@label Outh_Ending
+
+@hitakey                   ; Needed for LORD 4.06 compatibility.
+@endquest
+
+; ===============================================================
+; Based upon The Outhouse v1.00 IGM, formerly by Robert Fogt.
+;
+; The Forest Outhouse v2.10 LORD IGM:  Available from this URL:
+; http://www.filegate.net/camelot/lordfile/outh210.zip - 10/07/03 note.
+;
+; The Forest Outhouse v2.20 LORD IGM:  Available from this URL:
+; http://www.filegate.net/camelot/lordfile/outh220.zip - 12/27/03 note.
+;
+; v1.01: 12/27/2003. Prevents Charm from exceeding 32,000 points.
+; v1.02: 12/05/2004. Renamed script label Trees_Case to Outh_Trees.
+;
+; The Forest Outhouse v2.50 LORD IGM:  Available from this URL:
+; http://www.filegate.net/camelot/lordapps/outh250.zip - 06/11/05 release.
+;
+; 07/24/05: Added INSTALL and UNINSTALL sections to script.
+; ===============================================================
+
+; 05/31/07: v1.04: Revised Email/WWW info;  Changed version #.
+
+

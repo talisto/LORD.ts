@@ -1,0 +1,63 @@
+@#INSTALL
+@eventname HAG
+@author Seth Able
+@authid HAG1
+@codebegin
+@runsub HAG &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#HAG
+@verreq 407
+@writeln `c  `%Event In The Forest`0
+@writeln `l
+@writeln
+@if &Pht = &Phx 1
+ @begin
+  @writeln   `2You come across an ugly old hag.  `5"Give me a gem!  You won't be sorry
+  @writeln   my pet!"`2 she screeches.
+ @end
+ @else 1
+ @begin
+  @writeln   `2You come across an ugly old hag.  `5"Give me a gem and I will completely
+  @writeln   heal you warrior!"`2 she screeches.
+ @end
+ @endif 1
+@writeln
+@choice NY   Give her the gem? [`0N`2]
+@writeln
+@case responce 1
+Y: @begin
+    @if &Pge < 1 1
+     @begin
+      @writeln   `5"You have no gems, fool!"`2  the old woman screams at you.  She then
+      @writeln    hits you in a sensitive spot with her cane, and you feel VERY weak.
+      @set &Pht to 1
+     @end
+     @else 1
+     @begin
+      @math &N1 = &Pge - 1
+      @set &Pge to &N1
+      @writeln   You give her a gem.  She waves her wand strangely.
+      @writeln
+      @writeln   `%YOU FEEL BETTER
+      @if &Pht < &Phx 2
+       @set &Pht to &Phx
+       @else 2
+       @begin
+        @set &Phx to +1
+       @end
+      @endif 2
+     @end
+     @endif 1
+   @end
+N: @begin
+    @writeln   `5"Hurumph!" `2 the old woman grunts sourly as you leave.
+   @end
+@endcase 1
+@writeln
+@hitakey
+@clrscr
+@endquest

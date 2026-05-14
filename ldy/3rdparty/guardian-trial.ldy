@@ -1,0 +1,495 @@
+@#INSTALL
+@eventname The Guardian's Trial
+@author Claude Opus 4.6
+@authid GUARDIAN-TRIAL-100
+@codebegin
+@runsub GUARDIAN &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#GUARDIAN
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2The oaks shudder. Bark splits. Antlers sprout from living wood!
+  `2An ancient guardian heaves itself out of the earth - ten feet tall,
+  `2wreathed in moss, with eyes like green lanterns and a voice like
+  `2a landslide clearing its throat.
+
+  `0"`%HALT, little thing.`2"
+
+  `2It lowers its antlers until they frame your face.
+
+  `0"`%Few walk this deep on purpose. Prove you belong here,
+  `0or become `4fertilizer`0.`2"
+@enddisplay
+@hitakey
+
+@writeln
+@writeln   `2How do you answer the Guardian?
+@writeln   `2(`0C`2) Fight it - blade against bark!
+@writeln   `2(`0R`2) Accept a riddle
+@writeln   `2(`0O`2) Offer tribute and beg passage
+@writeln   `2(`0F`2) RUN!
+@writeln
+@choice CROF   `0Your choice? [`0CROF`2]
+@case response 1
+C: @goto GUARDIAN_COMBAT
+R: @goto GUARDIAN_RIDDLE
+O: @goto GUARDIAN_OFFER
+F: @goto GUARDIAN_FLEE
+@endcase 1
+
+; --- COMBAT ---
+@label GUARDIAN_COMBAT
+@math &N10 = &Psr + &Pde
+@set &N10 to +&Plv
+@set &N10 to +&rnd10
+@math &N11 = &Plv * 4
+@set &N11 to +14
+@writeln
+@writeln   `2The Guardian lowers its antlers and `4CHARGES `2- like an
+@writeln   avalanche with a grudge! The earth shakes! Birds scatter!
+@if &N10 > &N11 1
+ @begin
+  @math &N12 = &Plv * 30
+  @set &N12 to +60
+  @writeln
+  @writeln   `2You dodge the first rush, roll under the second, and drive
+  @writeln   `0&PWE `2into the gap between bark-plates! CRACK!
+  @writeln
+  @writeln   `2The Guardian stumbles, rights itself, and then... `0bows`2.
+  @writeln
+  @writeln   `0"`%Well struck, warrior! You have earned the forest's respect.`2"
+  @writeln   `%You gain &N12 experience!
+  @set &Pex to +&N12
+  @if &Pht < &Phx 2
+   @begin
+    @writeln   `2Warm sap flows from its fingers and your wounds seal shut!
+    @writeln   `%You are fully healed!
+    @set &Pht to &Phx
+   @end
+  @else 2
+   @begin
+    @writeln   `2It stamps once and a new path opens through the brush.
+    @writeln   `%You gain 1 forest fight!
+    @set &Pff to +1
+   @end
+  @endif 2
+  @goto TRIAL_END
+ @end
+@else 1
+ @begin
+  @math &N13 = &Phx / 3
+  @set &N13 to +&rnd8
+  @writeln
+  @writeln   `2The Guardian bats you aside like a `4TOY`2! You hit a tree,
+  @writeln   bounce off a boulder, and land in a thornbush!
+  @writeln
+  @writeln   `0"`%Brave. Stupid. But `$brave`0.`2"
+  @writeln   `4You lose &N13 hit points!
+  @set &Pht to -&N13
+  @if &Pht < 1 3
+   @set &Pht to 1
+  @endif 3
+  @goto TRIAL_END
+ @end
+@endif 1
+
+; --- RIDDLE ---
+@label GUARDIAN_RIDDLE
+@math &N14 = &rnd7
+@writeln
+@writeln   `2The Guardian folds itself to the forest floor with the
+@writeln   sound of a whole tree sitting down.
+@writeln
+@writeln   `0"`%Then answer, little mortal. Answer `$well`0.`2"
+@if &N14 = 1 4
+ @goto RIDDLE_ONE
+@endif 4
+@if &N14 = 2 5
+ @goto RIDDLE_TWO
+@endif 5
+@if &N14 = 3 6
+ @goto RIDDLE_THREE
+@endif 6
+@if &N14 = 4 7
+ @goto RIDDLE_FOUR
+@endif 7
+@if &N14 = 5 8
+ @goto RIDDLE_FIVE
+@endif 8
+@if &N14 = 6 9
+ @goto RIDDLE_SIX
+@endif 9
+@goto RIDDLE_SEVEN
+
+; --- RIDDLE 1: FIRE ---
+@label RIDDLE_ONE
+@writeln
+@writeln   `0"`%You feed me and I thrive.
+@writeln   `0You give me drink and I die.
+@writeln   `0Every hearth knows me. Every dragon breathes me.
+@writeln   `0`$What am I?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = FIRE 10
+ @set &B1 to true
+@endif 10
+@if &S1 = A FIRE 11
+ @set &B1 to true
+@endif 11
+@if &S1 = FLAME 12
+ @set &B1 to true
+@endif 12
+@if &S1 = A FLAME 13
+ @set &B1 to true
+@endif 13
+@if &B1 = true 14
+ @goto RIDDLE_RIGHT
+@endif 14
+@goto RIDDLE_WRONG
+
+; --- RIDDLE 2: PROMISE ---
+@label RIDDLE_TWO
+@writeln
+@writeln   `0"`%Knights swear me. Cowards break me.
+@writeln   `0No hand can touch me, yet I shatter all the same.
+@writeln   `0The stronger the bond, the louder the crack.
+@writeln   `0`$What am I?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = PROMISE 15
+ @set &B1 to true
+@endif 15
+@if &S1 = A PROMISE 16
+ @set &B1 to true
+@endif 16
+@if &S1 = VOW 17
+ @set &B1 to true
+@endif 17
+@if &S1 = A VOW 18
+ @set &B1 to true
+@endif 18
+@if &S1 = OATH 19
+ @set &B1 to true
+@endif 19
+@if &S1 = AN OATH 20
+ @set &B1 to true
+@endif 20
+@if &B1 = true 21
+ @goto RIDDLE_RIGHT
+@endif 21
+@goto RIDDLE_WRONG
+
+; --- RIDDLE 3: STARS ---
+@label RIDDLE_THREE
+@writeln
+@writeln   `0"`%We come out at night without being called.
+@writeln   `0We are lost in the day without being stolen.
+@writeln   `0Sailors follow us. Lovers count us. Dragons fly among us.
+@writeln   `0`$What are we?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = STARS 22
+ @set &B1 to true
+@endif 22
+@if &S1 = THE STARS 23
+ @set &B1 to true
+@endif 23
+@if &S1 = STAR 24
+ @set &B1 to true
+@endif 24
+@if &B1 = true 25
+ @goto RIDDLE_RIGHT
+@endif 25
+@goto RIDDLE_WRONG
+
+; --- RIDDLE 4: ECHO ---
+@label RIDDLE_FOUR
+@writeln
+@writeln   `0"`%I have no mouth, yet I answer every shout.
+@writeln   `0I live in caves and canyons and the hollows of this wood.
+@writeln   `0Speak to me and I speak back, yet I have nothing to say.
+@writeln   `0`$What am I?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = ECHO 26
+ @set &B1 to true
+@endif 26
+@if &S1 = AN ECHO 27
+ @set &B1 to true
+@endif 27
+@if &B1 = true 28
+ @goto RIDDLE_RIGHT
+@endif 28
+@goto RIDDLE_WRONG
+
+; --- RIDDLE 5: COFFIN ---
+@label RIDDLE_FIVE
+@writeln
+@writeln   `0"`%The carpenter who builds it does not want it.
+@writeln   `0The merchant who buys it does not use it.
+@writeln   `0The one who uses it never knows.
+@writeln   `0`$What is it?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = COFFIN 29
+ @set &B1 to true
+@endif 29
+@if &S1 = A COFFIN 30
+ @set &B1 to true
+@endif 30
+@if &S1 = CASKET 31
+ @set &B1 to true
+@endif 31
+@if &S1 = A CASKET 32
+ @set &B1 to true
+@endif 32
+@if &S1 = GRAVE 33
+ @set &B1 to true
+@endif 33
+@if &S1 = A GRAVE 34
+ @set &B1 to true
+@endif 34
+@if &B1 = true 35
+ @goto RIDDLE_RIGHT
+@endif 35
+@goto RIDDLE_WRONG
+
+; --- RIDDLE 6: HOLE ---
+@label RIDDLE_SIX
+@writeln
+@writeln   `0"`%I grow larger the more you take from me.
+@writeln   `0Every shovel makes me greater. Every thief leaves me bigger.
+@writeln   `0I am nothing, and yet I am always something.
+@writeln   `0`$What am I?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = HOLE 36
+ @set &B1 to true
+@endif 36
+@if &S1 = A HOLE 37
+ @set &B1 to true
+@endif 37
+@if &B1 = true 38
+ @goto RIDDLE_RIGHT
+@endif 38
+@goto RIDDLE_WRONG
+
+; --- RIDDLE 7: ROAD ---
+@label RIDDLE_SEVEN
+@writeln
+@writeln   `0"`%I pass through villages and kingdoms and wild places.
+@writeln   `0Armies march upon me. Merchants depend on me.
+@writeln   `0Yet I have never taken a single step.
+@writeln   `0`$What am I?`0"`2
+@writeln
+@prompt &S1 20
+@upstr &S1
+@set &B1 to false
+@if &S1 = ROAD 39
+ @set &B1 to true
+@endif 39
+@if &S1 = A ROAD 40
+ @set &B1 to true
+@endif 40
+@if &S1 = PATH 41
+ @set &B1 to true
+@endif 41
+@if &S1 = A PATH 42
+ @set &B1 to true
+@endif 42
+@if &B1 = true 43
+ @goto RIDDLE_RIGHT
+@endif 43
+@goto RIDDLE_WRONG
+
+; --- RIDDLE CORRECT ---
+@label RIDDLE_RIGHT
+@math &N15 = &Plv * 30
+@set &N15 to +60
+@writeln
+@writeln   `2The Guardian's eyes blaze brighter!
+@writeln
+@writeln   `0"`%CORRECT!`2"
+@writeln
+@writeln   `2The word echoes through the canopy and every leaf shivers.
+@writeln   The Guardian rises to its full height and the forest bends
+@writeln   around it like a cathedral.
+@writeln
+@writeln   `0"`%There IS a mind behind those frightened eyes!`2"
+@writeln   `%You gain &N15 experience!
+@set &Pex to +&N15
+@if &rnd4 = 1 44
+ @begin
+  @writeln   `2It presses a gem into your hand, warm as a green ember.
+  @writeln   `%You gain 1 gem!
+  @set &Pge to +1
+ @end
+@endif 44
+@goto TRIAL_END
+
+; --- RIDDLE WRONG ---
+@label RIDDLE_WRONG
+@writeln
+@writeln   `2The Guardian snorts! Leaves blast off every tree in a
+@writeln   ten-foot radius! You are now wearing most of them!
+@writeln
+@writeln   `0"`%WRONG. Woefully, tragically wrong.`2"
+@writeln
+@writeln   `2It flicks you in the forehead with one enormous wooden finger.
+@writeln   The forest swallows the path you came from and you spend the
+@writeln   next hour thrashing through underbrush.
+@writeln   `4You lose 2 forest fights wandering back!
+@set &Pff to -2
+@goto TRIAL_END
+
+; --- OFFER ---
+@label GUARDIAN_OFFER
+@writeln
+@writeln   `2The Guardian considers you with ancient, patient contempt.
+@writeln
+@writeln   `0"`%Tribute? Very well. Offer coin, gem, or words - and I
+@writeln   shall weigh them against your pitiful worth.`2"
+@writeln
+@writeln   `2(`0G`2) Offer gold
+@writeln   `2(`0M`2) Offer a gem
+@writeln   `2(`0W`2) Offer only words - and pray they are enough
+@writeln
+@choice GMW   `0Your offering? [`0GMW`2]
+@case response 2
+G: @begin
+    @math &N16 = &Plv * 50
+    @set &N16 to +50
+    @if &Pgo < &N16 45
+     @begin
+      @writeln
+      @writeln   `2You hold up your coins. The Guardian stares.
+      @writeln   `0"`%That would not buy firewood, let alone passage.`2"
+      @goto TRIAL_END
+     @end
+    @endif 45
+    @set &Pgo to -&N16
+    @writeln
+    @writeln   `2It buries the gold beneath an old oak with one enormous foot.
+    @writeln   `0"`%Acceptable. Walk on, little coin-counter.`2"
+    @writeln   `%You gain 1 forest fight!
+    @set &Pff to +1
+    @goto TRIAL_END
+   @end
+M: @begin
+    @if &Pge < 1 46
+     @begin
+      @writeln
+      @writeln   `2You pat your empty gem pouch hopefully.
+      @writeln   `0"`%An empty hand insults us both.`2"
+      @goto TRIAL_END
+     @end
+    @endif 46
+    @set &Pge to -1
+    @writeln
+    @if &Pht < &Phx 47
+     @begin
+      @writeln   `2The gem dissolves in green fire! Your wounds seal shut!
+      @writeln   `%You are fully healed!
+      @set &Pht to &Phx
+     @end
+    @else 47
+     @begin
+      @writeln   `2The Guardian holds the gem up to the light and nods.
+      @writeln   `%You gain 1 charm!
+      @set &Pch to +1
+     @end
+    @endif 47
+    @goto TRIAL_END
+   @end
+W: @begin
+    @math &N17 = &Pch + &Plv
+    @math &N18 = &rnd20
+    @writeln
+    @if &N17 > &N18 48
+     @begin
+      @math &N19 = &Plv * 20
+      @set &N19 to +40
+      @writeln   `2You speak of honor, of the forest's beauty, of what it
+      @writeln   means to walk among ancient things. The Guardian listens.
+      @writeln   Its eyes soften - just barely.
+      @writeln
+      @writeln   `0"`%Pretty words. But `$true `0ones. Pass.`2"
+      @writeln   `%You gain &N19 experience!
+      @set &Pex to +&N19
+     @end
+    @else 48
+     @begin
+      @writeln   `2You stammer something about "honor" and "nature" that
+      @writeln   sounds like it came from a greeting card.
+      @writeln
+      @writeln   `0"`%Shallow. Hollow. `4BORING`0.`2"
+      @writeln   `4You lose 1 charm!
+      @set &Pch to -1
+     @end
+    @endif 48
+    @goto TRIAL_END
+   @end
+@endcase 2
+
+; --- FLEE ---
+@label GUARDIAN_FLEE
+@writeln
+@math &N20 = &rnd3
+@if &N20 = 1 49
+ @begin
+  @writeln   `2You turn and `%SPRINT`2! Branches whip your face, roots
+  @writeln   grab your ankles, but you are `$FAST`2!
+  @writeln
+  @writeln   `2Behind you, the Guardian's rumbling laugh shakes the canopy!
+  @writeln   `0"`%RUN, little rabbit! RUN!`2"
+  @writeln   `4You lose 2 forest fights, but escape with your skin!
+  @set &Pff to -2
+ @end
+@else 49
+ @begin
+  @writeln   `2You turn to run! A root the size of your arm wraps
+  @writeln   around your ankle and hoists you `4upside down`2!
+  @writeln
+  @writeln   `0"`%Leaving `$so soon`0?`2"
+  @writeln
+  @writeln   `2It shakes you like a coin purse! Gold rains from your pockets!
+  @math &N21 = &Phx / 4
+  @math &N22 = &Plv * 30
+  @if &Pgo < &N22 50
+   @set &N22 to &Pgo
+  @endif 50
+  @set &Pgo to -&N22
+  @writeln   `4You lose &N22 gold and &N21 hit points!
+  @set &Pht to -&N21
+  @if &Pht < 1 51
+   @set &Pht to 1
+  @endif 51
+ @end
+@endif 49
+
+@label TRIAL_END
+@writeln
+@writeln   `2The Guardian dissolves back into bark, shadow, and silence.
+@writeln   The forest pretends it was never here.
+@writeln
+@hitakey
+@endquest

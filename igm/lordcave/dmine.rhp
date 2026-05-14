@@ -1,0 +1,44 @@
+@;@ The Diamond Mine RHP By Jason Brown
+@;@ For The L.O.R.D. Cavern v1.3+ and LORD v3.25+
+
+`7You wander down one tunnel, and find what appears to
+`7be an abandoned diamond mine!  It looks like its
+`7very unstable, though.
+`7Continue?`l
+@YESNO@
+@##N
+`7You decide to keep you hide save and leave the diamonds
+`7alone.
+@END@
+@##Y
+`7You carefully walk down the tunnel...
+`8You see a diamond in the wall!
+`7Grab it?`l
+@YESNO@
+@##N
+`7You leave the diamond and find that the mine dead ends
+`7at a cave-in, so you head back the way you came.
+@END@
+@##Y
+`7You grab for the diamond and `l
+@RANDOM@ 4
+@##1
+@##3
+`7find that it won't budge!
+`7As you pull harder, you notice that the rocks above it
+`7are unstable.  You leave the diamond and carefully leave.
+@END@
+@##2
+`8the rocks above fall!
+`7You barly make it out of the way, and you get scrached!
+`7Your armour is dented, and won't work as well now.
+@DEFENCE@ %-5
+`7You leave the mine for someplace safer.
+@END@
+@##4
+`7it breaks apart!
+`7It broke into 3 gems!
+@GEMS@ 3
+`7Maybe you can trade these to the `%Bartender`7.
+`7You pocket you treasure and head out.
+@END@

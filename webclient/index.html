@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legend of the Red Dragon</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@6.0.0/css/xterm.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game">
+        <div id="terminal-container"></div>
+    </div>
+    <div id="controls">
+        <label title="Enable RIPscrip graphics mode">
+            <input type="checkbox" id="rip-toggle"> RIP Graphics
+        </label>
+        <button id="logout-btn" style="display:none" title="Log out and return to login screen">Logout</button>
+    </div>
+
+    <!-- xterm.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@6.0.0/lib/xterm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.11.0/lib/addon-fit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-web-fonts@0.1.0/lib/addon-web-fonts.min.js"></script>
+
+    <!-- RIPtermJS upstream browser globals -->
+    <script src="vendor/riptermjs/src/BGI.js"></script>
+    <script src="vendor/riptermjs/src/ripterm.js"></script>
+
+    <!-- Client logic -->
+    <script src="client.js"></script>
+</body>
+</html>

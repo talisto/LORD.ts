@@ -1,0 +1,327 @@
+@#INSTALL
+@eventname The Fey Bargain
+@author Claude Opus 4.6
+@authid FEY-BARGAIN-100
+@codebegin
+@runsub FEYBARGAIN &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#FEYBARGAIN
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2The moonlight thickens. It pools. It `$solidifies `2- and suddenly
+  `2a woman stands before you, woven from glass petals and starlight
+  `2and very, `4very `2bad intentions.
+
+  `2She has too many teeth and every single one is smiling.
+
+  `0"`%Oh, a `$mortal`0! How delicious! I haven't made a deal since
+  `0Tuesday, and that one ended in tears. `$His`0, not mine.
+  `0Shall we trade?`2"
+@enddisplay
+@hitakey
+
+@display
+`l
+  `2She draws three glowing circles in the air with one
+  `2impossibly long finger.
+
+  `2(`0A`2) Trade `!1 charm `2for a purse of moon-gold
+  `2(`0B`2) Trade `!1 gem `2for fey mending
+  `2(`0C`2) Play her a `$game `2for double stakes
+  `2(`0D`2) Ask for the `0mystery prize
+  `2(`0E`2) Decline - politely, for your health
+@enddisplay
+
+@choice ABCDE   `0Which bargain? [`0ABCDE`2]
+@case response 1
+A: @goto FEY_GOLD
+B: @goto FEY_MEND
+C: @goto FEY_GAME
+D: @goto FEY_SURPRISE
+E: @goto FEY_DECLINE
+@endcase 1
+
+; --- CHARM FOR GOLD ---
+@label FEY_GOLD
+@if &Pch < 1 1
+ @begin
+  @writeln
+  @writeln   `2The fey circles you slowly, nose wrinkled.
+  @writeln   `0"`%Darling, you have no charm left to sell. I'd be stealing
+  @writeln   from the `$void`0, and even I have standards.`2"
+  @goto FEY_END
+ @end
+@endif 1
+
+@math &N10 = &Plv * 80
+@set &N10 to +&rnd40
+@writeln
+@writeln   `2She reaches into your chest - you feel it like ice water -
+@writeln   and plucks out something `0bright`2. A laugh you'll never have
+@writeln   again. A compliment you'll never quite earn. It's `4gone`2.
+@writeln
+@set &Pch to -1
+@set &Pgo to +&N10
+@writeln   `4You lose 1 charm. `%You gain &N10 gold!
+@if &rnd5 = 1 2
+ @begin
+  @writeln
+  @writeln   `2As she turns, a gem tumbles from her sleeve.
+  @writeln   `0"`%Oh, `$keep `0it. I have thousands.`2"
+  @writeln   `%You gain 1 gem!
+  @set &Pge to +1
+ @end
+@endif 2
+@goto FEY_END
+
+; --- GEM FOR MENDING ---
+@label FEY_MEND
+@if &Pge < 1 3
+ @begin
+  @writeln
+  @writeln   `0"`%A gem, sweetheart. That was the price. I don't accept
+  @writeln   good intentions or pocket lint.`2"
+  @goto FEY_END
+ @end
+@endif 3
+@set &Pge to -1
+@writeln
+@writeln   `2She bites the gem in half - `$CRUNCH `2- chews thoughtfully,
+@writeln   and exhales silver dust that settles over you like snow.
+@writeln
+@if &Pht < &Phx 4
+ @begin
+  @set &Pht to &Phx
+  @writeln   `2Every bruise, cut, and ache slides off your body like rain.
+  @writeln   `%You are completely healed!
+ @end
+@else 4
+ @begin
+  @writeln   `2With no wounds to mend, she gives you back a sliver of time.
+  @writeln   `%You gain 1 forest fight!
+  @set &Pff to +1
+  @if &rnd3 = 1 5
+   @begin
+    @writeln   `2And because you amused her, she adds something extra.
+    @writeln   `%You gain 1 charm!
+    @set &Pch to +1
+   @end
+  @endif 5
+ @end
+@endif 4
+@goto FEY_END
+
+; --- CUP GAME ---
+@label FEY_GAME
+@writeln
+@writeln   `2Her eyes flash bright green!
+@writeln   `0"`%A GAME! Oh, I `$adore `0mortals who think they can win!`2"
+@writeln
+@writeln   `2She conjures three crystal cups and a tiny dancing flame.
+@writeln   `0"`%I hide the fire. You find it. Win and I pay double.
+@writeln   Lose and... well.`2" She giggles.
+@writeln
+@writeln   `2What do you wager?
+@writeln   `2(`0G`2) `%50 `2gold
+@writeln   `2(`0M`2) 1 gem
+@writeln   `2(`0C`2) 1 charm point
+@writeln
+@choice GMC   `0Your wager? [`0GMC`2]
+@case response 2
+G: @begin
+    @if &Pgo < 50 6
+     @begin
+      @writeln
+      @writeln   `0"`%You're too poor to gamble, pet. How `$sad`0.`2"
+      @goto FEY_END
+     @end
+    @endif 6
+    @set &N20 to 1
+    @set &Pgo to -50
+    @goto FEY_CUPS
+   @end
+M: @begin
+    @if &Pge < 1 7
+     @begin
+      @writeln
+      @writeln   `0"`%No gems? Then you've nothing I want to take.`2"
+      @goto FEY_END
+     @end
+    @endif 7
+    @set &N20 to 2
+    @set &Pge to -1
+    @goto FEY_CUPS
+   @end
+C: @begin
+    @if &Pch < 1 8
+     @begin
+      @writeln
+      @writeln   `0"`%I can't take what isn't `$there`0, love.`2"
+      @goto FEY_END
+     @end
+    @endif 8
+    @set &N20 to 3
+    @goto FEY_CUPS
+   @end
+@endcase 2
+
+@label FEY_CUPS
+@writeln
+@writeln   `2The cups spin! The flame winks! They stop.
+@writeln   `2(`0L`2)eft    (`0C`2)enter    (`0R`2)ight
+@writeln
+@choice LCR   `0Pick! [`0LCR`2]
+@case response 3
+L: @set &N21 to 1
+C: @set &N21 to 2
+R: @set &N21 to 3
+@endcase 3
+@math &N22 = &rnd3
+@if &N21 = &N22 9
+ @begin
+  @writeln
+  @writeln   `2You lift the cup! The flame dances triumphantly!
+  @writeln   `2The fey's smile freezes like cracked ice!
+  @writeln   `0"`%You... won. How absolutely `4revolting`0.`2"
+  @writeln
+  @case &N20 4
+  1: @begin
+      @writeln   `%You win 100 gold!
+      @set &Pgo to +100
+     @end
+  2: @begin
+      @writeln   `%You win 2 gems!
+      @set &Pge to +2
+     @end
+  3: @begin
+      @writeln   `%You gain 2 charm!
+      @set &Pch to +2
+     @end
+  @endcase 4
+ @end
+@else 9
+ @begin
+  @writeln
+  @writeln   `2You lift the cup. Empty. The flame winks at you from
+  @writeln   the wrong cup and vanishes with a sizzle.
+  @writeln   `0"`%Better luck in your next `$life`0, darling!`2"
+  @writeln
+  @if &N20 = 3 10
+   @begin
+    @writeln   `4You lose 1 charm!
+    @set &Pch to -1
+   @end
+  @endif 10
+ @end
+@endif 9
+@goto FEY_END
+
+; --- SURPRISE ---
+@label FEY_SURPRISE
+@writeln
+@writeln   `2Her grin widens until it shouldn't be possible.
+@writeln   `0"`%The `$mystery prize`0! Oh, I love a gambler!
+@writeln   Do you swear not to whine, no matter what happens?
+@writeln   On your mother's good name?`2"
+@writeln
+@choice YN   `0Do you swear? [`0YN`2]
+@case response 5
+N: @begin
+    @math &N11 = &Plv * 30
+    @set &N11 to +25
+    @writeln
+    @writeln   `0"`%Smart,`2" `2she says, and for once she isn't mocking you.
+    @writeln   `0"`%Anyone willing to bargain blind with the fey is either
+    @writeln   very brave or very soon to be `$dead`0. You don't seem stupid.`2"
+    @writeln
+    @writeln   `2She flicks `%&N11 gold `2at you for making her laugh!
+    @set &Pgo to +&N11
+    @goto FEY_END
+   @end
+Y: @begin
+    @math &N30 = &rnd6
+    @writeln
+    @writeln   `0"`$WONDERFUL.`0`2"
+    @case &N30 6
+    1: @begin
+        @writeln
+        @writeln   `2She opens her palm. Two gems bloom like frozen tears!
+        @writeln   `%You gain 2 gems!
+        @set &Pge to +2
+       @end
+    2: @begin
+        @writeln
+        @writeln   `2She kisses your forehead. Something inside you `$shines`2!
+        @writeln   `%You gain 1 charm!
+        @set &Pch to +1
+       @end
+    3: @begin
+        @writeln
+        @writeln   `2She empties your pockets with fingers like quicksilver!
+        @if &Pge > 0 11
+         @begin
+          @writeln   `4You lose 1 gem!
+          @set &Pge to -1
+         @end
+        @else 11
+         @begin
+          @writeln   `4Finding no gem, she steals your dignity instead!
+          @writeln   `4You lose 1 charm!
+          @set &Pch to -1
+         @end
+        @endif 11
+       @end
+    4: @begin
+        @writeln
+        @writeln   `2The world turns `4inside out`2! Your stomach follows!
+        @writeln   `2When it settles, you're flat on the moss, groaning.
+        @writeln   `4The fey leaves you with 1 hit point and a wicked laugh!
+        @set &Pht to 1
+       @end
+    5: @begin
+        @math &N31 = &Plv * 40
+        @set &N31 to +60
+        @writeln
+        @writeln   `2She touches your temple and the forest makes sudden,
+        @writeln   brilliant `%sense`2! Every path, every danger, every
+        @writeln   hidden thing burns bright in your mind!
+        @writeln   `%You gain &N31 experience!
+        @set &Pex to +&N31
+       @end
+    6: @begin
+        @math &N32 = &Plv * 100
+        @set &N32 to +150
+        @writeln
+        @writeln   `2She claps her hands and gold `$rains `2from the canopy!
+        @writeln   Every leaf turns to a coin and clatters down around you!
+        @writeln   `%You gain &N32 gold!
+        @set &Pgo to +&N32
+       @end
+    @endcase 6
+    @goto FEY_END
+   @end
+@endcase 5
+
+; --- DECLINE ---
+@label FEY_DECLINE
+@writeln
+@writeln   `2You bow instead of bargaining.
+@writeln   `2The fey narrows her luminous eyes, then laughs like
+@writeln   breaking glass.
+@writeln   `0"`%Sensible. I `$HATE `0sensible! Come back when you've
+@writeln   lost your mind, mortal. I'll be here.`2"
+
+@label FEY_END
+@writeln
+@writeln   `2She unravels back into moonlight, petal by petal, until
+@writeln   the grove is dark and ordinary again.
+@writeln
+@hitakey
+@endquest

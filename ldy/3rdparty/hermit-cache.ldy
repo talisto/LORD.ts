@@ -1,0 +1,300 @@
+@#INSTALL
+@eventname The Hermit's Hidden Cache
+@author Claude Opus 4.6
+@authid HERMIT-CACHE-100
+@codebegin
+@runsub HERMITCACHE &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#HERMITCACHE
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2Behind a curtain of berry bushes and hanging bone charms, you find
+  `2a cabin so small it might be a very ambitious birdhouse.
+
+  `2Smoke curls from a crooked chimney. A kettle hisses inside.
+  `2The door hangs open and the smell of rosemary and old secrets
+  `2drifts out like a dare.
+
+  `2Inside, behind a loose stone that practically `$begs `2to be moved,
+  `2sits a leather pouch heavy with gold.
+@enddisplay
+@hitakey
+
+@writeln
+@writeln   `2Nobody's home. The gold is right there. What do you do?
+@writeln
+@writeln   `2(`0A`2) Grab the pouch and `4RUN
+@writeln   `2(`0B`2) Take a handful, leave a note - chivalry!
+@writeln   `2(`0C`2) Put it back and wait - be a hero
+@writeln   `2(`0D`2) Forget the gold - search the cabin for something better
+@writeln
+@choice ABCD   `0Your choice? [`0ABCD`2]
+@case response 1
+A: @goto HERMIT_STEAL
+B: @goto HERMIT_SHARE
+C: @goto HERMIT_WAIT
+D: @goto HERMIT_SEARCH
+@endcase 1
+
+; --- STEAL ---
+@label HERMIT_STEAL
+@math &N10 = &Plv * 40
+@set &N10 to +&rnd60
+@set &N10 to +50
+@writeln
+@writeln   `2You snatch the pouch, count `%&N10 gold `2into your purse
+@writeln   with the speed of a professional, and turn for the door--
+@set &Pgo to +&N10
+@writeln
+@writeln   `2A dry, `4dangerous `2voice behind you:
+@writeln   `0"`%I leave my home for `$TEN MINUTES`0.`2"
+@writeln
+@writeln   `2An old hermit fills the doorway. He holds a gnarled staff
+@writeln   and an expression that could curdle milk at forty paces.
+@writeln
+@writeln   `2(`0A`2) Apologize and give it ALL back
+@writeln   `2(`0R`2) Run for it!!
+@writeln   `2(`0B`2) Bluff - "I was organizing your finances!"
+@writeln
+@choice ARB   `0Well?! [`0ARB`2]
+@case response 2
+A: @begin
+    @writeln
+    @writeln   `2You hand the pouch back, face burning like a bonfire.
+    @writeln
+    @writeln   `0"`%Good. Shame is cheaper than a burial, boy.`2"
+    @writeln   `4You lose &N10 gold and 1 charm!
+    @set &Pgo to -&N10
+    @set &Pch to -1
+    @goto HERMIT_END
+   @end
+R: @begin
+    @math &N11 = &Phx / 4
+    @set &N11 to +&rnd10
+    @writeln
+    @writeln   `2You `%BOLT`2! The doorframe splinters as you barrel through!
+    @writeln   Roots catch your feet - the hermit's staff catches your
+    @writeln   `4HEAD `2- you hit every rock between here and the treeline!
+    @writeln
+    @writeln   `4You lose &N11 hit points, but you keep the gold!
+    @set &Pht to -&N11
+    @if &Pht < 1 1
+     @set &Pht to 1
+    @endif 1
+    @goto HERMIT_END
+   @end
+B: @begin
+    @math &N12 = &Pch + &rnd10
+    @writeln
+    @if &N12 > 12 2
+     @begin
+      @writeln   `2"`0I was just - counting - making sure nobody had - see,
+      @writeln   it's all right here -`2"
+      @writeln
+      @writeln   `2The hermit stares. And stares. And then he `0laughs `2-
+      @writeln   a single, rusty bark of a laugh.
+      @writeln
+      @writeln   `0"`%That is the worst lie I've heard in forty years!
+      @writeln   I respect the audacity. Keep half.`2"
+      @math &N13 = &N10 / 2
+      @set &Pgo to -&N13
+      @writeln   `2You sheepishly return half the gold. `%You keep &N13!
+     @end
+    @else 2
+     @begin
+      @writeln   `0"`%...organizing my finances,`2" `2he repeats flatly.
+      @writeln
+      @writeln   `2His staff connects with your kneecap. `4CRACK.
+      @writeln   `4You lose &N10 gold, 1 charm, and your dignity!
+      @set &Pgo to -&N10
+      @set &Pch to -1
+     @end
+    @endif 2
+    @goto HERMIT_END
+   @end
+@endcase 2
+
+; --- SHARE ---
+@label HERMIT_SHARE
+@math &N20 = &Plv * 25
+@set &N20 to +&rnd40
+@set &N20 to +30
+@writeln
+@writeln   `2You take `%&N20 gold `2and leave a note:
+@writeln
+@writeln   `$  "Dear sir/madam. Borrowed some gold.
+@writeln   `$   Will repay if I survive the forest.
+@writeln   `$   Thank you for your involuntary
+@writeln   `$   generosity. - A Hero (probably)"
+@set &Pgo to +&N20
+@writeln
+@writeln   `2When you turn around, the hermit is already reading it.
+@writeln
+@writeln   `0"`%Petty theft, but `$literate`0. That's new.`2"
+@if &Pht < &Phx 3
+ @begin
+  @writeln
+  @writeln   `2He sighs, waves a hand, and every ache dissolves!
+  @writeln   `%You are fully healed!
+  @set &Pht to &Phx
+ @end
+@else 3
+ @begin
+  @writeln
+  @writeln   `2He tosses you a gem. `0"`%For the note. Work on the spelling.`2"
+  @writeln   `%You gain 1 gem!
+  @set &Pge to +1
+ @end
+@endif 3
+@goto HERMIT_END
+
+; --- WAIT ---
+@label HERMIT_WAIT
+@writeln
+@writeln   `2You put the pouch back, step outside, and sit on the
+@writeln   porch like a very patient dog.
+@writeln
+@writeln   `2The hermit returns carrying mushrooms and wearing an
+@writeln   expression of deep, professional suspicion.
+@writeln
+@writeln   `0"`%You could have robbed me.`2"
+@writeln   `0"`%I `$considered `0it,`2" `2you admit.
+@writeln   `2He laughs once - the way granite would laugh.
+@writeln
+@writeln   `0"`%What do you want, then? I reward honesty, not heroism.`2"
+@writeln
+@writeln   `2(`0G`2) A gem
+@writeln   `2(`0H`2) Healing
+@writeln   `2(`0D`2) Directions to a better path
+@writeln   `2(`0T`2) Tea and advice
+@writeln
+@choice GHDT   `0Your wish? [`0GHDT`2]
+@case response 3
+G: @begin
+    @writeln
+    @writeln   `2He flips you a gem and calls it rent for your honesty.
+    @writeln   `%You gain 1 gem!
+    @set &Pge to +1
+    @goto HERMIT_END
+   @end
+H: @begin
+    @writeln
+    @if &Pht < &Phx 4
+     @begin
+      @writeln   `2He presses a weathered thumb to your forehead and
+      @writeln   mutters something that sounds like a very old prayer
+      @writeln   and a very new curse word.
+      @writeln   `%You are fully healed!
+      @set &Pht to &Phx
+     @end
+    @else 4
+     @begin
+      @math &N30 = &Plv * 25
+      @set &N30 to +40
+      @writeln   `0"`%You're already healthy. Take wisdom instead.`2"
+      @writeln   `%You gain &N30 experience!
+      @set &Pex to +&N30
+     @end
+    @endif 4
+    @goto HERMIT_END
+   @end
+D: @begin
+    @writeln
+    @writeln   `2He shows you a hidden trail behind the cabin. It cuts
+    @writeln   through the worst tangles like a knife through fog!
+    @writeln   `%You gain 1 forest fight!
+    @set &Pff to +1
+    @goto HERMIT_END
+   @end
+T: @begin
+    @writeln
+    @writeln   `2You sit on his porch and drink tea that tastes like
+    @writeln   boiled dirt and enlightenment. He tells you three things:
+    @writeln
+    @writeln   `0 1. Never trust a well that talks back.
+    @writeln   `0 2. The Red Dragon can smell fear AND garlic.
+    @writeln   `0 3. Charm is overrated. But it's nice.
+    @writeln
+    @math &N31 = &Plv * 15
+    @set &N31 to +30
+    @writeln   `%You gain &N31 experience and 1 charm!
+    @set &Pex to +&N31
+    @set &Pch to +1
+    @goto HERMIT_END
+   @end
+@endcase 3
+
+; --- SEARCH ---
+@label HERMIT_SEARCH
+@writeln
+@writeln   `2You ignore the gold pouch and start opening drawers,
+@writeln   cabinets, and things that are probably best left shut.
+@writeln
+@math &N40 = &rnd4
+@case &N40 4
+1: @begin
+    @writeln   `2Behind a false wall, you find a weapons maintenance kit!
+    @writeln   `2You give `0&PWE `2a once-over that would make a blacksmith weep!
+    @math &N34 = &Plv * 40
+    @set &N34 to +80
+    @writeln   `%You gain &N34 experience!
+    @set &Pex to +&N34
+   @end
+2: @begin
+    @writeln   `2You find three gems hidden in a sock! The hermit clearly
+    @writeln   doesn't trust banks. Smart man.
+    @writeln   `%You gain 2 gems!
+    @set &Pge to +2
+   @end
+3: @begin
+    @writeln   `2A drawer springs open and a vial of amber liquid rolls out.
+    @writeln   `2You drink it before thinking! It tastes like fire and regret!
+    @if &rnd2 = 1 5
+     @begin
+      @writeln   `2Warmth floods your body!
+      @writeln   `%You are fully healed!
+      @set &Pht to &Phx
+     @end
+    @else 5
+     @begin
+      @writeln   `4The potion was NOT healing!
+      @writeln   `4YOUR HP DROPS TO 1!
+      @set &Pht to 1
+     @end
+    @endif 5
+   @end
+4: @begin
+    @writeln   `2You open a box labeled `$"DO NOT OPEN."`2
+    @writeln   `2Inside is a note: `0"`%I said don't open it.`2"
+    @writeln
+    @writeln   `2And a spring-loaded fist that punches you in the face!
+    @math &N32 = &Phx / 5
+    @writeln   `4You lose &N32 hit points!
+    @set &Pht to -&N32
+    @if &Pht < 1 6
+     @set &Pht to 1
+    @endif 6
+    @writeln
+    @writeln   `2...but underneath the fist is a small pouch of gold!
+    @math &N33 = &Plv * 30
+    @set &N33 to +50
+    @writeln   `%You find &N33 gold!
+    @set &Pgo to +&N33
+   @end
+@endcase 4
+@writeln
+@writeln   `2The hermit's voice booms from outside:
+@writeln   `0"`%WHO IS IN MY HOUSE?!`2"
+@writeln   `2You leap out the window and don't look back!
+
+@label HERMIT_END
+@writeln
+@hitakey
+@endquest

@@ -1,0 +1,32 @@
+@#INSTALL
+@eventname MERRYMEN
+@author Seth Able
+@authid MERRYMEN1
+@codebegin
+ @begin
+    @if &Pht < &Phx 1
+     @runsub MERRYMEN &filename
+    @else
+     @runsub LORD lord.ldy
+    @endif 1
+   @end
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#MERRYMEN
+@verreq 407
+@set &Pht to &Phx
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2You stumble upon a group of Merry Men!  After partying with them
+  for 2 hours you feel totally refreshed.
+
+@hitakey
+@enddisplay
+@clrscr
+@endquest
+

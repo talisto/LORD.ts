@@ -1,0 +1,1181 @@
+[
+  {
+    "name": "Small Thief",
+    "str": 6,
+    "gold": 56,
+    "weapon": "Small Dagger",
+    "exp": 2,
+    "hp": 9,
+    "death": "You disembowel the little thieving menace!"
+  },
+  {
+    "name": "Rude Boy",
+    "str": 3,
+    "gold": 7,
+    "weapon": "Cudgel",
+    "exp": 3,
+    "hp": 7,
+    "death": "You quietly watch as the very Rude Boy bleeds to death."
+  },
+  {
+    "name": "Old Man",
+    "str": 5,
+    "gold": 73,
+    "weapon": "Cane",
+    "exp": 4,
+    "hp": 13,
+    "death": "You finish him off, by tripping him with his own cane."
+  },
+  {
+    "name": "Large Green Rat",
+    "str": 3,
+    "gold": 32,
+    "weapon": "Sharp Teeth",
+    "exp": 1,
+    "hp": 4,
+    "death": "A well placed step ends this small rodents life."
+  },
+  {
+    "name": "Wild Boar",
+    "str": 10,
+    "gold": 58,
+    "weapon": "Sharp Tusks",
+    "exp": 5,
+    "hp": 9,
+    "death": "You impale the boar between the eyes!"
+  },
+  {
+    "name": "Ugly Old Hag",
+    "str": 6,
+    "gold": 109,
+    "weapon": "Garlic Breath",
+    "exp": 4,
+    "hp": 9,
+    "death": "You emotionally crush the hag, by calling her ugly!"
+  },
+  {
+    "name": "Large Mosquito",
+    "str": 2,
+    "gold": 46,
+    "weapon": "Blood Sucker",
+    "exp": 2,
+    "hp": 3,
+    "death": "With a sharp slap, you end the Mosquitos life."
+  },
+  {
+    "name": "Bran The Warrior",
+    "str": 12,
+    "gold": 234,
+    "weapon": "Short Sword",
+    "exp": 10,
+    "hp": 15,
+    "death": "After a hardy duel, Bran lies at your feet, dead."
+  },
+  {
+    "name": "Evil Wretch",
+    "str": 7,
+    "gold": 76,
+    "weapon": "Finger Nail",
+    "exp": 3,
+    "hp": 12,
+    "death": "With a swift boot to her head, you kill her."
+  },
+  {
+    "name": "Small Bear",
+    "str": 9,
+    "gold": 154,
+    "weapon": "Claws",
+    "exp": 6,
+    "hp": 7,
+    "death": "After a swift battle, you stand holding the Bears heart!"
+  },
+  {
+    "name": "Small Troll",
+    "str": 6,
+    "gold": 87,
+    "weapon": "Uglyness",
+    "exp": 5,
+    "hp": 14,
+    "death": "This battle reminds you how of how much you hate trolls."
+  },
+  {
+    "name": "Green Python",
+    "str": 13,
+    "gold": 80,
+    "weapon": "Dripping Fangs",
+    "exp": 6,
+    "hp": 17,
+    "death": "You tie the mighty snake\"s carcass to a tree."
+  },
+  {
+    "name": "Gath The Barbarian",
+    "str": 12,
+    "gold": 134,
+    "weapon": "Huge Spiked Club",
+    "exp": 9,
+    "hp": 13,
+    "death": "You knock Gath down, ignoring his constant groaning."
+  },
+  {
+    "name": "Evil Wood Nymph",
+    "str": 15,
+    "gold": 160,
+    "weapon": "Flirtatios Behavior",
+    "exp": 11,
+    "hp": 10,
+    "death": "You shudder to think of what would have happened, had you given in."
+  },
+  {
+    "name": "Fedrick The Limping Baboon",
+    "str": 8,
+    "gold": 97,
+    "weapon": "Scary Faces",
+    "exp": 6,
+    "hp": 23,
+    "death": "Fredrick will never grunt in anyones face again."
+  },
+  {
+    "name": "Wild Man",
+    "str": 13,
+    "gold": 134,
+    "weapon": "Hands",
+    "exp": 8,
+    "hp": 14,
+    "death": "Pitting your wisdom against his brawn has one this battle."
+  },
+  {
+    "name": "Brorandia The Viking",
+    "str": 21,
+    "gold": 330,
+    "weapon": "Hugely Spiked Mace",
+    "exp": 20,
+    "hp": 18,
+    "death": "You consider this a message to her people, \"STAY AWAY!\"."
+  },
+  {
+    "name": "Huge Bald Man",
+    "str": 19,
+    "gold": 311,
+    "weapon": "Glare From Forehead",
+    "exp": 16,
+    "hp": 19,
+    "death": "It wasn\"t even a close battle, you slaughtered him."
+  },
+  {
+    "name": "Senile Senior Citizen",
+    "str": 13,
+    "gold": 270,
+    "weapon": "Crazy Ravings",
+    "exp": 13,
+    "hp": 11,
+    "death": "You may have just knocked some sense into this old man."
+  },
+  {
+    "name": "Membrain Man",
+    "str": 10,
+    "gold": 190,
+    "weapon": "Strange Ooze",
+    "exp": 11,
+    "hp": 16,
+    "death": "The monstrosity has been slain."
+  },
+  {
+    "name": "Bent River Dryad",
+    "str": 12,
+    "gold": 150,
+    "weapon": "Pouring Waterfall",
+    "exp": 9,
+    "hp": 16,
+    "death": "You cannot resist thinking the Dryad is \"All wet\"."
+  },
+  {
+    "name": "Rock Man",
+    "str": 8,
+    "gold": 300,
+    "weapon": "Large Stones",
+    "exp": 12,
+    "hp": 27,
+    "death": "You have shattered the Rock Mans head!"
+  },
+  {
+    "name": "Lazy Bum",
+    "str": 19,
+    "gold": 380,
+    "weapon": "Unwashed Body Odor",
+    "exp": 18,
+    "hp": 29,
+    "death": "\"This was a bum deal\" You think to yourself."
+  },
+  {
+    "name": "Two Headed Rotwieler",
+    "str": 18,
+    "gold": 384,
+    "weapon": "Twin Barking",
+    "exp": 17,
+    "hp": 32,
+    "death": "You have silenced the mutt, once and for all."
+  },
+  {
+    "name": "Purple Monchichi",
+    "str": 14,
+    "gold": 763,
+    "weapon": "Continous Whining",
+    "exp": 23,
+    "hp": 29,
+    "death": "You cant help but realize you have just killed a real loser."
+  },
+  {
+    "name": "Bone",
+    "str": 27,
+    "gold": 432,
+    "weapon": "Terrible Smoke Smell",
+    "exp": 16,
+    "hp": 11,
+    "death": "Now that you have killed Bone, maybe he will get a life.."
+  },
+  {
+    "name": "Red Neck",
+    "str": 19,
+    "gold": 563,
+    "weapon": "Awfull Country Slang",
+    "exp": 19,
+    "hp": 16,
+    "death": "The dismembered body causes a churning in your stomach."
+  },
+  {
+    "name": "Winged Demon Of Death",
+    "str": 42,
+    "gold": 830,
+    "weapon": "Red Glare",
+    "exp": 28,
+    "hp": 23,
+    "death": "You cut off the Demons head, to be sure of its death."
+  },
+  {
+    "name": "Black Owl",
+    "str": 28,
+    "gold": 711,
+    "weapon": "Hooked Beak",
+    "exp": 26,
+    "hp": 29,
+    "death": "A well placed blow knocks the winged creature to the ground."
+  },
+  {
+    "name": "Muscled Midget",
+    "str": 26,
+    "gold": 870,
+    "weapon": "Low Punch",
+    "exp": 32,
+    "hp": 19,
+    "death": "You laugh as the small man falls to the ground."
+  },
+  {
+    "name": "Headbanger Of The West",
+    "str": 23,
+    "gold": 245,
+    "weapon": "Ear Shattering Noises",
+    "exp": 43,
+    "hp": 27,
+    "death": "You slay the rowdy noise maker and destroy his evil machines."
+  },
+  {
+    "name": "Morbid Walker",
+    "str": 28,
+    "gold": 764,
+    "weapon": "Endless Walking",
+    "exp": 9,
+    "hp": 10,
+    "death": "Even lying dead on its back, it is still walking."
+  },
+  {
+    "name": "Magical Evil Gnome",
+    "str": 24,
+    "gold": 638,
+    "weapon": "Spell Of Fire",
+    "exp": 28,
+    "hp": 25,
+    "death": "The Gnome\"s small body is covered in a deep red blood."
+  },
+  {
+    "name": "Death Dog",
+    "str": 36,
+    "gold": 1150,
+    "weapon": "Teeth",
+    "exp": 36,
+    "hp": 52,
+    "death": "You rejoice as the dog wimpers for the very last time."
+  },
+  {
+    "name": "Weak Orc",
+    "str": 27,
+    "gold": 900,
+    "weapon": "Spiked Club",
+    "exp": 25,
+    "hp": 32,
+    "death": "A solid blow removes the Orcs head!"
+  },
+  {
+    "name": "Dark Elf",
+    "str": 43,
+    "gold": 1070,
+    "weapon": "Small bow",
+    "exp": 33,
+    "hp": 57,
+    "death": "The Elf falls at your feet, dead."
+  },
+  {
+    "name": "Evil Hobbit",
+    "str": 35,
+    "gold": 1240,
+    "weapon": "Smoking Pipe",
+    "exp": 46,
+    "hp": 95,
+    "death": "The Hobbit will never bother anyone again!"
+  },
+  {
+    "name": "Short Goblin",
+    "str": 34,
+    "gold": 768,
+    "weapon": "Short Sword",
+    "exp": 24,
+    "hp": 45,
+    "death": "A quick lunge renders him dead!"
+  },
+  {
+    "name": "Huge Black Bear",
+    "str": 67,
+    "gold": 1765,
+    "weapon": "Razor Claws",
+    "exp": 76,
+    "hp": 48,
+    "death": "You bearly beat the Huge Bear..."
+  },
+  {
+    "name": "Rabid Wolf",
+    "str": 45,
+    "gold": 1400,
+    "weapon": "Deathlock Fangs",
+    "exp": 43,
+    "hp": 39,
+    "death": "You pull the dogs lifeless body off you."
+  },
+  {
+    "name": "Young Wizard",
+    "str": 64,
+    "gold": 1754,
+    "weapon": "Weak Magic",
+    "exp": 64,
+    "hp": 35,
+    "death": "This Wizard will never cast another spell!"
+  },
+  {
+    "name": "Mud Man",
+    "str": 56,
+    "gold": 870,
+    "weapon": "Mud Balls",
+    "exp": 43,
+    "hp": 65,
+    "death": "You chop up the Mud Man into sushi!"
+  },
+  {
+    "name": "Death Jester",
+    "str": 34,
+    "gold": 1343,
+    "weapon": "Horrible Jokes",
+    "exp": 32,
+    "hp": 46,
+    "death": "You feel no pity for the Jester, his jokes being as bad as they were."
+  },
+  {
+    "name": "Rock Man",
+    "str": 87,
+    "gold": 1754,
+    "weapon": "Large Stones",
+    "exp": 76,
+    "hp": 54,
+    "death": "You have shattered the Rock Mans head!"
+  },
+  {
+    "name": "Pandion Knight",
+    "str": 64,
+    "gold": 3100,
+    "weapon": "Orkos Broadsword",
+    "exp": 98,
+    "hp": 59,
+    "death": "You are elated in the knowledge that you both fought honorably."
+  },
+  {
+    "name": "Jabba",
+    "str": 61,
+    "gold": 2384,
+    "weapon": "Whiplashing Tail",
+    "exp": 137,
+    "hp": 198,
+    "death": "The fat thing falls down, never to squirm again."
+  },
+  {
+    "name": "Manoken Sloth",
+    "str": 54,
+    "gold": 2452,
+    "weapon": "Dripping Paws",
+    "exp": 97,
+    "hp": 69,
+    "death": "You have cut him down, spraying a neaby tree with blood."
+  },
+  {
+    "name": "Trojan Warrior",
+    "str": 73,
+    "gold": 3432,
+    "weapon": "Twin Swords",
+    "exp": 154,
+    "hp": 87,
+    "death": "You watch, as the ants claim his body."
+  },
+  {
+    "name": "Misfit The Ugly",
+    "str": 75,
+    "gold": 2563,
+    "weapon": "Strange Ideas",
+    "exp": 120,
+    "hp": 89,
+    "death": "You cut him cleanly down the middle, in a masterfull stroke."
+  },
+  {
+    "name": "George Of The Jungle",
+    "str": 56,
+    "gold": 2230,
+    "weapon": "Echoing Screams",
+    "exp": 128,
+    "hp": 43,
+    "death": "You thought the story of George was a myth, until now."
+  },
+  {
+    "name": "Silent Death",
+    "str": 113,
+    "gold": 4711,
+    "weapon": "Pale Smoke",
+    "exp": 230,
+    "hp": 98,
+    "death": "Instead of spilling blood, the creature seems filled with only air."
+  },
+  {
+    "name": "Bald Medusa",
+    "str": 78,
+    "gold": 4000,
+    "weapon": "Glare Of Stone",
+    "exp": 256,
+    "hp": 120,
+    "death": "You are lucky you didnt look at her... Man was she ugly!"
+  },
+  {
+    "name": "Black Alligator",
+    "str": 65,
+    "gold": 3245,
+    "weapon": "Extra Sharp Teeth",
+    "exp": 123,
+    "hp": 65,
+    "death": "With a single stroke, you sever the creatures head right off."
+  },
+  {
+    "name": "Clancy, Son Of Emporor Len",
+    "str": 52,
+    "gold": 4764,
+    "weapon": "Spiked Bull Whip",
+    "exp": 324,
+    "hp": 324,
+    "death": "Its a pity so many new warriors get so proud."
+  },
+  {
+    "name": "Black Sorcerer",
+    "str": 86,
+    "gold": 2838,
+    "weapon": "Spell Of Lightning",
+    "exp": 154,
+    "hp": 25,
+    "death": "Thats the last spell this Sorcerer will ever cast!"
+  },
+  {
+    "name": "Iron Warrior",
+    "str": 100,
+    "gold": 6542,
+    "weapon": "3 Iron",
+    "exp": 364,
+    "hp": 253,
+    "death": "You have bent the Iron warrior\"s Iron!"
+  },
+  {
+    "name": "Black Soul",
+    "str": 112,
+    "gold": 5865,
+    "weapon": "Black Candle",
+    "exp": 432,
+    "hp": 432,
+    "death": "You have released the black soul."
+  },
+  {
+    "name": "Gold Man",
+    "str": 86,
+    "gold": 8964,
+    "weapon": "Rock Arm",
+    "exp": 493,
+    "hp": 354,
+    "death": "You kick the body of the Gold man to reveal some change.."
+  },
+  {
+    "name": "Screaming Zombie",
+    "str": 98,
+    "gold": 5322,
+    "weapon": "Gaping Mouth Full Of Teeth",
+    "exp": 354,
+    "hp": 286,
+    "death": "The battle has rendered the zombie even more unattractive then he was."
+  },
+  {
+    "name": "Satans Helper",
+    "str": 112,
+    "gold": 7543,
+    "weapon": "Pack Of Lies",
+    "exp": 453,
+    "hp": 165,
+    "death": "Apparently you have seen through the Devil\"s evil tricks"
+  },
+  {
+    "name": "Wild Stallion",
+    "str": 78,
+    "gold": 4643,
+    "weapon": "Hoofs",
+    "exp": 532,
+    "hp": 245,
+    "death": "You only wish you could have spared the animal\"s life."
+  },
+  {
+    "name": "Belar",
+    "str": 120,
+    "gold": 9432,
+    "weapon": "Fists Of Rage",
+    "exp": 565,
+    "hp": 352,
+    "death": "Not even Belar can stop you!"
+  },
+  {
+    "name": "Empty Armour",
+    "str": 67,
+    "gold": 6431,
+    "weapon": "Cutting Wind",
+    "exp": 432,
+    "hp": 390,
+    "death": "The whole battle leaves you with a strange chill."
+  },
+  {
+    "name": "Raging Lion",
+    "str": 98,
+    "gold": 3643,
+    "weapon": "Teeth And Claws",
+    "exp": 365,
+    "hp": 274,
+    "death": "You rip the jaw bone off the magnificent animal!"
+  },
+  {
+    "name": "Huge Stone Warrior",
+    "str": 112,
+    "gold": 4942,
+    "weapon": "Rock Fist",
+    "exp": 543,
+    "hp": 232,
+    "death": "There is nothing left of the stone warrior, except a few pebbles."
+  },
+  {
+    "name": "Magical Evil Gnome",
+    "str": 89,
+    "gold": 6384,
+    "weapon": "Spell Of Fire",
+    "exp": 321,
+    "hp": 234,
+    "death": "The Gnome\"s small body is covered in a deep, red blood."
+  },
+  {
+    "name": "Emporer Len",
+    "str": 210,
+    "gold": 12043,
+    "weapon": "Lightning Bull Whip",
+    "exp": 764,
+    "hp": 432,
+    "death": "His last words were.. \"I have failed to avenge my son.\""
+  },
+  {
+    "name": "Night Hawk",
+    "str": 220,
+    "gold": 10433,
+    "weapon": "Blood Red Talons",
+    "exp": 686,
+    "hp": 675,
+    "death": "Your last swing pulls the bird out of the air, landing him at your feet."
+  },
+  {
+    "name": "Charging Rhinoceros",
+    "str": 187,
+    "gold": 9853,
+    "weapon": "Rather Large Horn",
+    "exp": 654,
+    "hp": 454,
+    "death": "You finally felled the huge beast, but not without a few scratches."
+  },
+  {
+    "name": "Goblin Pygmy",
+    "str": 165,
+    "gold": 13252,
+    "weapon": "Death Squeeze",
+    "exp": 754,
+    "hp": 576,
+    "death": "You laugh at the little Goblin\"s puny attack."
+  },
+  {
+    "name": "Goliath",
+    "str": 243,
+    "gold": 14322,
+    "weapon": "Six Fingered Fist",
+    "exp": 898,
+    "hp": 343,
+    "death": "Now you know how David felt..."
+  },
+  {
+    "name": "Angry Liontaur",
+    "str": 187,
+    "gold": 13259,
+    "weapon": "Arms And Teeth",
+    "exp": 753,
+    "hp": 495,
+    "death": "You have laid this mythical beast to rest."
+  },
+  {
+    "name": "Fallen Angel",
+    "str": 154,
+    "gold": 12339,
+    "weapon": "Throwing Halos",
+    "exp": 483,
+    "hp": 654,
+    "death": "You slay the Angel, then watch as it gets sucked down into the ground."
+  },
+  {
+    "name": "Wicked Wombat",
+    "str": 198,
+    "gold": 13283,
+    "weapon": "The Dark Wombats Curse",
+    "exp": 786,
+    "hp": 464,
+    "death": "It\"s hard to believe a little wombat like that could be so much trouble."
+  },
+  {
+    "name": "Massive Dinosaur",
+    "str": 200,
+    "gold": 16753,
+    "weapon": "Gaping Jaws",
+    "exp": 1204,
+    "hp": 986,
+    "death": "The earth shakes as the huge beast falls to the ground."
+  },
+  {
+    "name": "Swiss Butcher",
+    "str": 230,
+    "gold": 8363,
+    "weapon": "Meat Cleaver",
+    "exp": 532,
+    "hp": 453,
+    "death": "You\"re glad you won...You really didn\"t want the haircut.."
+  },
+  {
+    "name": "Death Gnome",
+    "str": 270,
+    "gold": 10000,
+    "weapon": "Touch Of Death",
+    "exp": 654,
+    "hp": 232,
+    "death": "You watch as the animals pick away at his flesh."
+  },
+  {
+    "name": "Screeching Witch",
+    "str": 300,
+    "gold": 19753,
+    "weapon": "Spell Of Ice",
+    "exp": 2283,
+    "hp": 674,
+    "death": "You have silenced the witch\"s infernal screeching."
+  },
+  {
+    "name": "Rundorig",
+    "str": 330,
+    "gold": 17853,
+    "weapon": "Poison Claws",
+    "exp": 2748,
+    "hp": 675,
+    "death": "Rundorig, once your friend, now lies dead before you."
+  },
+  {
+    "name": "Wheeler",
+    "str": 250,
+    "gold": 23433,
+    "weapon": "Annoying Laugh",
+    "exp": 1980,
+    "hp": 786,
+    "death": "You rip the wheeler\"s wheels clean off!"
+  },
+  {
+    "name": "Death Knight",
+    "str": 287,
+    "gold": 21923,
+    "weapon": "Huge Silver Sword",
+    "exp": 4282,
+    "hp": 674,
+    "death": "The Death knight finally falls, not only wounded, but dead."
+  },
+  {
+    "name": "Werewolf",
+    "str": 230,
+    "gold": 19474,
+    "weapon": "Fangs",
+    "exp": 3853,
+    "hp": 543,
+    "death": "You have slaughtered the Werewolf. You didn\"t even need a silver bullet."
+  },
+  {
+    "name": "Fire Ork",
+    "str": 267,
+    "gold": 24933,
+    "weapon": "FireBall",
+    "exp": 3942,
+    "hp": 674,
+    "death": "You have put out this Fire Ork\"s flame!"
+  },
+  {
+    "name": "Wans Beast",
+    "str": 193,
+    "gold": 17141,
+    "weapon": "Crushing Embrace",
+    "exp": 2432,
+    "hp": 1243,
+    "death": "The hairy thing has finally stopped moving."
+  },
+  {
+    "name": "Lord Mathese",
+    "str": 245,
+    "gold": 24935,
+    "weapon": "Fencing Sword",
+    "exp": 2422,
+    "hp": 875,
+    "death": "You have wiped the sneer off his face once and for all."
+  },
+  {
+    "name": "King Vidion",
+    "str": 400,
+    "gold": 28575,
+    "weapon": "Long Sword Of Death",
+    "exp": 6764,
+    "hp": 1243,
+    "death": "You feel lucky to have lived. Things could have gone sour.."
+  },
+  {
+    "name": "Baby Dragon",
+    "str": 176,
+    "gold": 25863,
+    "weapon": "Dragon Smoke",
+    "exp": 3675,
+    "hp": 2322,
+    "death": "This Baby Dragon will never grow up."
+  },
+  {
+    "name": "Death Gnome",
+    "str": 356,
+    "gold": 31638,
+    "weapon": "Touch Of Death",
+    "exp": 2300,
+    "hp": 870,
+    "death": "You watch as the animals pick away at his flesh."
+  },
+  {
+    "name": "Pink Elephant",
+    "str": 434,
+    "gold": 33844,
+    "weapon": "Stomping",
+    "exp": 7843,
+    "hp": 1232,
+    "death": "You have witnessed the Pink Elephant...And you aren\"t even drunk!"
+  },
+  {
+    "name": "Gwendolens Nightmare",
+    "str": 490,
+    "gold": 35846,
+    "weapon": "Dreams",
+    "exp": 8232,
+    "hp": 764,
+    "death": "This is the first Nightmare you have put to sleep."
+  },
+  {
+    "name": "Flying Cobra",
+    "str": 400,
+    "gold": 37694,
+    "weapon": "Poison Fangs",
+    "exp": 8433,
+    "hp": 1123,
+    "death": "The creature falls to the ground with a sickening thud."
+  },
+  {
+    "name": "Rentakis Pet",
+    "str": 556,
+    "gold": 37584,
+    "weapon": "Gaping Maw",
+    "exp": 9854,
+    "hp": 987,
+    "death": "You vow to find Rentaki and tell him what you think about his new pet."
+  },
+  {
+    "name": "Ernest Brown",
+    "str": 432,
+    "gold": 34833,
+    "weapon": "Knee",
+    "exp": 9754,
+    "hp": 2488,
+    "death": "Ernest has finally learned his lesson, it seems."
+  },
+  {
+    "name": "Scallian Rap",
+    "str": 601,
+    "gold": 22430,
+    "weapon": "Way Of Hurting People",
+    "exp": 6784,
+    "hp": 788,
+    "death": "Scallian\"s dead...Looks like you took out the trash..."
+  },
+  {
+    "name": "Apeman",
+    "str": 498,
+    "gold": 38955,
+    "weapon": "Hairy Hands",
+    "exp": 7202,
+    "hp": 1283,
+    "death": "The battle is over...Nothing is left but blood and hair."
+  },
+  {
+    "name": "Hemo-Glob",
+    "str": 212,
+    "gold": 27853,
+    "weapon": "Weak Insults",
+    "exp": 4432,
+    "hp": 1232,
+    "death": "The battle is over.. And you really didn\"t find him particularly scary."
+  },
+  {
+    "name": "FrankenMoose",
+    "str": 455,
+    "gold": 31221,
+    "weapon": "Butting Head",
+    "exp": 5433,
+    "hp": 1221,
+    "death": "That Moose was a perversion of nature!"
+  },
+  {
+    "name": "Earth Shaker",
+    "str": 767,
+    "gold": 37565,
+    "weapon": "Earthquake",
+    "exp": 7432,
+    "hp": 985,
+    "death": "The battle is over...And it looks like you shook him up..."
+  },
+  {
+    "name": "Gollums Wrath",
+    "str": 621,
+    "gold": 42533,
+    "weapon": "Ring Of Invisibilty",
+    "exp": 13544,
+    "hp": 2344,
+    "death": "Gollum\"s ring apparently wasn\"t powerful enough."
+  },
+  {
+    "name": "Toraks Son, Korak",
+    "str": 921,
+    "gold": 46575,
+    "weapon": "Sword Of Lightning",
+    "exp": 13877,
+    "hp": 1384,
+    "death": "You have slain the son of a God!  You ARE great!"
+  },
+  {
+    "name": "Brand The Wanderer",
+    "str": 643,
+    "gold": 38755,
+    "weapon": "Fighting Quarter Staff",
+    "exp": 13744,
+    "hp": 2788,
+    "death": "Brand will wander no more."
+  },
+  {
+    "name": "The Grimest Reaper",
+    "str": 878,
+    "gold": 39844,
+    "weapon": "White Sickle",
+    "exp": 14237,
+    "hp": 1674,
+    "death": "You have killed that which was already dead.  Odd."
+  },
+  {
+    "name": "Death Dealer",
+    "str": 765,
+    "gold": 47333,
+    "weapon": "Stare Of Paralization",
+    "exp": 13877,
+    "hp": 1764,
+    "death": "The Death Dealer has been has been dealt his last hand."
+  },
+  {
+    "name": "Tiger Of The Deep Jungle",
+    "str": 587,
+    "gold": 43933,
+    "weapon": "Eye Of The Tiger",
+    "exp": 9766,
+    "hp": 3101,
+    "death": "The Tiger\"s cubs weep over their dead mother."
+  },
+  {
+    "name": "Sweet Looking Little Girl",
+    "str": 989,
+    "gold": 52322,
+    "weapon": "Demon Strike",
+    "exp": 14534,
+    "hp": 1232,
+    "death": "If it wasn\"t for her manners, you might have gotten along with her."
+  },
+  {
+    "name": "Floating Evil Eye",
+    "str": 776,
+    "gold": 43233,
+    "weapon": "Evil Stare",
+    "exp": 13455,
+    "hp": 2232,
+    "death": "You really didn\"t like the look of that Eye..."
+  },
+  {
+    "name": "Slock",
+    "str": 744,
+    "gold": 56444,
+    "weapon": "Swamp Slime",
+    "exp": 14333,
+    "hp": 1675,
+    "death": "Walking away fromm the battle, you nearly slip on the thing\"s slime."
+  },
+  {
+    "name": "Adult Gold Dragon",
+    "str": 565,
+    "gold": 56444,
+    "weapon": "Dragon Fire",
+    "exp": 15364,
+    "hp": 3222,
+    "death": "He was strong, but you were stronger."
+  },
+  {
+    "name": "Black Sorcerer",
+    "str": 86,
+    "gold": 2838,
+    "weapon": "Spell Of Lightning",
+    "exp": 187,
+    "hp": 25,
+    "death": "That\"s the last spell this Sorcerer will ever cast!"
+  },
+  {
+    "name": "Kill Joy",
+    "str": 988,
+    "gold": 168844,
+    "weapon": "Terrible Stench",
+    "exp": 25766,
+    "hp": 3222,
+    "death": "Kill Joy has fallen, and can\"t get up."
+  },
+  {
+    "name": "Gorma The Leper",
+    "str": 1132,
+    "gold": 168774,
+    "weapon": "Contagous Desease",
+    "exp": 26333,
+    "hp": 2766,
+    "death": "It looks like the lepers fighting strategy has fallen apart.."
+  },
+  {
+    "name": "Shogun Warrior",
+    "str": 1143,
+    "gold": 165433,
+    "weapon": "Japenese Nortaki",
+    "exp": 26555,
+    "hp": 3878,
+    "death": "He was tough, but not nearly tough enough."
+  },
+  {
+    "name": "Apparently Weak Old Woman",
+    "str": 1543,
+    "gold": 173522,
+    "weapon": "*GODS HAMMER*",
+    "exp": 37762,
+    "hp": 1878,
+    "death": "You pull back the old woman\"s hood, to reveal an eyeless skull."
+  },
+  {
+    "name": "Ables Creature",
+    "str": 985,
+    "gold": 176775,
+    "weapon": "Bear Hug",
+    "exp": 28222,
+    "hp": 2455,
+    "death": "That was a mighty creature.  Created by a mighty man."
+  },
+  {
+    "name": "White Bear Of Lore",
+    "str": 1344,
+    "gold": 65544,
+    "weapon": "Snow Of Death",
+    "exp": 16775,
+    "hp": 1875,
+    "death": "The White Bear Of Lore DOES exist you\"ve found.  Too bad it\"s now dead."
+  },
+  {
+    "name": "Mountain",
+    "str": 1544,
+    "gold": 186454,
+    "weapon": "Landslide",
+    "exp": 38774,
+    "hp": 1284,
+    "death": "You have knocked the mountain to the ground.  Now it IS the ground."
+  },
+  {
+    "name": "Sheena The Shapechanger",
+    "str": 1463,
+    "gold": 165755,
+    "weapon": "Deadly Illusions",
+    "exp": 26655,
+    "hp": 1898,
+    "death": "Sheena is now a quivering mass of flesh.  Her last shapechange."
+  },
+  {
+    "name": "ShadowStormWarrior",
+    "str": 1655,
+    "gold": 162445,
+    "weapon": "Mystical Storm",
+    "exp": 26181,
+    "hp": 2767,
+    "death": "The storm is over, and the sunshine greets you as the victor."
+  },
+  {
+    "name": "Madman",
+    "str": 1265,
+    "gold": 149564,
+    "weapon": "Chant Of Insanity",
+    "exp": 25665,
+    "hp": 1764,
+    "death": "Madman must have been mad to think he could beat you!"
+  },
+  {
+    "name": "Vegetable Creature",
+    "str": 111,
+    "gold": 4838,
+    "weapon": "Pickled Cabbage",
+    "exp": 2187,
+    "hp": 172,
+    "death": "For once you finished off your greens..."
+  },
+  {
+    "name": "Cyclops Warrior",
+    "str": 1744,
+    "gold": 204000,
+    "weapon": "Fire Eye",
+    "exp": 49299,
+    "hp": 2899,
+    "death": "The dead Cyclop\"s one eye stares at you blankly."
+  },
+  {
+    "name": "Corinthian Giant",
+    "str": 2400,
+    "gold": 336643,
+    "weapon": "De-rooted Tree",
+    "exp": 60333,
+    "hp": 2544,
+    "death": "You hope the giant has brothers, more sport for you."
+  },
+  {
+    "name": "The Screaming Eunich",
+    "str": 1488,
+    "gold": 197888,
+    "weapon": "High Pitched Voice",
+    "exp": 78884,
+    "hp": 2877,
+    "death": "If it wasn\"t for his ugly features, you thought he looked female."
+  },
+  {
+    "name": "Black Warlock",
+    "str": 1366,
+    "gold": 168483,
+    "weapon": "Satanic Choruses",
+    "exp": 58989,
+    "hp": 2767,
+    "death": "You have slain Satan\"s only son."
+  },
+  {
+    "name": "Kal Torak",
+    "str": 876,
+    "gold": 447774,
+    "weapon": "Cthrek Goru",
+    "exp": 94663,
+    "hp": 6666,
+    "death": "You have slain a God!  You are the ultimate warrior!"
+  },
+  {
+    "name": "The Mighty Shadow",
+    "str": 1633,
+    "gold": 176333,
+    "weapon": "Shadow Axe",
+    "exp": 51655,
+    "hp": 2332,
+    "death": "The mighty Shadow is now only a Shadow of his former self."
+  },
+  {
+    "name": "Black Unicorn",
+    "str": 1899,
+    "gold": 336693,
+    "weapon": "Shredding Horn",
+    "exp": 41738,
+    "hp": 1587,
+    "death": "You have felled the Unicorn, not the first, not the last."
+  },
+  {
+    "name": "Mutated Black Widow",
+    "str": 2575,
+    "gold": 434370,
+    "weapon": "Venom Bite",
+    "exp": 98993,
+    "hp": 1276,
+    "death": "A well placed stomp ends this Spider\"s life."
+  },
+  {
+    "name": "Humongous Black Wyre",
+    "str": 1166,
+    "gold": 653834,
+    "weapon": "Death Talons",
+    "exp": 76000,
+    "hp": 3453,
+    "death": "The Wyre\"s dead carcass covers the whole field!"
+  },
+  {
+    "name": "The Wizard Of Darkness",
+    "str": 1497,
+    "gold": 224964,
+    "weapon": "Chant Of Insanity",
+    "exp": 39878,
+    "hp": 1383,
+    "death": "This Wizard of Darkness will never bother you again"
+  },
+  {
+    "name": "Great Ogre Of The North",
+    "str": 1800,
+    "gold": 524838,
+    "weapon": "Spiked Steel Mace",
+    "exp": 112833,
+    "hp": 2878,
+    "death": "No one is going to call him The \"Great\" Ogre Of The North again."
+  }
+]

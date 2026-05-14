@@ -1,0 +1,63 @@
+@;@ RHP_name: The Mushroom Patch (02/08/99)
+@;@ For: The L.O.R.D. Cavern v1.3c+
+@;@ Written_by: Michael Everett
+@;@ Gold reward capped at 1000 flat (was 1000*LEVEL - too exploitable at high levels)
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.3c
+
+`6You find a tunnel with strange
+`6mushrooms all over the walls.
+
+`$Investigate further?
+@YESNO@
+@##N
+
+`%You leave the tunnel and the mushrooms.
+@END@
+
+@##Y
+
+`6What would you like to investigate?
+  `$(`6P`$)`6ick a mushroom
+  `$(`6S`$)`6mell a mushroom
+  `$(`6T`$)`6aste a mushroom
+@PROMPT@ PTS
+@##P
+@CLEAR@
+
+`6You decide to pick a mushroom.
+`6After placing it carefully in
+`6your sachel you decide to leave
+`6the mushroom patch.
+
+`$After a while your sachel becomes
+`$much much heavier.  You notice the
+`$mushroom has turned to gold.
+
+@GOLD@ 1000
+
+`6If only you could find
+`6that mushroom patch again!
+@END@
+@##S
+@CLEAR@
+
+`6The smell of the mushroom
+`6envigorates your body, you
+`6now have more energy.
+@SEARCH@ +2
+
+@END@
+@##T
+@CLEAR@
+
+`6You are very hungry and
+`6these mushrooms look tasty!
+
+`$After taking only a small bite
+`$you become weak and quickly leave
+`$the mushroom patch.
+
+`6You vow never to do that again.
+@SEARCH@ -1
+@END@

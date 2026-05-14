@@ -1,0 +1,51 @@
+@#INSTALL
+@eventname UGLYSTICK
+@author Seth Able
+@authid UGLYSTICK1
+@codebegin
+@runsub UGLYSTICK &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+@#UGLYSTICK
+@verreq 407
+; for the longest time, this event has always given 5 charm and
+; taken 1 charm. Doing that kinda throws off the balance of the game,
+; since a player could get very very pretty and never have a chance
+; of getting ugly. Randomizing it helps that a bit.
+@set &N3 to &rnd5
+@if &rnd3 = 1 1
+ @begin
+  @writeln
+  @writeln
+  @writeln   `%MEGA EVENT IN THE FOREST
+  @writeln `0-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  @writeln  `2You are whacked with a pretty stick by an old man!
+  @writeln
+  @writeln  He giggles and runs away!
+  @writeln
+  @writeln  `%YOU GET &N3 CHARM!
+  @writeln
+  @set &Pch to +&N3
+ @end
+@else 1
+ @begin
+  @writeln
+  @writeln
+  @writeln   `%MEGA EVENT IN THE FOREST
+  @writeln `0-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  @writeln   `2You are wacked with an `4ugly`2 stick by an old man!
+  @writeln
+  @writeln   `2He giggles and runs away!
+  @writeln
+  @writeln   `4YOU LOSE 2 CHARM!
+  @writeln
+  @set &Pch to -2
+ @end
+@endif 1
+@hitakey
+@cls
+@endquest
+

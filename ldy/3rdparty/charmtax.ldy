@@ -1,0 +1,221 @@
+@#INSTALL
+@eventname The Charm Tax
+@author Donald Tidmore
+@authid CHARMTAX127
+@codebegin
+@runsub CHARMTAX &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+; ===============================================================
+; The Charm Tax v1.27:  By Donald Tidore.
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+; ===============================================================
+;
+@#CHARMTAX
+@display
+`c            `!Shocking Event In The Forest
+`l
+    `%You're in the ole Forest minding your own business - `#yeah sure
+    you are.  `%Suddenly, an ugly dwarf jumps down from a tree holding
+    a thick ledger book.  `!"Hold on there, now, `$&Nick, `!I've been
+    `!waiting for you awhile now.  It has been reported that some
+    of the King's citizens are not properly paying their `@Charm tax."
+
+    `%My name is `$"Cranky" John, `%and it's time for your `#Charm Tax
+    Audit. `%He opens the ledger book and starts turning the pages,
+    muttering, under his breath, people's names and `!Charm Tax status."
+
+    `%You stand there hoping you pass his test, trying to recall if
+    you remembered to pay that `!Charm Tax `%or not.
+@enddisplay
+@hitakey
+
+@math &N1 = &Pch + 0        ; Store player's Charm points
+@math &N2 = &N1 / 100       ; Compute 1% of Charm Points
+@math &N3 = &Pex + 0        ; Store player's Exp. points
+@math &N4 = &N3 / 100       ; Compute 1% of Experience
+
+@set &N8 to 0               ; Preset Charm Tax owed field.
+@set &N10 to 0              ; Preset Exp. penalty owed field.
+@set &N12 to 0              ; Preset Charm tax rate field.
+@set &N13 to 0              ; Preset Penalty rate field.
+
+;  Determine if player owes any tax.
+@if &N1 < 140 1         ; Tax is assessed when Charm at 140+ points.
+   @begin
+      @set &Phi to True
+      @writeln
+      @display  
+    `!John `2closes his book, and stares at you awhile. "All right, you
+    don't owe any `@Charm Tax `2this time.  `%As he walks off, you feel
+    `$extremely Happy.  `%Perhaps you're lucky, and will get to find
+    the `9legendary angel `%that people say sometimes grants favors
+    in the Forest.
+      @enddisplay 
+      @goto CHARM_ENDING
+   @end
+@else 1
+   @goto CTAX_RATES
+@endif 1
+
+
+;  Determine what Charm Tax Rate to assess player with.  And, if they
+;  are above 180 Charm points, determine Exp. point penalty rate.
+;  ------------------------------------------------------------------
+@LABEL CTAX_RATES
+@if &N1 < 180 2
+   @begin
+     @set &N12 to 3          ; Charm Tax rate is 3 percent.
+     @goto CTAX_CHARM-TAX
+   @end
+@endif 2
+
+@if &N1 < 220 3
+   @begin
+     @set &N12 to 6          ; Charm Tax rate is 6 percent.
+     @set &N13 to 3          ; Experience Penalty rate is 3 percent.
+     @goto CTAX_CHARM-TAX
+   @end
+@endif 3
+
+@if &N1 < 260 4
+   @begin
+     @set &N12 to 9          ; Charm Tax rate is 9 percent.
+     @set &N13 to 4          ; Exp. Penalty rate is 4 percent.
+     @goto CTAX_CHARM-TAX
+   @end
+@endif 4
+
+@if &N1 < 300 5
+   @begin
+     @set &N12 to 12         ; Charm Tax rate is 12 percent.
+     @set &N13 to 5          ; Exp. Penalty rate is 5 percent.
+     @goto CTAX_CHARM-TAX
+   @end
+@endif 5
+
+@if &N1 < 340 6
+   @begin
+     @set &N12 to 15         ; Charm Tax rate is 15 percent.
+     @set &N13 to 6          ; Exp. Penalty rate is 6 percent.
+     @goto CTAX_CHARM-TAX
+   @end
+@endif 6
+
+@if &N1 > 339 7         ; Players with 340+ Charm processing.
+   @begin
+     @set &N12 to 18         ; Charm Tax rate is 18 percent.
+     @set &N13 to 7          ; Exp. Penalty rate is 7 percent.
+     @goto CTAX_CHARM-TAX
+   @end
+@endif 7
+
+
+; Compute amount of Charm Tax the player owes, and collect it.
+; ------------------------------------------------------------------
+@LABEL CTAX_CHARM-TAX
+@math &N8 = &N2 * &N12       ; Compute how much Charm Tax is owed.
+@math &N9 = &N1 - &N8        ; Deduct Charm point Taxes owed.
+@set &Pch to &N9             ; Reset adjusted Charm points stat.
+
+@writeln
+@display
+    `!John `%finishes examining his ledger, and looks at you. `!"Looks like
+    `!you didn't pay your taxes like you should have.
+
+    Your `@Charm Tax `!is `$&N8 `#Charm points, `$&Nick,", `!he says.
+    `!"Now, let us see if there is any tax penalty that you have to pay."
+@enddisplay
+
+@if &N13 = 0 8
+   @begin
+      @writeln
+      @display
+    "All right, you do not owe any tax penalty this time."
+    John looks at you awhile, then walks away.
+      @enddisplay
+      @goto CHARM_ENDING
+   @end
+@endif 8
+
+; Determine the Experience points penalty owed.
+@math &N10 = &N4 * &N13      ; Assess Tax Penalty in Exp. points.
+
+; Give low-level players a break - Penalty assessed only if they
+; are over 400,000 exp. points. Otherwise grant an reprieve from
+; the penalty.
+@if &N3 < 400000 9
+   @begin
+     @math &N11 = &N3 + 0    ; Skip tax penalty assessment.
+     @writeln
+     @display
+   `%"The King was in a good mood this morning.  So he has granted
+   an reprieve from the Experience Tax penalty for some people. `0This
+   is YOUR lucky day, your tax penalty is waived this time."
+
+   `%John taps your shoulder with an Crystal Wand, and says, "The Charm
+   tax that you owed has been collected magically and sent to the King's
+   Treasury."  John then vanishes in a burst of Green light, leaving
+   you to continue your Forest adventuring.
+     @enddisplay
+     @goto CHARM_ENDING
+   @end
+@endif 9
+
+@math &N11 = &N3 - &N10      ; Deduct the Exp. point penalty
+@set &Pex to &N11            ; Reset Experience Points stat.
+
+@writeln
+@display
+    `%"Well, `$&Nick, `%I see that you have been delinquent in paying your
+    taxes more than one year.  So, you owe a `#Back Tax penalty, `%which is
+    assessed in `#Experience points.  `%Your penalty rate is `$&N13 percent.
+
+    `%And your `@Charm Tax `%penalty is `$&N10 `0Experience Points. `%
+
+    `0John `%pulls out an Crystal Wand and taps it on your shoulder.  `!"Your
+    `#Charm tax `!and `#Experience penalty `!have been collected magically, and
+    sent to the `0King's Treasury.  `!You may go now."  `%He then vanishes in
+    a flash of `2green light.
+@enddisplay
+
+@LABEL CHARM_ENDING
+@writeln
+@writeln     `$Having survived the `#Tax Audit, `$you go on your way.
+@hitakey
+
+@endquest
+
+; ===============================================================
+; Requires LORD v4.05+.  Tested under LORD v4.07 beta by author.
+; Exp. point penalty is only assessed if player has over 500,000
+; experience points.  The others get a reprieve from the King.
+;
+; =================================================================
+; Summary:  There is a rather ugly dwarf, named Cranky John, who
+; works for the LORD I.R.S. office.  He enjoys traveling around
+; the Forest collecting an Charm Tax.  His buddy, the old Elf,
+; may find you and assess an Income Tax, but that's another script.
+;     When you increase in Charm points, people treat you differently.
+; At times, you even get a Free room at the Inn.  So that is
+; considered taxable income.  If you've not paid your taxes on time,
+; each year, John will assess and collect a tax penalty also.
+;        { Moved summary wording down here. 05/17/2003 }
+
+; -------------------------------------------------------------------
+; v1.14: Changed script label names.  v1.15: Tested under LORD 4.06.
+; v1.18: 05/17/03. Changes to dialogue display using new color codes.
+; v1.19: 12/21/03. dialogue text spacing changes. Added Gold tax.
+; v1.20. 12/05/04. Renamed Charm_Tax label to CTAX_CHARM-TAX.
+;        Changed version from 1.19 to 1.20, 12/05/04.
+; =================================================================
+; 04/12/05: Added number identifier to the @else statements.
+; 04/12/05:  changed version to 1.25.  Donald.
+; 07/24/05: Added INSTALL and UNINSTALL sections to script.
+; 05/31/07: v1.27: Revised Email/WWW info;  Changed version #.
+
+

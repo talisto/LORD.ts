@@ -1,0 +1,81 @@
+@;@ The Waterfall RHP By Jason Brown
+@;@ For The L.O.R.D. Cavern v1.3c+ and LORD v3.25+
+
+`9You come across an underground waterfall!
+`9You are at the bottom of it.
+`9Move into the waterfall?`l
+@YESNO@
+@##N
+`9You chicken out and leave
+@END@
+@##Y
+`9You move into the waterfall...
+`9It feels nice and cool.
+@RANDOM@ 4
+@##4
+`9You feel no different, only wetter.
+@MORE@
+`9You shake yourself off and leave.
+@END@
+@##3
+`@All of the sudden, you get knocked about the head!
+`9You go unconscious, and almost drown!
+`9You wake and swin to the surface!
+`9The near death experience made you smarter, however you
+`9are very tired.
+@EXPERIENCE@ %16
+@HITPOINTS@ =1
+@MORE@
+`9You squish back to the mail tunnel.
+@END@
+@##1
+`9You walk out and feel stronger!  That really envigorated you!
+@HITMAX@ 2*LEVEL
+@MORE@
+`9You skip around until you find the main tunnel.
+@END@
+@##2
+`9You find a hidden passage!
+`9In it lies a treasure chest!
+`9Open the chest?`l
+@YESNO@
+@##N
+`9You decide to leave the chest a mystery and leave.
+@END@
+@##Y
+`9All while prying it open you wonder what could be in it!
+`9You slownly open it to reveal`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@RANDOM@ 3
+@##1
+`9water.
+`9Darn, it was empty!
+@MORE@
+`9You trudge back to the main tunnel.
+@END@
+@##2
+`9a sharp knife!
+`9Its a little rusty, but should help you to clear the
+`9forest, to find things to kill!
+@FOREST@ 3
+@MORE@
+`9You wave the knife around and head back to the main tunnel.
+@END@
+@##3
+`@A TRAP!
+`9An arrow shoots out of the chest and into your arm!
+`9You are really hurt, and you're not as strong.
+@HITPOINTS@ =1
+@STRENGTH@ %-17
+@MORE@
+`9You limp to the main tunnel.
+@END@

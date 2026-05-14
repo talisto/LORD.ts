@@ -1,0 +1,155 @@
+@;@ RHP_name: The Old Magician
+@;@ RHP By Jason Brown
+@;@ Maintained by Donald Tidmore
+@;@ For The L.O.R.D. Cavern v1.3c+ and LORD v3.25+
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.80
+@;@@NAME@ The Old Magician
+@;@@PERCENT@ 85
+@;@@SCRIPTVERSION 1.20
+
+@SHOW@
+`2While walking around, an Old Magician appears to you!
+`0"`2Hehehehe!  Answer my question right, and I'll grant
+`2you a wish!`0"`2 he says.
+
+`0  "`2What do you say?`0"`2`l
+@YESNO@
+
+@##N
+`0"`2Well, all right... for now!`0"`2
+`2  He vanishes in a puff of smoke!
+`2You run away as fast as you can.
+@END@
+
+@##Y
+`0"`2Ok... what is my name?`0"`2
+  `5A`0) `2Rumpelstiltskin
+  `5B`0) `2Rumblefish
+  `5C`0) `2Merlin
+  `5D`0) `2Bob
+  `5E`0) `2Run away!
+@PROMPT@ EABCD
+
+@##E
+`2You turn and run away screaming!
+`0  "`2You'll be back!`0", `2yells the old man.
+
+`2You manage to find the main tunnel.
+
+@##A
+@##B
+@##C
+`0"`2Hehehe... That's not it!`0", `2he giggles.
+`2  You cower in expectation of his punishment.
+
+`0"`2Don't worry, I'm not going to hurt you.`0"`2
+  He waves his wand, and you appear in the main tunnel, undamaged.
+@END@
+
+@##D
+`0"`2Right!  My name is Bob!`0", `2he emphatically yells.
+@RANDOM@ 3
+
+@##3
+@##2
+`0"`2However, I'm in a bad mood.  No wish!`0"`2
+
+`2With that he vanishes.
+`2You are very angry, and you walk back to the main tunnel.
+@END@
+
+@##1
+`0"`2Now for your wish.  What do you want?`0"`2
+  `5A`0) A Sex change
+  `5B`0) A Horse
+  `5C`0) A Fairy
+  `5D`0) More Hitpoints
+  `5E`0) More Charm
+  `5F`0) Nothing
+@PROMPT@ FABCDE
+
+@##F
+`0"`2I appreciate your honesty.  Bye!`0"`2 he says in a
+flash of light.
+@GOTO@ @#Quit
+
+@##A
+`0"`2A sex change?  How odd... oh, well...`0"`2
+
+`2A strange glow surrounds you...
+`2  All of the sudden, you feel different.
+@SEX@
+`0"`2It's done.  See you later.`0" he says, as he
+vanishes in a flash of light.
+@GOTO@ @#Quit
+
+@##B
+@IF@ HORSE @GOTO@ @#Gothorse
+`0"`2A horse?  Child's play!`0"`2
+`2  Suddenly, a Horse appears next to you.
+@HORSE@
+`2You look around and find the magician has left.
+@GOTO@ @#Quit
+
+@#Gothorse
+`0"`2Fool!  You already have a Horse!  Leave me be!`0"`2
+
+`2  He disappears, and you feel foolish for asking for
+something that you already had.
+@GOTO@ @#Quit
+
+@##C
+@IF@ FAIRY @GOTO@ @#GotFairy
+`0"`2A Fairy?  Tricky... let me try...`0"`2
+
+`%  A gust of wind comes up, and then a `0Fairy `%flies at you!
+
+`2You catch it, and put it in your pocket, at the disgust
+of the magician.
+@FAIRY@
+
+`0  "`2You make me sick!`0", `2he says, as he walks away.
+@GOTO@ @#Quit
+
+@#GotFairy
+`0  "`2You already have a Fairy, sicko!  I'm not letting you
+  imprison another one!`0"`2
+
+He vanishes in a flash of light that almost makes you blind.
+@GOTO@ @#Quit
+
+@##D
+`0"`2Yawn.  Mortals and their petty wishes.`0"`2
+`2  You are surrounded in fire, and feel stronger!
+@HITMAX@ +LEVEL*4
+
+`2You hear the magician's laughter even after he vanishes.
+@GOTO@ @#Quit
+
+@##E
+`0"`2Want to impress someone, do you?`0"`2
+`2  He taps you with his wand, and gives you a mirror.
+
+`2You look marvelous!
+@CHARM@ +LEVEL*4
+`0"`2Have fun!`0"`2 laughs the magician as he walks away.
+@GOTO@ @#Quit
+
+@#Quit
+`2You decide to leave, there's nothing more to do here.
+
+@END@
+
+@;@ 06/17/03: worked on code indentation.
+@;@ 11/05/03: moved version number to ScriptVersion line.
+@;@ 12/08/04: Added RHP_Name: coding to first line.
+
+@;@ 06/08/08: Rewrote HITMAX and CHARM statements. v1.13
+@;@    Rewrote VERSION statement. Requires LORD Cavern v1.8.
+@;@  08/09/08: Added SHOW command to top of script.
+@;@  09/04/09: Revised to use v1.20.
+
+@;@ 11/30/09: Changed VERSION to 1.80.  No SCRIPTVERSION change.
+
+

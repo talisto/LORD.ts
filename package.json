@@ -1,0 +1,119 @@
+{
+  "name": "lord-ts",
+  "version": "1.4.2",
+  "description": "Legend of the Red Dragon - Typescript / Node.js port",
+  "main": "server.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "workspaces": [
+    "src/util",
+    "src/storage",
+    "src/door",
+    "src/igm",
+    "src/core",
+    "igm/aratime",
+    "igm/barak",
+    "igm/felicity",
+    "igm/freeworld2",
+    "igm/gravyard",
+    "igm/lordcave",
+    "igm/lotto",
+    "igm/lrdevent",
+    "igm/npclord",
+    "igm/oorphans",
+    "igm/outhouse",
+    "igm/sandbar",
+    "igm/teamlord",
+    "igm/violet"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "bash scripts/copy-igm-assets.sh",
+    "build:watch": "tsc --watch",
+
+    "dev:server": "tsx watch server.ts",
+    "start": "tsx server.ts",
+    "start:ts": "tsx server.ts",
+    "play": "tsx door.ts --cli",
+    "play:ts": "tsx door.ts --cli",
+    "door": "tsx door.ts",
+    "door:ts": "tsx door.ts",
+    "lordctl": "tsx lordctl.ts",
+    "test": "jest --verbose",
+    "test:unit": "jest --verbose tests/unit",
+    "test:integration": "jest --verbose tests/integration",
+    "test:coverage": "jest --coverage",
+    "test:load": "node --import tsx -e \"import('./src/core/GameContext.ts').then(() => console.log('All modules OK'))\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sentry/node": "^10.41.0",
+    "better-sqlite3": "^12.6.2",
+    "handlebars": "^4.7.8",
+    "nodemailer": "^8.0.3",
+    "tsx": "^4.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/handlebars": "^4.0.40",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^25.3.0",
+    "@types/nodemailer": "^7.0.11",
+    "@types/ws": "^8.18.1",
+    "esbuild": "^0.27.3",
+    "eslint": "^10.0.2",
+    "eslint-plugin-jest": "^29.15.0",
+    "jest": "^29.6.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tests/tsconfig.json"
+        }
+      ]
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json",
+      "node"
+    ],
+    "testMatch": [
+      "**/tests/**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "moduleNameMapper": {
+      "^@lordts/util/(.*)$": "<rootDir>/src/util/$1",
+      "^@lordts/storage/(.*)$": "<rootDir>/src/storage/$1",
+      "^@lordts/db/(.*)$": "<rootDir>/src/storage/$1",
+      "^@lordts/door/(.*)$": "<rootDir>/src/door/$1",
+      "^@lordts/igm$": "<rootDir>/src/igm/index",
+      "^@lordts/igm/(.*)$": "<rootDir>/src/igm/$1",
+      "^@lordts/core$": "<rootDir>/src/core/index",
+      "^@lordts/core/(.*)$": "<rootDir>/src/core/$1",
+      "^@lordts/igm-lrdevent/(.*)$": "<rootDir>/igm/lrdevent/$1",
+      "^@lordts/igm-npclord/(.*)$": "<rootDir>/igm/npclord/$1",
+      "^@lordts/igm-aratime/(.*)$": "<rootDir>/igm/aratime/$1",
+      "^@lordts/igm-barak/(.*)$": "<rootDir>/igm/barak/$1",
+      "^@lordts/igm-felicity/(.*)$": "<rootDir>/igm/felicity/$1",
+      "^@lordts/igm-freeworld2/(.*)$": "<rootDir>/igm/freeworld2/$1",
+      "^@lordts/igm-gravyard/(.*)$": "<rootDir>/igm/gravyard/$1",
+      "^@lordts/igm-lordcave/(.*)$": "<rootDir>/igm/lordcave/$1",
+      "^@lordts/igm-lotto/(.*)$": "<rootDir>/igm/lotto/$1",
+      "^@lordts/igm-oorphans/(.*)$": "<rootDir>/igm/oorphans/$1",
+      "^@lordts/igm-outhouse/(.*)$": "<rootDir>/igm/outhouse/$1",
+      "^@lordts/igm-sandbar/(.*)$": "<rootDir>/igm/sandbar/$1",
+      "^@lordts/igm-teamlord/(.*)$": "<rootDir>/igm/teamlord/$1",
+      "^@lordts/igm-violet/(.*)$": "<rootDir>/igm/violet/$1"
+    }
+  }
+}

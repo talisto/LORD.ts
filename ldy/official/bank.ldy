@@ -1,0 +1,8 @@
+@#LEAVEBANK
+; 1 in 30 chance of amulet event when leaving the bank,
+; matching the odds from the original game engine.
+@set &N1 to &rnd30
+@if &N1 = 26 1
+  @runsub AMULET amulet.ldy
+@endif 1
+@endquest

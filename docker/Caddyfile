@@ -1,0 +1,21 @@
+:80 {
+	root * /srv/client
+	file_server
+
+	# Serve index.html for root requests
+	@root path /
+	rewrite @root /index.html
+
+	# RIP icon files served from the game data directory
+	handle_path /rip/icons/* {
+		root * /srv/data/rip/icons
+		file_server
+		header Cache-Control "public, max-age=86400"
+	}
+
+	@ws path /ws
+	reverse_proxy @ws server:80
+
+	@api path /api/*
+	reverse_proxy @api server:80
+}

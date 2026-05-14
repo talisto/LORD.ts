@@ -1,0 +1,67 @@
+@;@ RHP_name: The Strange Rock
+@;@ For: The L.O.R.D. Cavern v1.3c+
+@;@ Written_by: Jason Brown
+@;@ Maintained by Donald Tidmore
+@;@ This is included so your users have an extra Random Happening.
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.3c
+@;@@NAME@ The Strange Rock
+@;@@SCRIPTVERSION@ 1.12
+
+`7You look down and see a strange looking rock!
+`7It's grey with `4red `7stripes!
+`#  Pick it up?`l
+@YESNO@
+
+@##Y
+
+`7You pick up the rock and `l
+@RANDOM@ 4
+
+@##1
+@##2
+`7look at it closely.
+
+`7It turns out that it is not that special.
+`3  You throw it down the tunnel.
+@GOTO@ @#Ending
+
+@##3
+`9  IT BEGINS TO GLOW!
+
+`7You get frightened, but then you see that it glows 
+`7brighter than your torch!
+
+`#  You can explore farther now!
+@SEARCH@ 3
+@GOTO@ @#Ending
+
+@##4
+`9  it breaks apart!
+
+`!  It broke into many valuable jewels!
+@IF@ @GEMS@<>0 @GOTO@ @#Gems1
+@GEMS@ 6
+@GOTO@ @#Ending
+
+@#Gems1
+@GEMS@ 5
+@GOTO@ @#Ending
+
+@;@  This way is not working currently, at all. 07/02/03
+@IF@ GEMS<>0 @GEMS@ +5
+@IF@ GEMS=0 @GEMS@ +6
+
+@##N
+`7  You kick the stupid rock down the tunnel.
+
+@#Ending
+
+`3  You walk around, and come across the main tunnel again.
+@END@
+
+@;@ 06/23/03: changed "grey" word to show in White.
+@;@ 07/02/03: fixed issue with Gems info not showing on-screen.
+@;@ 11/05/03: Removed version # data from RHP_Name line.
+
+

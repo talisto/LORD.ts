@@ -1,0 +1,255 @@
+@#INSTALL
+@eventname The Merchant's Gambit
+@author Claude Opus 4.6
+@authid MERCHANT-GAMBIT-100
+@codebegin
+@runsub MERCHANT &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#MERCHANT
+@verreq 407
+@math &N10 = &Plv * 60
+@set &N10 to +90
+@math &N11 = &Plv * 40
+@set &N11 to +75
+@set &B1 to false
+
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2In a lonely clearing, a velvet-coated merchant has set up shop
+  `2with three walnut shells, a folding table, and the grin of a man
+  `2who has separated better people than you from their savings.
+
+  `2A small crowd of woodland creatures watches. Even a squirrel
+  `2looks skeptical.
+
+  `0"`%Step right up, hero! One round! One `$HONEST `0chance!
+  `0The house always wins, but today the house is feeling `$generous`0!`2"
+@enddisplay
+@hitakey
+
+@display
+`l
+  `2He rolls a brass pea beneath the shells so fast your eyes water.
+
+  `2(`0P`2)lay his shell game for `%&N10 `2gold
+  `2(`0W`2)atch his hands first - look for the trick
+  `2(`0L`2)eave while your purse is still heavy
+@enddisplay
+
+@choice PWL   `0Your move? [`0PWL`2]
+@case response 1
+P: @goto MERCHANT_PLAY
+W: @goto MERCHANT_WATCH
+L: @goto MERCHANT_LEAVE
+@endcase 1
+
+; --- WATCH ---
+@label MERCHANT_WATCH
+@math &N20 = &Pch + &Plv
+@math &N21 = &rnd25
+@if &N21 <= &N20 1
+ @begin
+  @writeln
+  @writeln   `2You stop watching the shells and start watching `4him`2.
+  @writeln   There - a flick of the thumb! The brass pea vanishes into
+  @writeln   his sleeve like a coin into a politician's pocket!
+  @writeln
+  @writeln   `0"`%Sharp eyes,`2" `2the merchant murmurs, sweat beading.
+  @writeln   `0"`%So now what, hero?`2"
+  @writeln
+  @writeln   `2(`0B`2) Blackmail him - "Pay up or I shout CHEAT!"
+  @writeln   `2(`0P`2) Force one fair round
+  @writeln
+  @choice BP   `0[`0BP`2]
+  @case response 2
+  B: @begin
+      @writeln
+      @writeln   `2You tap the brass pea peeking from his cuff and `0smile`2.
+      @writeln   The merchant goes the colour of old cheese, mutters
+      @writeln   something anatomically creative, and slides `%&N11 gold
+      @writeln   `2into your hand.
+      @writeln
+      @writeln   `0"`%Now `$GET LOST `0before my reputation does!`2"
+      @writeln   `%You gain &N11 gold!
+      @set &Pgo to +&N11
+      @goto MERCHANT_END
+     @end
+  P: @begin
+      @writeln
+      @writeln   `2You tap the hidden pea. `0"`%One fair round,`2" `2you say.
+      @writeln   He sighs like a man attending his own funeral.
+      @set &B1 to true
+      @goto MERCHANT_PLAY
+     @end
+  @endcase 2
+ @end
+@else 1
+ @begin
+  @writeln
+  @writeln   `2You lean in, squinting. The merchant notices instantly.
+  @writeln   `0"`%Hands off the craft, `4friend`0.`2"
+  @writeln
+  @math &N22 = &N10 / 3
+  @if &Pgo > &N22 2
+   @begin
+    @writeln   `2While you're staring at shells, his assistant lifts
+    @writeln   `%&N22 gold `2from your purse with surgical precision!
+    @writeln   `4You lose &N22 gold!
+    @set &Pgo to -&N22
+   @end
+  @else 2
+   @begin
+    @writeln   `2The crowd snickers. The squirrel covers its eyes.
+    @writeln   `4You lose 1 charm from sheer embarrassment!
+    @set &Pch to -1
+   @end
+  @endif 2
+  @goto MERCHANT_END
+ @end
+@endif 1
+
+; --- PLAY ---
+@label MERCHANT_PLAY
+@if &Pgo < &N10 3
+ @begin
+  @writeln
+  @writeln   `2You pat your purse. It makes a sad, empty sound.
+  @writeln   `0"`%Come back when you can afford to be disappointed,`2"
+  @writeln   `2the merchant says, not unkindly.
+  @goto MERCHANT_LEAVE
+ @end
+@endif 3
+
+@writeln
+@writeln   `2The stake is `%&N10 gold`2!
+@if &B1 is true 4
+ @begin
+  @writeln   `2The merchant rolls up both sleeves with theatrical reluctance.
+  @writeln   `0"`%Fine. FINE. One `$honest `0round. Happy?`2"
+ @end
+@endif 4
+@writeln
+@set &Pgo to -&N10
+@writeln   `2He sets the shells down with a flourish!
+@writeln   `2(`0L`2)eft    (`0C`2)enter    (`0R`2)ight
+@writeln
+@choice LCR   `0Pick a shell! [`0LCR`2]
+@case response 3
+L: @set &N30 to 1
+C: @set &N30 to 2
+R: @set &N30 to 3
+@endcase 3
+
+@math &N31 = &rnd3
+@if &N30 = &N31 5
+ @begin
+  @math &N32 = &N10 * 2
+  @writeln
+  @writeln   `2You lift the shell! The brass pea winks up at you like
+  @writeln   a tiny golden sun!
+  @writeln
+  @writeln   `%YOU WIN!
+  @writeln
+  @writeln   `2The merchant's face `4collapses`2. The squirrel applauds!
+  @writeln   He counts out `%&N32 gold `2with the enthusiasm of a man
+  @writeln   paying his own ransom!
+  @set &Pgo to +&N32
+  @if &B1 is true 6
+   @begin
+    @if &rnd4 = 1 7
+     @begin
+      @writeln
+      @writeln   `2He flicks a gem across the table!
+      @writeln   `0"`%NOW. GO. `$AWAY`0.`2"
+      @writeln   `%You gain 1 gem!
+      @set &Pge to +1
+     @end
+    @endif 7
+   @end
+  @endif 6
+  @goto MERCHANT_DOUBLE
+ @end
+@else 5
+ @begin
+  @writeln
+  @if &B1 is true 8
+   @begin
+    @math &N35 = &N10 / 2
+    @writeln   `2Wrong! But you catch him switching shells mid-reveal!
+    @writeln   After a stare that could cut glass, he refunds `%&N35 gold
+    @writeln   `2and declares the show `0"permanently over."`2
+    @set &Pgo to +&N35
+   @end
+  @else 8
+   @begin
+    @writeln   `2Wrong shell. Very wrong shell.
+    @writeln
+    @writeln   `2The merchant sweeps up your stake with the tenderness
+    @writeln   of a loving father tucking in his favourite child.
+    @writeln   `0"`%Better luck next life, hero!`2"
+   @end
+  @endif 8
+  @goto MERCHANT_END
+ @end
+@endif 5
+
+; --- DOUBLE OR NOTHING ---
+@label MERCHANT_DOUBLE
+@writeln
+@writeln   `2The merchant eyes you. The crowd holds its breath.
+@writeln
+@writeln   `2(`0D`2) Double or nothing - push your luck!
+@writeln   `2(`0Q`2) Quit while you're ahead!
+@writeln
+@choice DQ   `0[`0DQ`2]
+@case response 4
+D: @begin
+    @math &N33 = &N32 * 2
+    @writeln
+    @writeln   `0"`%Oh HO!`2" `2the merchant's eyes light up!
+    @writeln   `0"`%Now THAT is the kind of stupid I can work with!`2"
+    @writeln
+    @writeln   `2He shuffles again. You pick!
+    @math &N34 = &rnd3
+    @if &N34 = 1 9
+     @begin
+      @writeln
+      @writeln   `2The pea is `%THERE`2!! The merchant `4CHOKES`2!!
+      @writeln   `%YOU WIN &N33 GOLD!!
+      @set &Pgo to +&N33
+     @end
+    @else 9
+     @begin
+      @writeln
+      @writeln   `2Empty shell. The merchant's grin returns instantly.
+      @writeln   `0"`%Greeeeed. Gets them every time.`2"
+      @writeln   `4You lose your &N32 gold winnings!
+      @set &Pgo to -&N32
+     @end
+    @endif 9
+   @end
+Q: @begin
+    @writeln
+    @writeln   `2The merchant looks genuinely disappointed.
+    @writeln   `0"`%Wise. Boring. But wise.`2"
+   @end
+@endcase 4
+@goto MERCHANT_END
+
+; --- LEAVE ---
+@label MERCHANT_LEAVE
+@writeln
+@writeln   `2You give the table a respectful nod and keep walking.
+@writeln   Behind you, the merchant hollers after another victim.
+@writeln   The squirrel looks relieved.
+
+@label MERCHANT_END
+@writeln
+@hitakey
+@endquest

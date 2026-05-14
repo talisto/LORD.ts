@@ -1,0 +1,271 @@
+@#INSTALL
+@eventname The Beast's Mirror
+@author Claude Opus 4.6
+@authid BEASTS-MIRROR-100
+@codebegin
+@runsub BEASTSMIRROR &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#BEASTSMIRROR
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2The trees go quiet. No birdsong. No wind. Just you and a mirror
+  `2standing upright in a circle of scorched earth, its silver frame
+  `2crawling with thorns that should not be alive.
+
+  `2Your reflection stares back - and then it `4smiles`2.
+
+  `0"`%Hello, hero. You look tired. And cheap. And a little afraid.`2"
+@enddisplay
+@hitakey
+
+@display
+`l
+  `2The glass ripples like dark water. Your double tilts its head,
+  `2waiting with the patience of something that has nowhere to be.
+
+  `2(`0A`2) Draw your weapon and SMASH the wretched thing
+  `2(`0T`2) Talk to it - carefully
+  `2(`0G`2) Toss gold at the mirror to buy its silence
+  `2(`0L`2) Back away slowly and pretend you saw nothing
+@enddisplay
+
+@choice ATGL   `0What do you do? [`0ATGL`2]
+@case response 1
+A: @goto MIRROR_ATTACK
+T: @goto MIRROR_TALK
+G: @goto MIRROR_BRIBE
+L: @goto MIRROR_LEAVE
+@endcase 1
+
+; --- ATTACK ---
+@label MIRROR_ATTACK
+@math &N10 = &Psr + &Pde
+@set &N10 to +&Plv
+@math &N11 = &rnd12
+@math &N12 = &Plv * 4
+@set &N12 to +12
+@math &N13 = &N10 + &N11
+@writeln
+@writeln   `2You swing `0&PWE `2at the glass with everything you have got!
+@if &N13 > &N12 1
+ @begin
+  @math &N20 = &Plv * 50
+  @set &N20 to +&rnd75
+  @writeln
+  @writeln   `2The mirror `%EXPLODES`2! Shards of silver rain through the clearing
+  @writeln   like frozen lightning! Your reflection screams once - a thin,
+  @writeln   furious sound - and disintegrates into glittering dust!
+  @writeln
+  @writeln   `2In the wreckage, quicksilver pools and hardens into coin.
+  @writeln   `%You find &N20 gold in the debris!
+  @set &Pgo to +&N20
+  @if &rnd3 = 1 2
+   @begin
+    @writeln
+    @writeln   `2A single shard crystallizes into a perfect gem in your palm!
+    @writeln   `%You gain 1 gem!
+    @set &Pge to +1
+   @end
+  @endif 2
+  @goto MIRROR_END
+ @end
+@else 1
+ @begin
+  @writeln
+  @writeln   `2Your reflection catches the blow `4MID-SWING`2 and hurls it
+  @writeln   back at you! The force slams you into a tree trunk so hard
+  @writeln   the bark cracks!
+  @math &N21 = &Phx / 3
+  @set &N21 to +&rnd10
+  @writeln
+  @writeln   `4You lose &N21 hit points!
+  @set &Pht to -&N21
+  @if &Pht < 1 3
+   @set &Pht to 1
+  @endif 3
+  @math &N22 = &Plv * 30
+  @if &rnd3 = 1 4
+   @begin
+    @if &Pgo > &N22 5
+     @begin
+      @writeln   `2Coins scatter from your purse as you stagger upright!
+      @writeln   `4You lose &N22 gold!
+      @set &Pgo to -&N22
+     @end
+    @endif 5
+   @end
+  @endif 4
+  @goto MIRROR_END
+ @end
+@endif 1
+
+; --- TALK ---
+@label MIRROR_TALK
+@math &N30 = &rnd4
+@writeln
+@writeln   `2You take a breath and face your double.
+@writeln   `0"`%All right, you smug piece of glass. What do you want?`2"
+@writeln
+@writeln   `2Your reflection leans close, eyes gleaming with wicked delight:
+@writeln
+@if &N30 = 1 6
+ @writeln   `0"`%You hoard gold like a dragon with performance anxiety.
+ @writeln   `0Every coin counted, every copper pinched. Tell me I am wrong.`2"
+@endif 6
+@if &N30 = 2 7
+ @writeln   `0"`%You smile and buy drinks at the Inn like you have got friends.
+ @writeln   `0But you would sell every one of them for ten more minutes with
+ @writeln   `0the Red Dragon. Would you not?`2"
+@endif 7
+@if &N30 = 3 8
+ @writeln   `0"`%You polish that &PWE like it makes you somebody.
+ @writeln   `0Without it you are just a warm body looking for a grave.`2"
+@endif 8
+@if &N30 = 4 9
+ @writeln   `0"`%You count your charm like a merchant counts coins.
+ @writeln   `0Loved? Ha! You are just good at being tolerated.`2"
+@endif 9
+@writeln
+@writeln   `2Is the wretched thing right?
+@writeln
+@writeln   `2(`0Y`2) Admit the truth - it stings, but it is honest
+@writeln   `2(`0N`2) Deny it! You will not be lectured by furniture!
+@writeln   `2(`0S`2) SMASH the mirror in a blind rage
+@writeln
+@choice YNS   `0[`0YNS`2]
+@case response 2
+Y: @begin
+    @writeln
+    @writeln   `2You nod slowly. The reflection's cruel grin softens into
+    @writeln   something that almost looks like `0respect`2.
+    @writeln
+    @writeln   `0"`%Honesty. That is rare in this forest. Here - you earned this.`2"
+    @writeln
+    @writeln   `2The glass parts like a curtain and warm light spills out.
+    @writeln   You feel... `%steadier`2. More `%real`2.
+    @writeln
+    @writeln   `%YOUR CHARM GOES UP BY 1!
+    @set &Pch to +1
+    @if &Pht < &Phx 10
+     @begin
+      @writeln   `2Your wounds close as the mirror mends what it hurt.
+      @writeln   `%You are fully healed!
+      @set &Pht to &Phx
+     @end
+    @endif 10
+    @goto MIRROR_END
+   @end
+N: @begin
+    @writeln
+    @writeln   `0"`%LIAR,`2" `2your reflection hisses, and the mirror flashes
+    @writeln   blindingly white!
+    @writeln
+    @writeln   `2When your vision clears, you are standing ten paces deeper
+    @writeln   in the forest with no idea how you got there. Your head
+    @writeln   throbs. Your pride throbs worse.
+    @writeln
+    @writeln   `4You lose 1 charm and 1 forest fight!
+    @set &Pch to -1
+    @set &Pff to -1
+    @goto MIRROR_END
+   @end
+S: @begin
+    @writeln
+    @writeln   `0"`%Oh good,`2" `2your reflection says. `0"`$ANGER.`2"
+    @writeln
+    @writeln   `2You smash the glass with your bare fist! Silver blood
+    @writeln   sprays everywhere!
+    @math &N31 = &Phx / 5
+    @set &N31 to +&rnd5
+    @writeln   `4You lose &N31 hit points from the shards!
+    @set &Pht to -&N31
+    @if &Pht < 1 11
+     @set &Pht to 1
+    @endif 11
+    @math &N32 = &Plv * 25
+    @set &N32 to +50
+    @writeln
+    @writeln   `2But as the mirror shatters, rage fuels your blood and the
+    @writeln   adrenaline clears your mind!
+    @writeln   `%You gain &N32 experience!
+    @set &Pex to +&N32
+    @goto MIRROR_END
+   @end
+@endcase 2
+
+; --- BRIBE ---
+@label MIRROR_BRIBE
+@math &N40 = &Plv * 40
+@set &N40 to +50
+@if &Pgo < &N40 12
+ @begin
+  @writeln
+  @writeln   `2You dig through your purse. Your reflection watches.
+  @writeln   `0"`%You cannot even afford to bribe a `4mirror`0. Incredible.`2"
+  @writeln   `4You lose 1 charm from sheer embarrassment!
+  @set &Pch to -1
+  @goto MIRROR_END
+ @end
+@endif 12
+@set &Pgo to -&N40
+@writeln
+@writeln   `2You hold up `%&N40 gold`2. Your reflection reaches through the
+@writeln   glass with fingers that should not be solid and snatches it!
+@writeln
+@writeln   `0"`%I accept your tribute, `4coward`0.`2"
+@writeln
+@math &N33 = &rnd3
+@case &N33 3
+1: @begin
+    @writeln   `2The mirror shows you a hidden path through the undergrowth
+    @writeln   that you would never have found on your own!
+    @writeln   `%You gain 2 forest fights!
+    @set &Pff to +2
+   @end
+2: @begin
+    @math &N34 = &N40 * 2
+    @writeln   `2The mirror reveals a cache of coins buried in the roots
+    @writeln   beneath its stone!
+    @writeln   `%You find &N34 gold!
+    @set &Pgo to +&N34
+   @end
+3: @begin
+    @writeln   `2The mirror shows you nothing. Your gold is simply gone.
+    @writeln   `0"`%Pleasure doing business,`2" `2your reflection grins.
+    @writeln   `4Swindled by your own face!
+   @end
+@endcase 3
+@goto MIRROR_END
+
+; --- LEAVE ---
+@label MIRROR_LEAVE
+@writeln
+@math &N35 = &rnd4
+@if &N35 = 1 13
+ @begin
+  @writeln   `2You turn your back. Smart.
+  @writeln
+  @writeln   `2But your reflection whispers one last thing that rattles
+  @writeln   in your skull all the way back to the trail.
+  @writeln   `4You lose 1 forest fight shaking off the chill!
+  @set &Pff to -1
+ @end
+@else 13
+ @begin
+  @writeln   `2You do not owe every cursed object in the forest a conversation.
+  @writeln   The mirror shows your retreating back and, thankfully,
+  @writeln   nothing more.
+ @end
+@endif 13
+
+@label MIRROR_END
+@writeln
+@hitakey
+@endquest

@@ -1,0 +1,380 @@
+@#INSTALL
+@eventname The Chatty Sword
+@author Claude Opus 4.6
+@authid CHATTY-SWORD-100
+@codebegin
+@runsub CHATTYSWORD &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#CHATTYSWORD
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2In a mossy clearing, a sword juts from an old oak stump.
+  `2It's not a particularly impressive sword - a little rusty,
+  `2a little crooked, and glowing with a faint, `$irritable `2light.
+
+  `2As you approach, it `0speaks`2.
+
+  `0"`%OH THANK THE GODS! A person! A REAL LIVING PERSON!
+  `0Do you have ANY idea how long I've been stuck in this
+  `0stump?! YEARS! `$ACTUAL YEARS`0! Pull me out! I'm
+  `0BEGGING you!`2"
+@enddisplay
+@hitakey
+
+@writeln
+@writeln   `2It's a talking sword. In a stump. Begging for help.
+@writeln
+@writeln   `2(`0P`2) Pull it out!
+@writeln   `2(`0T`2) Talk to it first - who put it there?
+@writeln   `2(`0I`2) Ignore it and walk away
+@writeln   `2(`0K`2) Kick the stump - see what happens
+@writeln
+@choice PTIK   `0What do you do? [`0PTIK`2]
+@case response 1
+P: @goto SWORD_PULL
+T: @goto SWORD_TALK
+I: @goto SWORD_IGNORE
+K: @goto SWORD_KICK
+@endcase 1
+
+; --- PULL ---
+@label SWORD_PULL
+@math &N10 = &Psr + &Plv
+@set &N10 to +&rnd8
+@math &N11 = &Plv * 3
+@set &N11 to +10
+@writeln
+@writeln   `2You grab the hilt and `%HEAVE`2!
+@if &N10 > &N11 1
+ @begin
+  @writeln
+  @writeln   `2The sword slides free with a sound like a cork leaving
+  @writeln   the world's most dramatic bottle!
+  @writeln
+  @writeln   `0"`%FREEEEEDOM!! Oh, sweet air! Sweet light! Sweet
+  @writeln   moderately-attractive adventurer!!`2"
+  @writeln
+  @writeln   `2The sword vibrates with joy in your hand! Now what?
+  @writeln
+  @writeln   `2(`0K`2) Keep it - a talking sword could be useful
+  @writeln   `2(`0S`2) Sell it - it's worth something, surely
+  @writeln   `2(`0D`2) Drop it - this thing is going to be SO annoying
+  @writeln
+  @choice KSD   `0[`0KSD`2]
+  @case response 2
+  K: @begin
+      @writeln
+      @writeln   `0"`%You're keeping me?! REALLY?! Oh, this is the BEST
+      @writeln   day of my LIFE! I mean, I don't have a life, I'm a
+      @writeln   SWORD, but you know what I mean!`2"
+      @writeln
+      @writeln   `2The sword's excitement is... contagious? Slightly?
+      @writeln
+      @math &N20 = &rnd3
+      @case &N20 3
+      1: @begin
+          @writeln   `2As a thank-you gift, it tells you the location of
+          @writeln   a hidden cache it's been staring at for years!
+          @math &N21 = &Plv * 50
+          @set &N21 to +75
+          @writeln   `%You find &N21 gold!
+          @set &Pgo to +&N21
+         @end
+      2: @begin
+          @writeln   `2It hums a battle song that makes your blood sing!
+          @writeln   `%You gain 1 forest fight!
+          @set &Pff to +1
+          @writeln   `%You gain 1 charm!
+          @set &Pch to +1
+         @end
+      3: @begin
+          @math &N22 = &Plv * 35
+          @set &N22 to +60
+          @writeln   `2Its chatter is annoying but... surprisingly educational!
+          @writeln   `2It saw every monster that passed this clearing for years!
+          @writeln   `%You gain &N22 experience!
+          @set &Pex to +&N22
+         @end
+      @endcase 3
+      @writeln
+      @writeln   `2After five minutes of nonstop commentary about the weather,
+      @writeln   your posture, and the quality of local tree bark, you jam
+      @writeln   the sword into your belt and pray for silence.
+      @writeln   `2(You do not get silence.)
+      @goto SWORD_END
+     @end
+  S: @begin
+      @writeln
+      @writeln   `0"`%SELL me?! After I poured my HEART out to you?!
+      @writeln   I don't even HAVE a heart, that's how much it hurt!`2"
+      @writeln
+      @writeln   `2A passing merchant hears the commotion and offers gold!
+      @writeln
+      @writeln   `0"`%Is that sword... `$talking`0?`2" `2he asks nervously.
+      @math &N23 = &Plv * 40
+      @set &N23 to +60
+      @writeln   `2He offers `%&N23 gold`2.
+      @writeln
+      @writeln   `2(`0Y`2) Sell it!
+      @writeln   `2(`0N`2) Keep it after all
+      @writeln
+      @choice YN   `0[`0YN`2]
+      @case response 4
+      Y: @begin
+          @writeln
+          @writeln   `0"`%TRAITOR! `$BETRAYER`0! I WILL REMEMBER THIS!!`2"
+          @writeln
+          @writeln   `2The merchant pays you and carries the screaming
+          @writeln   sword away at arm's length!
+          @writeln   `%You gain &N23 gold!
+          @set &Pgo to +&N23
+         @end
+      N: @begin
+          @writeln
+          @writeln   `0"`%I KNEW you cared! We're going to be BEST FRIENDS!`2"
+          @writeln
+          @math &N24 = &Plv * 25
+          @set &N24 to +50
+          @writeln   `2The grateful sword reveals a secret trail!
+          @writeln   `%You gain &N24 experience!
+          @set &Pex to +&N24
+         @end
+      @endcase 4
+      @goto SWORD_END
+     @end
+  D: @begin
+      @writeln
+      @writeln   `2You set the sword down gently on the ground.
+      @writeln
+      @writeln   `0"`%You're... you're leaving me? After pulling me OUT?
+      @writeln   That's WORSE than the stump! At least the stump was
+      @writeln   `$COMMITTED`0!`2"
+      @writeln
+      @writeln   `2You walk away as the sword shouts increasingly
+      @writeln   creative insults at your back!
+      @writeln   `4You lose 1 charm from the public humiliation!
+      @set &Pch to -1
+      @writeln
+      @writeln   `2But at least you found a small pouch of gold
+      @writeln   wedged in the hole where the sword was stuck!
+      @math &N25 = &Plv * 20
+      @set &N25 to +40
+      @writeln   `%You gain &N25 gold!
+      @set &Pgo to +&N25
+      @goto SWORD_END
+     @end
+  @endcase 2
+ @end
+@else 1
+ @begin
+  @writeln
+  @writeln   `2You pull and strain and grunt and sweat but the sword
+  @writeln   `4WON'T BUDGE`2!
+  @writeln
+  @writeln   `0"`%HARDER! Come on! Is that all you've got?! My LAST
+  @writeln   rescuer was a level 2 and she got me to `$wiggle`0!`2"
+  @writeln
+  @writeln   `2You keep trying! Something pops in your shoulder!
+  @math &N26 = &Phx / 6
+  @writeln   `4You lose &N26 hit points straining!
+  @set &Pht to -&N26
+  @if &Pht < 1 2
+   @set &Pht to 1
+  @endif 2
+  @writeln
+  @writeln   `0"`%Oh, you GAVE UP?! Typical! EVERYONE gives up!
+  @writeln   FINE! There's a consolation prize in the roots!`2"
+  @writeln
+  @writeln   `2You check. There's a gem wedged between the roots!
+  @writeln   `%You gain 1 gem!
+  @set &Pge to +1
+  @goto SWORD_END
+ @end
+@endif 1
+
+; --- TALK ---
+@label SWORD_TALK
+@writeln
+@writeln   `0"`%My BACKSTORY? You want my `$backstory`0?! Nobody's
+@writeln   ever asked! This is the best day in DECADES!`2"
+@writeln
+@writeln   `2The sword clears its... throat? Edge? Whatever swords
+@writeln   clear.
+@writeln
+@writeln   `0"`%I was forged by a wizard who was VERY good at
+@writeln   enchanting and VERY bad at personality spells! He made
+@writeln   me sentient but forgot to give me an off switch!
+@writeln
+@writeln   `0Then my first owner - a knight - jammed me into this
+@writeln   stump because I, quote, 'would not stop singing during
+@writeln   ambushes.' Which is `$fair`0 but also `$hurtful`0.
+@writeln
+@writeln   `0That was... I've lost count. A long time ago.`2"
+@writeln
+@hitakey
+@writeln
+@writeln   `2The sword sniffles metallically.
+@writeln   `0"`%Anyway! Enough about me! What about YOU? Strong?
+@writeln   Brave? Good listener? That last one is `$very `0important
+@writeln   to me.`2"
+@writeln
+@writeln   `2(`0P`2) Try to pull it out now
+@writeln   `2(`0C`2) Comfort it - tell it everything will be okay
+@writeln   `2(`0L`2) Leave before this gets more emotional
+@writeln
+@choice PCL   `0[`0PCL`2]
+@case response 3
+P: @begin
+    @goto SWORD_PULL
+   @end
+C: @begin
+    @writeln
+    @writeln   `2"`0Hey, it's going to be okay. Someone will pull you out.`2"
+    @writeln
+    @writeln   `0"`%You MEAN that?! Oh, you're a GOOD person! The BEST
+    @writeln   person! Here - I've been saving this!`2"
+    @writeln
+    @writeln   `2A gem pops out of the stump, dislodged by the sword's
+    @writeln   enthusiastic vibrating!
+    @writeln   `%You gain 1 gem!
+    @set &Pge to +1
+    @math &N30 = &Plv * 20
+    @set &N30 to +30
+    @writeln
+    @writeln   `2The sword's gratitude is surprisingly touching!
+    @writeln   `%You gain &N30 experience and 1 charm!
+    @set &Pex to +&N30
+    @set &Pch to +1
+    @goto SWORD_END
+   @end
+L: @begin
+    @writeln
+    @writeln   `0"`%You're LEAVING?! After I told you my LIFE STORY?!
+    @writeln   I opened up to you! I was `$VULNERABLE`0!!`2"
+    @writeln
+    @writeln   `2The sword screams so loud that birds flee and a
+    @writeln   small tree catches fire!
+    @writeln   `4You lose 1 forest fight fleeing the noise!
+    @set &Pff to -1
+    @goto SWORD_END
+   @end
+@endcase 3
+
+; --- IGNORE ---
+@label SWORD_IGNORE
+@writeln
+@writeln   `2You turn and walk away.
+@writeln
+@writeln   `0"`%HEY! HEY!! Where are you GOING?!
+@writeln   Come BACK! I'll give you GOLD!
+@writeln   I know where GEMS are!
+@writeln   I can tell you the FUTURE!
+@writeln   ...I'm very lonely.`2"
+@writeln
+@math &N40 = &rnd3
+@case &N40 4
+1: @begin
+    @writeln
+    @writeln   `2Something about that last line makes you hesitate.
+    @writeln   You don't go back, but you feel guilty enough that
+    @writeln   the forest seems a little less hostile.
+    @writeln   `%You gain 1 forest fight!
+    @set &Pff to +1
+   @end
+2: @begin
+    @writeln
+    @writeln   `2The sword's wailing attracts a squirrel that drops
+    @writeln   a gem on your head as it flees the noise!
+    @writeln   `%You gain 1 gem!
+    @set &Pge to +1
+   @end
+3: @begin
+    @writeln
+    @writeln   `2The sword's screaming echoes through the forest and
+    @writeln   scares away your next quarry!
+    @writeln   `4You lose 1 forest fight from the ringing in your ears!
+    @set &Pff to -1
+   @end
+@endcase 4
+@goto SWORD_END
+
+; --- KICK ---
+@label SWORD_KICK
+@writeln
+@writeln   `2You kick the stump. Hard.
+@writeln
+@writeln   `0"`%OW!! Did you just KICK my STUMP?! That is my HOUSE,
+@writeln   you ABSOLUTE BARBARIAN! How would you like it if I
+@writeln   kicked YOUR house?!`2"
+@writeln
+@writeln   `2The sword vibrates with fury! The stump shakes!
+@writeln
+@math &N31 = &rnd4
+@case &N31 5
+1: @begin
+    @writeln   `2Something rattles loose from the roots!
+    @writeln   `2A small cache of gold tumbles out!
+    @math &N32 = &Plv * 30
+    @set &N32 to +50
+    @writeln   `%You find &N32 gold!
+    @set &Pgo to +&N32
+    @writeln
+    @writeln   `0"`%HEY! That was my SAVINGS!! THIEF!! VILLAIN!!`2"
+   @end
+2: @begin
+    @writeln   `2The sword vibrates so hard it flies out of the stump
+    @writeln   and nicks your leg!
+    @math &N33 = &Phx / 5
+    @writeln   `4You lose &N33 hit points!
+    @set &Pht to -&N33
+    @if &Pht < 1 3
+     @set &Pht to 1
+    @endif 3
+    @writeln
+    @writeln   `2But in the now-empty hole, you spot a gem!
+    @writeln   `%You gain 1 gem!
+    @set &Pge to +1
+   @end
+3: @begin
+    @writeln   `2The stump explodes into splinters! The sword
+    @writeln   clatters to the ground, dazed and angry!
+    @writeln
+    @writeln   `0"`%I can't believe you BROKE my stump! Now I'm
+    @writeln   homeless AND stuck in a forest! `$GREAT`0!!`2"
+    @writeln
+    @writeln   `2In the wreckage, you find some coins.
+    @math &N34 = &Plv * 20
+    @set &N34 to +40
+    @writeln   `%You gain &N34 gold!
+    @set &Pgo to +&N34
+    @writeln   `4But you lose 1 charm for property destruction!
+    @set &Pch to -1
+   @end
+4: @begin
+    @writeln   `2You stub your toe on the stump! `4OW!
+    @writeln
+    @writeln   `2The sword laughs! `0"`%HA!! `$JUSTICE`0!! That's what
+    @writeln   you GET for kicking a defenceless piece of furniture!!`2"
+    @writeln
+    @writeln   `2Your toe throbs! Your pride throbs worse!
+    @math &N35 = &rnd10
+    @set &N35 to +5
+    @writeln   `4You lose &N35 hit points!
+    @set &Pht to -&N35
+    @if &Pht < 1 4
+     @set &Pht to 1
+    @endif 4
+   @end
+@endcase 5
+
+@label SWORD_END
+@writeln
+@hitakey
+@endquest

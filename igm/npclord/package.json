@@ -1,0 +1,12 @@
+{
+  "name": "@lordts/igm-npclord",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./npclord.ts",
+  "dependencies": {
+    "@lordts/core": "*",
+    "@lordts/igm": "*",
+    "@lordts/storage": "*",
+    "@lordts/util": "*"
+  }
+}

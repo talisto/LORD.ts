@@ -1,0 +1,358 @@
+@#INSTALL
+@eventname The Trickster Sprite
+@author Claude Opus 4.6
+@authid TRICKSTER-SPRITE-100
+@codebegin
+@runsub TRICKSTER &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#TRICKSTER
+@verreq 407
+@math &N10 = 0
+@math &N11 = 0
+@math &N12 = &Plv * 35
+@set &N12 to +40
+@set &B1 to false
+
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2A little winged sprite drops from a branch and lands on your
+  `2shoulder, apparently uninvited and completely unbothered.
+
+  `0"`%CARDS! STAKES! HUMILIATION!`0" `2it squeals, bouncing on
+  `2your collarbone like a flea with ambition.
+
+  `0"`%Three rounds of higher-lower! I promise nothing except noise
+  `0and the strong possibility that I'll laugh at you!`2"
+@enddisplay
+@hitakey
+
+@label SPRITE_STAKE
+@writeln
+@writeln   `2What will you wager?
+@writeln   `2(`0G`2) `%&N12 `2gold
+@writeln   `2(`0M`2) 1 gem
+@writeln   `2(`0C`2) 1 point of charm
+@writeln   `2(`0Q`2) Refuse the game
+@writeln
+@choice GMCQ   `0Your wager? [`0GMCQ`2]
+@case response 1
+G: @begin
+    @if &Pgo < &N12 1
+     @begin
+      @writeln
+      @writeln   `2The sprite rattles your empty purse and laughs so hard
+      @writeln   it falls off your shoulder!
+      @goto SPRITE_STAKE
+     @end
+    @endif 1
+    @set &N13 to 1
+    @set &Pgo to -&N12
+    @writeln
+    @writeln   `2The sprite pockets your gold with insulting confidence!
+    @goto SPRITE_ROUND1
+   @end
+M: @begin
+    @if &Pge < 1 2
+     @begin
+      @writeln
+      @writeln   `2The sprite checks your gem pouch and makes a face like
+      @writeln   a tiny theatrical tragedy!
+      @goto SPRITE_STAKE
+     @end
+    @endif 2
+    @set &N13 to 2
+    @set &Pge to -1
+    @writeln
+    @writeln   `2The sprite bites your gem, nods approvingly, and tucks it
+    @writeln   into a pocket that shouldn't exist on something that small!
+    @goto SPRITE_ROUND1
+   @end
+C: @begin
+    @if &Pch < 1 3
+     @begin
+      @writeln
+      @writeln   `0"`%You're not wagering charm. You're financing `$pity`0.`2"
+      @goto SPRITE_STAKE
+     @end
+    @endif 3
+    @set &N13 to 3
+    @writeln
+    @writeln   `2The sprite rubs its tiny hands together!
+    @writeln   `0"`%Excellent! `$Pride money`0!`2"
+    @goto SPRITE_ROUND1
+   @end
+Q: @goto SPRITE_QUIT
+@endcase 1
+
+; --- ROUND 1 ---
+@label SPRITE_ROUND1
+@set &N20 to 6
+@math &N21 = &rnd13
+@writeln
+@writeln   `2`%  -=- Round 1! -=-
+@writeln
+@writeln   `2The sprite deals a card face-up: `$6`2!
+@writeln   `2It peers at you with enormous eyes.
+@writeln   `0"`%Higher or lower, hero? Your DESTINY awaits!`2"
+@writeln
+@writeln   `2(`0H`2)igher  (`0L`2)ower
+@choice HL   `0[`0HL`2]
+@case response 2
+H: @begin
+    @if &N21 > &N20 4
+     @begin
+      @writeln   `2The card is `$&N21`2! `%You take the round!
+      @set &N10 to +1
+     @end
+    @else 4
+     @begin
+      @writeln   `2The card is `$&N21`2! The sprite does a victory dance!
+      @set &N11 to +1
+     @end
+    @endif 4
+   @end
+L: @begin
+    @if &N21 < &N20 5
+     @begin
+      @writeln   `2The card is `$&N21`2! `%You take the round!
+      @set &N10 to +1
+     @end
+    @else 5
+     @begin
+      @writeln   `2The card is `$&N21`2! The sprite does a victory dance!
+      @set &N11 to +1
+     @end
+    @endif 5
+   @end
+@endcase 2
+
+; --- ROUND 2 ---
+@label SPRITE_ROUND2
+@set &N30 to 8
+@math &N31 = &rnd13
+@writeln
+@writeln   `2`%  -=- Round 2! -=-
+@writeln
+@if &N10 > &N11 6
+ @writeln   `2The sprite narrows its eyes! `0"`%Lucky. Let's see that again.`2"
+@endif 6
+@if &N11 > &N10 7
+ @writeln   `2The sprite preens! `0"`%I'm a GENIUS! Admit it!`2"
+@endif 7
+@if &N10 = &N11 8
+ @writeln   `2The sprite yawns! `0"`%Tied? BORING! Let's fix that!`2"
+@endif 8
+@writeln
+@writeln   `2Next card face-up: `$8`2!
+@writeln   `2(`0H`2)igher  (`0L`2)ower
+@choice HL   `0[`0HL`2]
+@case response 3
+H: @begin
+    @if &N31 > &N30 9
+     @begin
+      @writeln   `2The card is `$&N31`2! `%You take the round!
+      @set &N10 to +1
+     @end
+    @else 9
+     @begin
+      @writeln   `2The card is `$&N31`2! The sprite cackles!
+      @set &N11 to +1
+     @end
+    @endif 9
+   @end
+L: @begin
+    @if &N31 < &N30 10
+     @begin
+      @writeln   `2The card is `$&N31`2! `%You take the round!
+      @set &N10 to +1
+     @end
+    @else 10
+     @begin
+      @writeln   `2The card is `$&N31`2! The sprite cackles!
+      @set &N11 to +1
+     @end
+    @endif 10
+   @end
+@endcase 3
+
+; --- DOUBLE-OR-NOTHING OFFER ---
+@if &N11 > &N10 11
+ @begin
+  @writeln
+  @writeln   `2The sprite grins ear to ear!
+  @writeln   `0"`%You're LOSING! Double or nothing on the last round?!`2"
+  @choice YN   `0Take the double? [`0YN`2]
+  @case response 4
+  Y: @set &B1 to true
+  N: @set &B1 to false
+  @endcase 4
+ @end
+@endif 11
+
+; --- ROUND 3 ---
+@label SPRITE_ROUND3
+@set &N40 to 7
+@math &N15 = &rnd13
+@writeln
+@writeln   `2`%  -=- FINAL ROUND! -=-
+@writeln
+@if &B1 is true 12
+ @writeln   `2The sprite is practically vibrating! `0"`%DOUBLE STAKES! HERE WE GO!`2"
+@else 12
+ @writeln   `2The sprite drums its tiny fingers on your shoulder!
+@endif 12
+@writeln
+@writeln   `2Last card face-up: `$7`2!
+@writeln   `2(`0H`2)igher  (`0L`2)ower
+@choice HL   `0[`0HL`2]
+@case response 5
+H: @begin
+   @if &N15 > &N40 13
+     @begin
+      @writeln   `2The card is `$&N15`2! `%You take the final round!
+      @if &B1 is true 14
+       @set &N10 to +2
+      @else 14
+       @set &N10 to +1
+      @endif 14
+     @end
+    @else 13
+     @begin
+      @writeln   `2The card is `$&N15`2! The sprite `4SHRIEKS `2with glee!
+      @if &B1 is true 15
+       @set &N11 to +2
+      @else 15
+       @set &N11 to +1
+      @endif 15
+     @end
+    @endif 13
+   @end
+L: @begin
+   @if &N15 < &N40 16
+     @begin
+      @writeln   `2The card is `$&N15`2! `%You take the final round!
+      @if &B1 is true 17
+       @set &N10 to +2
+      @else 17
+       @set &N10 to +1
+      @endif 17
+     @end
+    @else 16
+     @begin
+      @writeln   `2The card is `$&N15`2! The sprite `4SHRIEKS `2with glee!
+      @if &B1 is true 18
+       @set &N11 to +2
+      @else 18
+       @set &N11 to +1
+      @endif 18
+     @end
+    @endif 16
+   @end
+@endcase 5
+
+; --- RESULTS ---
+@writeln
+@writeln   `%Final Score: `2You `%&N10 `2- Sprite `%&N11
+@writeln
+
+@if &N10 > &N11 19
+ @begin
+  @writeln   `2The sprite claps both hands over its mouth in `4HORROR`2!
+  @writeln
+    @case &N13 6
+  1: @begin
+    @math &N14 = &N12 * 2
+    @writeln   `2It pays you `%&N14 gold `2with trembling hands!
+    @set &Pgo to +&N14
+     @end
+  2: @begin
+      @writeln   `2It returns your gem and adds another out of pure spite!
+      @writeln   `%You gain 2 gems!
+      @set &Pge to +2
+     @end
+  3: @begin
+      @writeln   `2It grudgingly admits you are `0entertaining`2!
+      @writeln   `%You gain 1 charm!
+      @set &Pch to +1
+     @end
+  @endcase 6
+  @if &N11 = 0 20
+   @begin
+    @writeln
+    @writeln   `$PERFECT SWEEP!
+    @writeln   `2The sprite throws in one extra favor out of sheer disbelief!
+    @if &N13 = 3 21
+     @begin
+      @writeln   `%You gain 1 forest fight!
+      @set &Pff to +1
+     @end
+    @else 21
+     @begin
+      @writeln   `%You gain 1 gem!
+      @set &Pge to +1
+     @end
+    @endif 21
+   @end
+  @endif 20
+  @goto SPRITE_DONE
+ @end
+@endif 19
+
+@if &N10 = &N11 22
+ @begin
+  @writeln   `0"`%A tie,`2" `2the sprite says sourly!
+  @writeln   `0"`%I HATE ties! They feel `$fair`0!`2"
+    @if &N13 = 1 23
+   @begin
+    @writeln   `2You get your gold back.
+    @set &Pgo to +&N12
+   @end
+  @endif 23
+    @if &N13 = 2 24
+   @begin
+    @writeln   `2You get your gem back.
+    @set &Pge to +1
+   @end
+  @endif 24
+  @goto SPRITE_DONE
+ @end
+@endif 22
+
+; --- PLAYER LOST ---
+@writeln   `2The sprite spins in the air, absolutely `4delighted`2!
+@if &N13 = 3 25
+ @begin
+  @writeln   `4You lose 1 charm!
+  @set &Pch to -1
+ @end
+@endif 25
+@if &N13 = 1 26
+ @writeln   `2Your gold is gone! The sprite waves bye-bye to it!
+@endif 26
+@if &N13 = 2 27
+ @writeln   `2Your gem is gone! The sprite is already wearing it as a hat!
+@endif 27
+
+@label SPRITE_DONE
+@writeln
+@writeln   `2With one last rude little bow, the sprite vanishes into
+@writeln   a spray of autumn leaves!
+@writeln
+@hitakey
+@endquest
+
+@label SPRITE_QUIT
+@writeln
+@writeln   `0"`%COWARD!`2" `2the sprite yells after you! `0"`%I knew you
+@writeln   didn't have the GUTS! Come back when you grow a spine!`2"
+@writeln
+@writeln   `2A pinecone bounces off the back of your head.
+@writeln
+@hitakey
+@endquest

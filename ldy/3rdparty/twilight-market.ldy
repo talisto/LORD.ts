@@ -1,0 +1,411 @@
+@#INSTALL
+@eventname The Twilight Marketplace
+@author Claude Opus 4.6
+@authid TWILIGHT-MARKET-100
+@codebegin
+@runsub TWILIGHT &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#TWILIGHT
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2At dusk, the clearing ahead fills with lanterns that burn violet
+  `2and gold! Silk awnings billow from nowhere! Strange music plays -
+  `2harps and drums and something that sounds like a cat arguing
+  `2with a violin!
+
+  `2People too elegant to be entirely mortal drift between stalls,
+  `2trading in things that shimmer and whisper!
+
+  `$The Twilight Market has opened!
+@enddisplay
+@hitakey
+
+@writeln
+@writeln   `2Which stall catches your eye before the whole place vanishes?
+@writeln   `2(`0A`2) The map seller - `2ancient charts and hidden paths
+@writeln   `2(`0B`2) The apothecary - `2bubbling potions and sharp smells
+@writeln   `2(`0C`2) The mask stall - `2faces for every occasion
+@writeln   `2(`0D`2) The shadow broker - `2buys things you can't hold
+@writeln   `2(`0E`2) The fortune teller - `2knows more than she should
+@writeln   `2(`0F`2) Leave immediately - this place feels `4wrong
+@writeln
+@choice ABCDEF   `0Which stall? [`0ABCDEF`2]
+@case response 1
+A: @goto MARKET_MAP
+B: @goto MARKET_APOTHECARY
+C: @goto MARKET_MASK
+D: @goto MARKET_SHADOW
+E: @goto MARKET_FORTUNE
+F: @goto MARKET_END
+@endcase 1
+
+; --- MAP SELLER ---
+@label MARKET_MAP
+@math &N10 = &Plv * 25
+@set &N10 to +70
+@writeln
+@writeln   `2The map seller is a tall woman with ink-stained fingers
+@writeln   and eyes that don't blink nearly often enough. She unfolds
+@writeln   a page that shows paths the forest hasn't `0invented `2yet.
+@writeln
+@writeln   `0"`%&N10 gold. It'll save you two hunts before dawn.
+@writeln   Or don't buy it, and take the long way through the thorns.`2"
+@writeln
+@writeln   `2(`0B`2) Buy it!
+@writeln   `2(`0H`2) Haggle
+@writeln   `2(`0L`2) Leave the stall
+@writeln
+@choice BHL   `0[`0BHL`2]
+@case response 2
+B: @begin
+    @if &Pgo < &N10 1
+     @begin
+      @writeln
+      @writeln   `2She rolls the map up before you finish counting.
+      @writeln   `0"`%Come back with real money.`2"
+      @goto MARKET_END
+     @end
+    @endif 1
+    @set &Pgo to -&N10
+    @writeln
+    @writeln   `2The map burns itself into your memory and crumbles to dust!
+    @writeln   `%You gain 2 forest fights!
+    @set &Pff to +2
+    @goto MARKET_END
+   @end
+H: @begin
+    @math &N11 = &Pch + &rnd10
+    @if &N11 > 16 2
+     @begin
+      @math &N12 = &N10 / 2
+      @if &Pgo < &N12 3
+       @begin
+        @writeln
+        @writeln   `2You win the haggle and still can't afford the result!
+        @goto MARKET_END
+       @end
+      @endif 3
+      @writeln
+      @writeln   `2The seller sighs dramatically.
+      @writeln   `0"`%FINE. `$&N12 gold`0. You're lucky you're charming.`2"
+      @set &Pgo to -&N12
+      @writeln   `%You gain 2 forest fights!
+      @set &Pff to +2
+     @end
+    @else 2
+     @begin
+      @writeln
+      @writeln   `2The surrounding merchants burst out laughing!
+      @writeln   `0"`%Was that a `$haggle `0or a `$confession`0?`2"
+      @writeln   `4You lose 1 charm!
+      @set &Pch to -1
+     @end
+    @endif 2
+    @goto MARKET_END
+   @end
+L: @goto MARKET_END
+@endcase 2
+
+; --- APOTHECARY ---
+@label MARKET_APOTHECARY
+@math &N13 = &Plv * 20
+@set &N13 to +70
+@writeln
+@writeln   `2The apothecary is a hunched figure in a mask that looks
+@writeln   like a plague doctor crossed with a parrot. Bottles of
+@writeln   every colour line the shelves, some of them `0bubbling`2,
+@writeln   some of them `4screaming quietly`2.
+@writeln
+@writeln   `2(`0G`2) Pay `%&N13 gold `2for a healing draught
+@writeln   `2(`0M`2) Pay `!1 gem `2for the `$strong `2stuff
+@writeln   `2(`0R`2) Ask for a `4random `2sample - free!
+@writeln   `2(`0L`2) Leave the stall
+@writeln
+@choice GMRL   `0[`0GMRL`2]
+@case response 3
+G: @begin
+    @if &Pgo < &N13 4
+     @begin
+      @writeln
+      @writeln   `2The apothecary shakes its head slowly.
+      @writeln   `0"`%No gold, no glow-up.`2"
+      @goto MARKET_END
+     @end
+    @endif 4
+    @set &Pgo to -&N13
+    @math &N14 = &Phx / 2
+    @writeln
+    @writeln   `2The draught tastes like peppermint and old lightning!
+    @set &Pht to +&N14
+    @if &Pht > &Phx 5
+     @set &Pht to &Phx
+    @endif 5
+    @writeln   `%You heal &N14 hit points!
+    @goto MARKET_END
+   @end
+M: @begin
+    @if &Pge < 1 6
+     @begin
+      @writeln
+      @writeln   `2You have no gem to trade!
+      @goto MARKET_END
+     @end
+    @endif 6
+    @set &Pge to -1
+    @writeln
+    @writeln   `2The strong bottle burns all the way down and leaves
+    @writeln   you `$SHINING`2!
+    @writeln   `%You are fully healed!
+    @set &Pht to &Phx
+    @goto MARKET_END
+   @end
+R: @begin
+    @writeln
+    @writeln   `2The apothecary tilts its head and slides a tiny vial
+    @writeln   across the counter!
+    @writeln   `0"`%Free sample. No refunds. No lawsuits.`2"
+    @writeln
+    @math &N15 = &rnd4
+    @case &N15 7
+    1: @begin
+        @writeln   `2You drink it! Tastes like sunshine and victory!
+        @math &N16 = &Plv * 20
+        @set &N16 to +30
+        @writeln   `%You gain &N16 experience!
+        @set &Pex to +&N16
+       @end
+    2: @begin
+        @writeln   `2You drink it! Tastes like `4REGRET`2!!
+        @math &N17 = &Phx / 3
+        @writeln   `4You lose &N17 hit points!
+        @set &Pht to -&N17
+        @if &Pht < 1 8
+         @set &Pht to 1
+        @endif 8
+       @end
+    3: @begin
+        @writeln   `2You drink it! Everything turns `$purple `2for a moment!
+        @writeln   `2When it clears, you feel... `0different`2.
+        @writeln   `%You gain 1 charm!
+        @set &Pch to +1
+       @end
+    4: @begin
+        @writeln   `2You drink it! Nothing happens!
+        @writeln
+        @writeln   `2...then you hiccup and a gem pops out of your ear!
+        @writeln   `%You gain 1 gem!
+        @set &Pge to +1
+       @end
+    @endcase 7
+    @goto MARKET_END
+   @end
+L: @goto MARKET_END
+@endcase 3
+
+; --- MASK STALL ---
+@label MARKET_MASK
+@math &N18 = &Plv * 20
+@set &N18 to +50
+@writeln
+@writeln   `2The mask-maker is either very small or very far away;
+@writeln   it's hard to tell. Her stall is hung with a thousand faces:
+@writeln   beautiful, terrible, and everything between!
+@writeln
+@writeln   `2(`0T`2) Try a mask for free - luck of the draw
+@writeln   `2(`0B`2) Buy a flattering mask for `%&N18 gold
+@writeln   `2(`0L`2) Leave the stall
+@writeln
+@choice TBL   `0[`0TBL`2]
+@case response 4
+T: @begin
+    @math &N19 = &rnd4
+    @writeln
+    @case &N19 8
+    1: @begin
+        @writeln   `2This face makes you look like a romantic lead!
+        @writeln   `%You gain 1 charm!
+        @set &Pch to +1
+       @end
+    2: @begin
+        @writeln   `2This face makes you look like a `4dishonest radish`2!
+        @writeln   `4You lose 1 charm!
+        @set &Pch to -1
+       @end
+    3: @begin
+        @writeln   `2A gem falls out of the mask's left eye when you sneeze!
+        @writeln   `%You gain 1 gem!
+        @set &Pge to +1
+       @end
+    4: @begin
+        @writeln   `2The mask won't come OFF! You spend precious time prying
+        @writeln   it free while the mask-maker laughs!
+        @writeln   `4You lose 1 forest fight!
+        @set &Pff to -1
+       @end
+    @endcase 8
+    @goto MARKET_END
+   @end
+B: @begin
+    @if &Pgo < &N18 9
+     @begin
+      @writeln
+      @writeln   `2Beauty, it seems, is too expensive tonight.
+      @goto MARKET_END
+     @end
+    @endif 9
+    @set &Pgo to -&N18
+    @writeln
+    @writeln   `2The mask settles on your face and you feel instantly
+    @writeln   more `$dashing`2! People turn to stare!
+    @writeln   `%You gain 1 charm!
+    @set &Pch to +1
+    @goto MARKET_END
+   @end
+L: @goto MARKET_END
+@endcase 4
+
+; --- SHADOW BROKER ---
+@label MARKET_SHADOW
+@math &N20 = &Plv * 90
+@set &N20 to +60
+@math &N21 = &Plv * 120
+@set &N21 to +80
+@writeln
+@writeln   `2The shadow broker sits in a stall that seems to eat light!
+@writeln   Its face is hidden. Its voice sounds like two people
+@writeln   whispering at the same time!
+@writeln
+@writeln   `0"`%I buy things you cannot hold. Intangibles. Abstractions.
+@writeln   Also gems. I buy those too.`2"
+@writeln
+@writeln   `2(`0C`2) Sell 1 charm for `%&N20 gold
+@writeln   `2(`0G`2) Sell 1 gem for `%&N21 gold
+@writeln   `2(`0L`2) Leave the stall
+@writeln
+@choice CGL   `0[`0CGL`2]
+@case response 5
+C: @begin
+    @if &Pch < 1 10
+     @begin
+      @writeln
+      @writeln   `2The broker peers at you and decides there is
+      @writeln   nothing left to buy!
+      @goto MARKET_END
+     @end
+    @endif 10
+    @set &Pch to -1
+    @set &Pgo to +&N20
+    @writeln
+    @writeln   `2You feel slightly less `0impressive `2and much more `$solvent`2!
+    @writeln   `4You lose 1 charm. `%You gain &N20 gold!
+    @goto MARKET_END
+   @end
+G: @begin
+    @if &Pge < 1 11
+     @begin
+      @writeln
+      @writeln   `2You have no gem to sell!
+      @goto MARKET_END
+     @end
+    @endif 11
+    @set &Pge to -1
+    @set &Pgo to +&N21
+    @writeln
+    @writeln   `2The broker bites the gem, nods, and pours gold into
+    @writeln   your hand from a pouch that seems bottomless!
+    @writeln   `%You gain &N21 gold!
+    @goto MARKET_END
+   @end
+L: @goto MARKET_END
+@endcase 5
+
+; --- FORTUNE TELLER ---
+@label MARKET_FORTUNE
+@writeln
+@writeln   `2The fortune teller's tent is draped in midnight blue silk.
+@writeln   `2Inside, a woman with silver eyes and too many rings shuffles
+@writeln   cards that `$glow`2 faintly in the dark!
+@writeln
+@writeln   `0"`%Sit. I'll read your fate. No charge - the future pays
+@writeln   for itself.`2"
+@writeln
+@writeln   `2(`0S`2) Sit and hear your fortune
+@writeln   `2(`0L`2) Leave - some things are better unknown
+@writeln
+@choice SL   `0[`0SL`2]
+@case response 6
+S: @begin
+    @math &N30 = &rnd5
+    @writeln
+    @writeln   `2She turns three cards face-up:
+    @writeln
+    @case &N30 9
+    1: @begin
+        @writeln   `$The Tower. The Fool. The Star.`2
+        @writeln
+        @writeln   `0"`%Danger approaches, but you'll stumble through it
+        @writeln   with the grace of someone too stubborn to die.
+        @writeln   The stars favour idiots tonight.`2"
+        @writeln   `%You gain 1 forest fight!
+        @set &Pff to +1
+       @end
+    2: @begin
+        @writeln   `$The Lovers. The Hermit. The Moon.`2
+        @writeln
+        @writeln   `0"`%Someone thinks of you fondly. And someone else
+        @writeln   thinks of you with a knife. Hard to tell which
+        @writeln   is which from here.`2"
+        @writeln   `%You gain 1 charm!
+        @set &Pch to +1
+       @end
+    3: @begin
+        @writeln   `$Death. Death. Death.`2
+        @writeln
+        @writeln   `2She frowns!
+        @writeln   `0"`%Hm. That's new. Usually it's only one.`2"
+        @writeln   `2She waves her hand and the tent fills with smoke!
+        @writeln   `4You stumble out and lose 2 forest fights!
+        @set &Pff to -2
+       @end
+    4: @begin
+        @writeln   `$The Wheel. The Sun. The Magician.`2
+        @writeln
+        @writeln   `0"`%Fortune smiles! The wheel turns in your favour!
+        @writeln   Go, quickly, before it changes its mind!`2"
+        @math &N31 = &Plv * 30
+        @set &N31 to +50
+        @writeln   `%You gain &N31 experience!
+        @set &Pex to +&N31
+       @end
+    5: @begin
+        @writeln   `$The Empress. The Chariot. The World.`2
+        @writeln
+        @writeln   `0"`%Power. Motion. Completeness. Today, mortal,
+        @writeln   you are unstoppable.`2"
+        @writeln
+        @writeln   `2She presses a gem into your hand!
+        @writeln   `%You gain 1 gem!
+        @set &Pge to +1
+       @end
+    @endcase 9
+    @goto MARKET_END
+   @end
+L: @goto MARKET_END
+@endcase 6
+
+@label MARKET_END
+@writeln
+@writeln   `2A bell rings somewhere beyond the lanterns!
+@writeln   `2By the time you blink, the stalls are gone and the
+@writeln   clearing is only a clearing again. Just grass and
+@writeln   moonlight and the fading smell of something wonderful.
+@writeln
+@hitakey
+@endquest

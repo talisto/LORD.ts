@@ -1,0 +1,342 @@
+@#INSTALL
+@eventname Cursed Wishing Well
+@author Claude Opus 4.6
+@authid CURSED-WELL-100
+@codebegin
+@runsub CURWWELL &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#CURWWELL
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2Deep in a hollow where the trees lean in like gossiping old women,
+  `2you find a well. Its stones are green with centuries of moss.
+  `2Strange runes pulse along the rim, and somewhere far below,
+  `2something goes `4plop`2.
+
+  `$  "Wishes Accepted. Complaints Ignored."
+  `$  "Refunds? HA."
+@enddisplay
+@hitakey
+
+@writeln
+@writeln   `2What do you toss into the well?
+@writeln   `2(`0A`2) `%10 `2gold - a modest offering
+@writeln   `2(`0B`2) `%50 `2gold - respectable
+@writeln   `2(`0C`2) `%100 `2gold - the full ceremony
+@writeln   `2(`0G`2) A `!gem `2- go big or go home
+@writeln   `2(`0D`2) Nothing. Wells are holes and you are not a fool.
+@writeln
+@choice ABCGD   `0Your offering? [`0ABCGD`2]
+@case response 1
+A: @begin
+    @if &Pgo < 10 1
+     @begin
+      @writeln
+      @writeln   `2You root through your pockets. Empty. A frog at the bottom
+      @writeln   of the well croaks in what can only be `0laughter`2.
+      @goto WELL_END
+     @end
+    @endif 1
+    @set &Pgo to -10
+    @set &N10 to 10
+    @goto WELL_STYLE
+   @end
+B: @begin
+    @if &Pgo < 50 2
+     @begin
+      @writeln
+      @writeln   `2You count your gold twice, hoping it multiplies. It does not.
+      @goto WELL_END
+     @end
+    @endif 2
+    @set &Pgo to -50
+    @set &N10 to 50
+    @goto WELL_STYLE
+   @end
+C: @begin
+    @if &Pgo < 100 3
+     @begin
+      @writeln
+      @writeln   `2A hundred gold? You can barely afford `0dinner`2.
+      @goto WELL_END
+     @end
+    @endif 3
+    @set &Pgo to -100
+    @set &N10 to 100
+    @goto WELL_STYLE
+   @end
+G: @begin
+    @if &Pge < 1 4
+     @begin
+      @writeln
+      @writeln   `2You reach for a gem you don't have. The well gurgles
+      @writeln   impatiently.
+      @goto WELL_END
+     @end
+    @endif 4
+    @set &Pge to -1
+    @set &N10 to 200
+    @goto WELL_GEM
+   @end
+D: @begin
+    @writeln
+    @writeln   `2You peer over the edge. Deep below, a duck wearing a
+    @writeln   `$tiny golden crown `2glares up at you with immense offense.
+    @writeln
+    @writeln   `$"`%CHEAPSKATE!`$" `2it quacks, and the echo chases you
+    @writeln   back to the trail.
+    @goto WELL_END
+   @end
+@endcase 1
+
+; --- GEM WISH ---
+@label WELL_GEM
+@writeln
+@writeln   `2The gem tumbles into the dark and detonates like a tiny
+@writeln   emerald `$STAR`2! The well `%SHUDDERS`2! Something down there
+@writeln   is `0very `2impressed!
+@writeln
+@math &N40 = &rnd4
+@case &N40 2
+1: @begin
+    @writeln   `2A geyser of golden light erupts and drenches you in warmth!
+    @writeln   `%You are fully healed!
+    @set &Pht to &Phx
+    @math &N34 = &Plv * 30
+    @set &N34 to +50
+    @writeln   `%You gain &N34 experience!
+    @set &Pex to +&N34
+   @end
+2: @begin
+    @writeln   `2Three gems float up on a pillow of silver mist, spinning!
+    @writeln   `%You gain 3 gems!
+    @set &Pge to +3
+   @end
+3: @begin
+    @writeln   `2The crowned duck rises on a column of water, looking
+    @writeln   `0extremely `2regal.
+    @writeln
+    @writeln   `$"`%FOR YOUR GENEROUS OFFERING, MORTAL, I GRANT YOU...`$"
+    @writeln
+    @writeln   `2It pecks you once on the forehead. Hard.
+    @writeln   `%YOUR CHARM GOES UP BY 2!
+    @set &Pch to +2
+   @end
+4: @begin
+    @math &N35 = &Plv * 80
+    @set &N35 to +100
+    @writeln   `2The gem vanishes. Nothing happens. Then the ground
+    @writeln   `4SHAKES `2and ALL the gold you have ever thrown down wells
+    @writeln   comes shooting back up in a geyser of coins!
+    @writeln   `%You catch &N35 gold!
+    @set &Pgo to +&N35
+   @end
+@endcase 2
+@goto WELL_END
+
+; --- STYLE CHOICE ---
+@label WELL_STYLE
+@writeln
+@writeln   `2You hold the coins over the black water.
+@writeln   `2How do you make your wish?
+@writeln
+@writeln   `2(`0W`2) Whisper it respectfully
+@writeln   `2(`0S`2) `$SHOUT `2it like a champion
+@writeln
+@choice WS   `0[`0W`2]hisper or [`0S`2]hout?
+@case response 3
+W: @goto WELL_WHISPER
+S: @goto WELL_SHOUT
+@endcase 3
+
+; --- WHISPER ---
+@label WELL_WHISPER
+@writeln
+@writeln   `2The coins disappear with barely a ripple. The silence
+@writeln   that follows is almost `0polite`2.
+@math &N20 = &rnd7
+@case &N20 4
+1: @begin
+    @math &N21 = &N10 + &rnd50
+    @set &N21 to +20
+    @writeln
+    @writeln   `2A neat pile of wet coins stacks itself on the rim!
+    @writeln   `%You gain &N21 gold!
+    @set &Pgo to +&N21
+   @end
+2: @begin
+    @if &Pht < &Phx 5
+     @begin
+      @writeln
+      @writeln   `2Cool silver mist rolls up and seeps into your skin.
+      @writeln   Your bruises fade like bad memories.
+      @writeln   `%You are fully healed!
+      @set &Pht to &Phx
+     @end
+    @else 5
+     @begin
+      @writeln
+      @writeln   `2A single pearl-bright gem floats up on a bubble.
+      @writeln   `%You gain 1 gem!
+      @set &Pge to +1
+     @end
+    @endif 5
+   @end
+3: @begin
+    @if &N10 > 49 6
+     @begin
+      @writeln
+      @writeln   `2Two gems leap from the water like crystal trout!
+      @writeln   `%You gain 2 gems!
+      @set &Pge to +2
+     @end
+    @else 6
+     @begin
+      @writeln
+      @writeln   `2A single gem bobs to the surface with a polite `4plop`2.
+      @writeln   `%You gain 1 gem!
+      @set &Pge to +1
+     @end
+    @endif 6
+   @end
+4: @begin
+    @writeln
+    @writeln   `2The forest parts gently, revealing a shortcut.
+    @writeln   `%You gain 1 forest fight!
+    @set &Pff to +1
+   @end
+5: @begin
+    @writeln
+    @writeln   `2A duck wearing a `$tiny golden crown `2surfaces, stares at
+    @writeln   you with magnificent disappointment, spits half your gold
+    @writeln   back, and vanishes.
+    @math &N22 = &N10 / 2
+    @writeln   `%You get &N22 gold back. Barely.
+    @set &Pgo to +&N22
+   @end
+6: @begin
+    @math &N23 = &Plv * 25
+    @set &N23 to +25
+    @writeln
+    @writeln   `2Your own voice echoes up from the bottom, whispering
+    @writeln   battle advice you did not know you needed!
+    @writeln   `%You gain &N23 experience!
+    @set &Pex to +&N23
+   @end
+7: @begin
+    @writeln
+    @writeln   `2Nothing happens. The coins are gone. From deep below,
+    @writeln   you hear what might be a duck `0laughing`2.
+    @writeln   `4You got nothing. The well keeps your gold!
+   @end
+@endcase 4
+@goto WELL_END
+
+; --- SHOUT ---
+@label WELL_SHOUT
+@writeln
+@writeln   `$"`%I WISH FOR SOMETHING GOOD!`$"
+@writeln
+@writeln   `2Your voice rattles all the way down and then some.
+@math &N30 = &rnd7
+@case &N30 5
+1: @begin
+    @math &N31 = &N10 * 3
+    @writeln
+    @writeln   `2The well apparently `0LOVES `2confidence! Gold erupts
+    @writeln   from the darkness like a fountain!
+    @writeln   `%You gain &N31 gold!
+    @set &Pgo to +&N31
+   @end
+2: @begin
+    @math &N32 = &N10 / 2
+    @writeln
+    @writeln   `2Something below hisses: `4"`%TOO. LOUD.`4"
+    @writeln   `2A tentacle of black water snatches coins from your belt!
+    @if &Pgo < &N32 7
+     @begin
+      @writeln   `4The well takes everything you have left!
+      @set &Pgo to 0
+     @end
+    @else 7
+     @begin
+      @writeln   `4You lose &N32 more gold!
+      @set &Pgo to -&N32
+     @end
+    @endif 7
+   @end
+3: @begin
+    @writeln
+    @writeln   `2A cold voice echoes up: `0"`%Charm is earned, not wished for.`2"
+    @writeln   `2You feel instantly less interesting.
+    @writeln   `4You lose 1 charm!
+    @set &Pch to -1
+   @end
+4: @begin
+    @writeln
+    @writeln   `2Your shout scares every monster within a mile!
+    @writeln   The forest goes eerily, uncomfortably quiet.
+    @if &N10 > 10 8
+     @begin
+      @writeln   `4You lose 2 forest fights!
+      @set &Pff to -2
+     @end
+    @else 8
+     @begin
+      @writeln   `4You lose 1 forest fight!
+      @set &Pff to -1
+     @end
+    @endif 8
+   @end
+5: @begin
+    @if &N10 = 100 9
+     @begin
+      @writeln
+      @writeln   `2The well answers your arrogance with a `4BLAST `2of black
+      @writeln   water that smashes you flat on your back!
+      @writeln   `4You are left with 1 hit point!
+      @set &Pht to 1
+     @end
+    @else 9
+     @begin
+      @writeln
+      @writeln   `2A surge of icy force slams into your chest!
+      @math &N33 = &N10 / 2
+      @writeln   `4You lose &N33 hit points!
+      @set &Pht to -&N33
+      @if &Pht < 1 10
+       @set &Pht to 1
+      @endif 10
+     @end
+    @endif 9
+   @end
+6: @begin
+    @writeln
+    @writeln   `2The crowned duck `4ROCKETS `2out of the well on a geyser,
+    @writeln   does a barrel roll in midair, spits a gem at your head
+    @writeln   with pinpoint accuracy, and crashes back into the water
+    @writeln   with immense dignity!
+    @writeln   `%You gain 1 gem!
+    @set &Pge to +1
+   @end
+7: @begin
+    @writeln
+    @writeln   `2Your shout impresses `0something `2down there! The well
+    @writeln   rumbles and two paths you had never noticed reveal themselves
+    @writeln   through the underbrush!
+    @writeln   `%You gain 2 forest fights!
+    @set &Pff to +2
+   @end
+@endcase 5
+
+@label WELL_END
+@writeln
+@hitakey
+@endquest

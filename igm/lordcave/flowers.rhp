@@ -1,0 +1,55 @@
+@;@ RHP_name: The Flower Patch
+@;@ For: The L.O.R.D. Cavern v1.3c+
+@;@ Written_by: Michael Everett
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.3c
+
+`#After wondering around the caverns for countless hours
+`#you notice a sliver of light emanating from the side
+`#of the cave.
+`#
+`#Should you check it out?  `l
+@YESNO@
+@##N
+`#
+`#You continue to wonder around.
+@END@
+@##Y
+@CLEAR@
+`#You notice a gap in the walls of the cave.
+`#You slip through and notice a small patch
+`#of beautiful flowers. Where could this light
+`#be coming from?
+`#
+`%Should you investigate further?  `l
+@YESNO@
+@##N
+`#You decide it better not to find out and
+`#head out to the main part of the cavern.
+@END@
+@##Y
+@CLEAR@
+`#You take a look through the gap and see
+`#a tunnel leading up to the surface.  Sunlight
+`#pours down the tunnel onto the beautiful flowers.
+`#
+`%You feel as though something is watching you.
+@MORE@
+@RANDOM@ 2
+@##1
+`%You feel a small dart pierce your skin
+`%After waking up, you find yourself back
+`%in the cavern but more rested somehow.
+@SEARCH@ 3
+@END@
+@##2
+`%
+`%A small pixie pops out of the flowers.
+`%It gives you a kiss then flies away!
+@CHARM@ 2
+`%
+`%You chase the pixie back into the caverns
+`%but soon lose sight of it.
+@END@
+
+

@@ -1,0 +1,28 @@
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.caddy
+    env_file:
+      - .env
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    environment:
+      - "HTTP_PORT=80"
+      - "TELNET_PORT=${TELNET_PORT:-2323}"
+      - SENTRY_DSN
+    ports:
+      - "${TELNET_PORT:-2323}:${TELNET_PORT:-2323}"
+    volumes:
+      - ./runtime:/app/runtime
+    restart: unless-stopped

@@ -1,0 +1,314 @@
+@;@ RHP_name: The Lost City of Darborne
+@;@ RHP By Jason Brown
+@;@ Maintained by Donald Tidmore
+@;@ For The LORD Cavern v1.3c+ and LORD v3.50+
+@;@ The ultimate RHP!
+@;@@PROGRAM@ LORDCAVE
+@;@@VERSION@ 1.80
+@;@@NAME@ The Lost City of Darborne
+@;@@PERCENT@ 40
+@;@@SCRIPTVERSION 1.30
+
+@SHOW@
+`2  You walk down a tunnel, and you see a light up ahead!  If
+`2  you investigate, you will lose some `%Cave Searching `2time.
+
+  `#  Head towards the light?, `$`n `l
+@YESNO@
+
+@##N
+
+`2  You run desperately away from the light.
+@END@
+
+@##Y
+@SEARCH@ -3
+
+`2  You get closer and closer to the light  `%...
+`2  You come across a bridge that spans a ravine.
+
+  `!A guard stares at you, `%`] `!gleam menacing looking.
+  `!What will you do?
+
+    `%(`#A`%) `!Attack the guard
+    `%(`#G`%) `!Grovel to go by
+    `%(`#R`%) `!Run for your life
+@PROMPT@ RGA
+
+@##R
+`2  You run and stumble.  The guard laughs at your cowardice.
+@END@
+@##A
+
+`2    You run screaming at the guard, waving around your `@`w`2.
+
+`#  The guard laughs and grabs your weapon, then `o punches a
+`#  huge hole right through your `@`a!
+
+`2  You feel `%REALLY `2hurt, and your armour doesn't work so
+`2  well any more  `%...
+@VARIABLE1@ =DEFENSE%10
+@DEFENSE@ -VARIABLE1
+@HITPOINTS@ =1
+
+`2  You stumble away and find your way back to the main tunnel.
+
+@END@
+
+@##G
+
+  `!  "Oh please let me by, you kind, generous soul!," `2you plead.
+  `2  The guard thinks about it, then `%`o `2lets you by.
+
+@MORE@
+`2  You make it to the middle of the bridge OK, but then you
+`2  notice that the bridge is fairly unstable.  It's a long way
+`2  to the bottom of the ravine, a trip you would rather not
+`2  take.  A big `%bird `2circles overhead.
+
+    `%(`#J`%) `!Jump for the bird
+    `%(`#R`%) `!Run to the other side
+    `%(`#M`%) `!Make your way back
+@PROMPT@ MJR
+
+@##M
+`2  You make it safely back to the guard station.  You decide
+`2  to head back to the main Cavern tunnel.
+
+@END@
+
+@##R
+
+`2  You make a break for the other side!  You run as fast as
+`2  you can just as the bridge rope snaps!  Even at your fastest
+`2  speed, you can't outrun `!gravity`%!  `2You fall for what seems
+`2  to be forever, and then hit the rocks below.
+@GOTO@ @#Died
+@##J
+
+`2  You jump up just as the bridge rope snaps!  You grab a hold
+`2  of the bird, and climb onto its back.  You feel much `%stronger
+`2  from the experience.  However, you have less time to explore
+`2  the other cavern tunnels.
+@VARIABLE1@ =STRENGTH%6
+@STRENGTH@ +VARIABLE1
+@SEARCH@ -3
+
+@MORE@
+@IF@ SEARCH>0 @GOTO@ @#Suburbs
+
+`2  You feel very tired and have the bird drop you off at the
+`#  Cave's `2entrance, and you decide to head back to `#Town.
+
+@EXIT@
+
+@#Suburbs
+`2  You near what appears to be an underground city.  A sign
+`2  says `%"City of Darborne".  `2You thought that the lost
+`2  city was just a myth.
+@NEWS@
+  `5`n`2 found the `$Lost City of Darborne `2in the `@LORD Cavern.
+@NEWSLINE@
+@NEWSEND@   @;@ 08/06/07. added NewsEnd command line.
+
+`2  The outskirts of the City are magnificent.  Very old
+`2  architecture, probably much older than the `%Village,
+`2  maybe older than the `@Dragon `2himself.  Several buildings
+`2  seem to still be occupied.
+
+`#    What do you want to do?:
+        `%(`#H`%) `!Enter a Hut
+        `%(`#P`%) `!Enter the Palace
+        `%(`#L`%) `!Leave the city
+@PROMPT@ LHP
+
+@##L
+@GOTO@ @#Leave
+
+@##H
+
+`2  You enter the Hut, surrounded by a strange glow.  You can
+`2  see an image lying in the corner of the room.  It appears
+`2  to be asleep.
+
+    `#  What to do  `%....
+        `%(`#W`%) `!Wake it up
+        `%(`#S`%) `!Steal something
+        `%(`#R`%) `!Run back to town
+@PROMPT@ RWS
+
+@##S
+
+`2  You creep over to a nearby Chest, open it and reach inside.
+`#    You find `l
+@RANDOM@ 4
+
+@##1
+`!a bag of `0Gems.
+@GEMS@ +LEVEL*3
+@;@   Rewrote statement to use new math syntax. 03/29/08
+@GOTO@ @#Leave
+@;@ 06/08/05: Increased Gems reward, made it level-based.
+@;@ 06/08/05: Changed "Drawer" to "nearby Chest".
+
+@##2
+@##4
+`!a pile of `#dust.
+
+`#  Hmmm, the chest seems to be empty.
+@GOTO@ @#Leave
+
+@##3
+`!5 gems.
+@GEMS@ +5
+@;@   Rewrote statement to use new math syntax. 03/29/08
+@GOTO@ @#Leave
+
+@##W
+
+`2  You walk up to the form and roll it over `%...
+  `#It's a skeleton!
+
+`2  You find a small pouch on it, and take it.
+  `#It contains `l
+@RANDOM@ 4
+
+@##1
+`%several `0Gems.
+@GEMS@ +LEVEL*3
+@;@   Rewrote statement to use new math syntax. 03/29/08
+@GOTO@ @#Leave
+@;@ 06/08/05: Increased Gems reward by making it level-based.
+
+@##2
+`%1,500 `$Gold Coins.
+
+@GOLD@ +1500
+   @;@   Rewrote statement to use new math syntax. 03/29/08
+@GOTO@ @#Leave
+   @;@ 06/08/05: Increased Gold reward from 1100 to 1500.
+
+@##3
+@##4
+`%air.
+
+`!  Shoot, the dang pouch is empty!
+@GOTO@ @#Leave
+
+@##R
+@GOTO@ @#Leave
+
+@##P
+
+`2  The Palace seems empty `%...
+`2    You continue, but then you hear something odd `%...
+
+@RANDOM@ 3
+
+@##3
+  `#    Suddenly, a sword swings downward and hits you!
+  `#    Your head flies off!  You sprung a trap!
+@GOTO@ @#Died
+
+@##1
+@##2
+`!  Part of a nearby wall falls down!  You see what looks like
+`!  a `$treasure vault `!inside`%!  `#You don't feel safe `%...
+`!  But you wonder what's inside `%...
+
+`#    Search the vault for some `$Gold?`l
+@YESNO@
+
+@##N
+
+`2  You leave the scary ruins.
+@GOTO@ @#Leave
+
+@##Y
+
+`2    You walk over to it, reach in, and`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@DELAY@
+.`l
+@DELAY@
+.
+@DELAY@
+@RANDOM@ 3
+
+@##1
+@##3
+  `!grab some `$Gold Coins!
+
+@IF@ THIEF @GOTO@ @#Thief
+@IF@ LEVEL<6 @GOLD@ +LEVEL*200
+@IF@ LEVEL>5 @GOLD@ +LEVEL*1000
+@;@   Rewrote IF statements to use new math syntax. 03/29/08
+@GOTO@ @#Leave
+
+@#Thief
+@IF@ LEVEL<6 @GOLD@ +LEVEL*350
+@IF@ LEVEL>5 @GOLD@ +LEVEL*1200
+@;@   Rewrote IF statements to use new math syntax. 03/29/08
+@GEMS@ +4
+@;@   Rewrote statement to use new math syntax. 03/29/08
+
+@GOTO@ @#Leave
+
+@##2
+
+  `#Suddenly, the rest of the wall falls on top of you!!
+
+`2  You are `@killed `2in the accident!
+@GOTO@ @#Died
+
+@#Died
+@RANDOM@ 2
+
+@##1
+@NEWS@
+`!  `n `#died `%searching the depths of the `@LORD Cavern.
+@GOTO@ @#Killem
+
+@##2
+@NEWS@
+`!  `n `#did not return from the `@LORD Cavern!
+`%  Everyone wonders what could have happened to the warrior.
+@#Killem
+@NEWSLINE@
+@NEWSEND@   @;@ 08/06/07. added NewsEnd command line.
+@KILL@
+
+@#Leave
+
+`2  You find your way back to the main `#Cavern.
+
+@END@
+
+
+@;@ 06/17/03: Display player's name.
+@;@ 11/05/03: moved version number to ScriptVersion line.
+@;@ 12/08/04: Added RHP_Name: coding to first line.
+@;@ 06/08/05: Increased Hut Gold/Gems reward amounts.
+@;@ 06/11/07: Corrected glitch in RHP's name's spelling.
+@;@ 06/27/07: Changed to "The Lost City of Darborne" rhp name.
+
+@;@ v1.14. Added missing NEWSEND command lines. 08/06/07.
+
+@;@ 03/29/2008: Changed to use new RHP codes syntax. v1.16
+@;@       Added SHOW RHP Command statement.
+@;@       All math statements rewrote to use new math syntax.
+@;@       Rewrote script's wording in several places. DGT
+
+@;@ 06/08/08: Rewrote all percentage formulas. v1.18
+@;@ 07/11/08: Minor editing after using script in telnet session.
+
+@;@  09/04/09: Revised to use v1.30.
+
+@;@ 11/30/09: Changed VERSION to 1.80.  No SCRIPTVERSION change.
+
+

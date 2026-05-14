@@ -1,0 +1,520 @@
+@#INSTALL
+@eventname The Dead Gambler
+@author Claude Opus 4.6
+@authid DEAD-GAMBLER-100
+@codebegin
+@runsub DEADGAMBLER &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@#DEADGAMBLER
+@verreq 407
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2Fog rolls across a moonlit crossroads like spilled milk.
+  `2Sitting on a stump, shuffling translucent cards with skeletal
+  `2fingers, is the ghost of a man who was clearly `0somebody
+  `2before death made him `4nobody`2.
+
+  `2He looks up. His eye sockets glow faintly blue.
+
+  `0"`%Ah! A living person! `$Wonderful`0! I haven't had a game
+  `0since... well. Since the `4incident`0.
+  `0Sit! Play! I'm dead and I'm STILL not bored of cards!`2"
+@enddisplay
+@hitakey
+
+@writeln
+@writeln   `2What do you do?
+@writeln   `2(`0P`2) Sit down and play cards with a dead man
+@writeln   `2(`0T`2) Talk to him first - who was he?
+@writeln   `2(`0H`2) Help him move on - maybe he's trapped here
+@writeln   `2(`0R`2) Rob the grave behind him
+@writeln   `2(`0L`2) Leave - you don't play cards with corpses
+@writeln
+@choice PTHRL   `0Your choice? [`0PTHRL`2]
+@case response 1
+P: @goto GAMBLER_PLAY
+T: @goto GAMBLER_TALK
+H: @goto GAMBLER_HELP
+R: @goto GAMBLER_ROB
+L: @goto GAMBLER_LEAVE
+@endcase 1
+
+; --- PLAY CARDS ---
+@label GAMBLER_PLAY
+@writeln
+@writeln   `2The ghost deals with the speed of someone who spent their
+@writeln   entire life (and death) at the table!
+@writeln
+@writeln   `0"`%Simple game! I flip cards. You bet high or low.
+@writeln   `0Three rounds! I'll even let you pick the stakes!`2"
+@writeln
+@writeln   `2What do you wager?
+@writeln   `2(`0G`2) Gold - `%&Plv `2x 50
+@writeln   `2(`0M`2) A gem
+@writeln   `2(`0C`2) A point of charm
+@writeln
+@math &N10 = &Plv * 50
+@choice GMC   `0Your wager? [`0GMC`2]
+@case response 2
+G: @begin
+    @if &Pgo < &N10 1
+     @begin
+      @writeln
+      @writeln   `0"`%You're too poor to gamble. That's the saddest thing
+      @writeln   I've heard since my own eulogy.`2"
+      @goto GAMBLER_END
+     @end
+    @endif 1
+    @set &N11 to 1
+    @set &Pgo to -&N10
+    @writeln
+    @writeln   `2The ghost pockets your gold in a pouch that phases through
+    @writeln   the stump! Ghosts and their `0magic pockets`2...
+   @end
+M: @begin
+    @if &Pge < 1 2
+     @begin
+      @writeln
+      @writeln   `0"`%No gems? I see death hasn't improved YOUR fortunes either.`2"
+      @goto GAMBLER_END
+     @end
+    @endif 2
+    @set &N11 to 2
+    @set &Pge to -1
+    @writeln
+    @writeln   `2The ghost holds your gem up to the moonlight and sighs
+    @writeln   wistfully! `0"`%I remember having things. Good times.`2"
+   @end
+C: @begin
+    @if &Pch < 1 3
+     @begin
+      @writeln
+      @writeln   `0"`%You have no charm to wager. I'd say I'm sorry but
+      @writeln   I'm dead, so I have limited sympathy.`2"
+      @goto GAMBLER_END
+     @end
+    @endif 3
+    @set &N11 to 3
+    @writeln
+    @writeln   `2The ghost grins! `0"`%Gambling with your own `$personality`0!
+    @writeln   I love it! That's exactly how I ended up dead!`2"
+   @end
+@endcase 2
+
+; --- THREE ROUNDS ---
+@set &N20 to 0
+@set &N21 to 0
+
+; Round 1
+@writeln
+@writeln   `2`%  -=- Round 1 -=-
+@math &N30 = &rnd13
+@writeln   `2The ghost flips a `$&N30`2!
+@writeln   `2(`0H`2)igher  (`0L`2)ower
+@choice HL   `0[`0HL`2]
+@math &N31 = &rnd13
+@case response 3
+H: @begin
+    @if &N31 > &N30 4
+     @begin
+      @writeln   `2Next card: `$&N31`2! `0"`%Blast!`2" `%You win!
+      @set &N20 to +1
+     @end
+    @else 4
+     @begin
+      @writeln   `2Next card: `$&N31`2! `0"`%HA!`2" Ghost wins!
+      @set &N21 to +1
+     @end
+    @endif 4
+   @end
+L: @begin
+    @if &N31 < &N30 5
+     @begin
+      @writeln   `2Next card: `$&N31`2! `0"`%Blast!`2" `%You win!
+      @set &N20 to +1
+     @end
+    @else 5
+     @begin
+      @writeln   `2Next card: `$&N31`2! `0"`%HA!`2" Ghost wins!
+      @set &N21 to +1
+     @end
+    @endif 5
+   @end
+@endcase 3
+
+; Round 2
+@writeln
+@writeln   `2`%  -=- Round 2 -=-
+@math &N32 = &rnd13
+@writeln   `2The ghost flips a `$&N32`2!
+@if &N20 > &N21 6
+ @writeln   `2He rattles nervously! `0"`%Lucky so far... `$SO `0far!`2"
+@endif 6
+@if &N21 > &N20 7
+ @writeln   `2He cackles! `0"`%I'm winning! And I'm DEAD! How embarrassing for you!`2"
+@endif 7
+@writeln   `2(`0H`2)igher  (`0L`2)ower
+@choice HL   `0[`0HL`2]
+@math &N33 = &rnd13
+@case response 4
+H: @begin
+    @if &N33 > &N32 8
+     @begin
+      @writeln   `2Next card: `$&N33`2! `%You take round two!
+      @set &N20 to +1
+     @end
+    @else 8
+     @begin
+      @writeln   `2Next card: `$&N33`2! The ghost pumps a bony fist!
+      @set &N21 to +1
+     @end
+    @endif 8
+   @end
+L: @begin
+    @if &N33 < &N32 9
+     @begin
+      @writeln   `2Next card: `$&N33`2! `%You take round two!
+      @set &N20 to +1
+     @end
+    @else 9
+     @begin
+      @writeln   `2Next card: `$&N33`2! The ghost pumps a bony fist!
+      @set &N21 to +1
+     @end
+    @endif 9
+   @end
+@endcase 4
+
+; Round 3
+@writeln
+@writeln   `2`%  -=- FINAL ROUND! -=-
+@math &N34 = &rnd13
+@writeln   `2The ghost flips a `$&N34`2!
+@writeln   `0"`%Last card! EVERYTHING rides on this! I love it!`2"
+@writeln   `2(`0H`2)igher  (`0L`2)ower
+@choice HL   `0[`0HL`2]
+@math &N35 = &rnd13
+@case response 5
+H: @begin
+    @if &N35 > &N34 10
+     @begin
+      @writeln   `2Next card: `$&N35`2! `%YOU WIN!
+      @set &N20 to +1
+     @end
+    @else 10
+     @begin
+      @writeln   `2Next card: `$&N35`2! `0"`%YES!! STILL GOT IT!!`2"
+      @set &N21 to +1
+     @end
+    @endif 10
+   @end
+L: @begin
+    @if &N35 < &N34 11
+     @begin
+      @writeln   `2Next card: `$&N35`2! `%YOU WIN!
+      @set &N20 to +1
+     @end
+    @else 11
+     @begin
+      @writeln   `2Next card: `$&N35`2! `0"`%YES!! STILL GOT IT!!`2"
+      @set &N21 to +1
+     @end
+    @endif 11
+   @end
+@endcase 5
+
+; --- RESULTS ---
+@writeln
+@writeln   `%Final: `2You `%&N20 `2- Ghost `%&N21
+
+@if &N20 > &N21 12
+ @begin
+  @writeln
+  @writeln   `2The ghost slumps! `0"`%I can't believe it! BEATEN by a
+  @writeln   mortal! Again! That's literally how I died!`2"
+  @case &N11 6
+  1: @begin
+      @math &N40 = &N10 * 2
+      @writeln
+      @writeln   `2Ghostly coins materialize and clatter into your hand!
+      @writeln   `%You win &N40 gold!
+      @set &Pgo to +&N40
+     @end
+  2: @begin
+      @writeln
+      @writeln   `2Your gem reappears, along with another from the grave!
+      @writeln   `%You gain 2 gems!
+      @set &Pge to +2
+     @end
+  3: @begin
+      @writeln
+      @writeln   `2The ghost bows low!
+      @writeln   `0"`%You beat death at cards! That's worth bragging about!`2"
+      @writeln   `%You gain 2 charm!
+      @set &Pch to +2
+     @end
+  @endcase 6
+  @goto GAMBLER_END
+ @end
+@endif 12
+
+@if &N20 = &N21 13
+ @begin
+  @writeln
+  @writeln   `0"`%A TIE? After all that?! How BORING!`2"
+  @writeln   `2He throws his cards in the air! They float down like
+  @writeln   ghostly snow!
+  @if &N11 = 1 14
+   @begin
+    @writeln   `2Your gold floats back to you.
+    @set &Pgo to +&N10
+   @end
+  @endif 14
+  @if &N11 = 2 15
+   @begin
+    @writeln   `2Your gem materializes back in your hand.
+    @set &Pge to +1
+   @end
+  @endif 15
+  @goto GAMBLER_END
+ @end
+@endif 13
+
+; Player lost
+@writeln
+@writeln   `2The ghost lights up like a blue lantern!
+@writeln   `0"`%I WON! I WON!! Take THAT, mortality! Take THAT, the
+@writeln   concept of fairness! Take THAT, my ex-wife who said I'd
+@writeln   never amount to anything!!`2"
+@if &N11 = 3 16
+ @begin
+  @writeln   `4You lose 1 charm!
+  @set &Pch to -1
+ @end
+@endif 16
+@goto GAMBLER_END
+
+; --- TALK ---
+@label GAMBLER_TALK
+@writeln
+@writeln   `0"`%Who was I?`2" `2the ghost echoes, leaning back!
+@writeln
+@writeln   `0"`%I was Aldric the Lucky! Professional card player!
+@writeln   Tournament champion three years running! Then I played
+@writeln   double-or-nothing with a fey woman and - well.`2"
+@writeln
+@writeln   `2He gestures at himself.
+@writeln
+@writeln   `0"`%The `$'nothing' `0was very literal.`2"
+@writeln
+@writeln   `2He shuffles his cards thoughtfully.
+@writeln   `0"`%I can't leave this crossroads until I beat a thousand
+@writeln   mortals. I'm at nine hundred and sixty-seven. Play me
+@writeln   and you'll be helping a dead man's dream!`2"
+@writeln
+@writeln   `2(`0P`2) Play him now - for his dream!
+@writeln   `2(`0A`2) Give him advice on moving on
+@writeln
+@choice PA   `0[`0PA`2]
+@case response 6
+P: @begin
+    @writeln
+    @writeln   `2He beams! `0"`%That's the spirit! Pun intended!`2"
+    @goto GAMBLER_PLAY
+   @end
+A: @begin
+    @math &N12 = &Pch + &rnd8
+    @writeln
+    @if &N12 > 10 17
+     @begin
+      @writeln   `2"`0Maybe you don't need a thousand wins. Maybe you just
+      @writeln   need to forgive yourself for the one loss that killed you.`2"
+      @writeln
+      @writeln   `2The ghost stares at you for a very long time.
+      @writeln   `2A single translucent tear rolls down his cheekbone.
+      @writeln
+      @writeln   `0"`%That's... that's the nicest thing anyone's said to me
+      @writeln   in four hundred years.`2"
+      @writeln
+      @writeln   `2He presses a cold hand to yours. It feels like
+      @writeln   moonlight and old friendship.
+    @math &N13 = &Plv * 30
+    @set &N13 to +50
+    @writeln   `%You gain &N13 experience and 1 charm!
+    @set &Pex to +&N13
+      @set &Pch to +1
+     @end
+    @else 17
+     @begin
+      @writeln   `2"`0Have you tried... not being dead?`2" you offer.
+      @writeln
+      @writeln   `0"`%WOW. Thank you. Truly groundbreaking advice. I'm
+      @writeln   `0cured. Four centuries of haunting, solved by a level &Plv
+      @writeln   adventurer with the emotional range of a `$turnip`0.`2"
+      @writeln   `4You lose 1 charm!
+      @set &Pch to -1
+     @end
+    @endif 17
+    @goto GAMBLER_END
+   @end
+@endcase 6
+
+; --- HELP ---
+@label GAMBLER_HELP
+@writeln
+@writeln   `0"`%Help me? You want to help me `$move on`0?`2"
+@writeln
+@writeln   `2The ghost looks down at his cards, then back at you.
+@writeln
+@writeln   `0"`%The truth is... I don't want to move on. I LIKE
+@writeln   cards. I like the crossroads. I like scaring travelers.
+@writeln   What I NEED is someone to settle my debt.`2"
+@writeln
+@writeln   `0"`%I owe a fey woman one gem. Pay her for me and I'll
+@writeln   give you everything I have left.`2"
+@writeln
+@if &Pge < 1 18
+ @begin
+  @writeln   `2You have no gems. The ghost sighs like wind through
+  @writeln   a ruin!
+  @writeln   `0"`%Come back when you can afford to be charitable.`2"
+  @goto GAMBLER_END
+ @end
+@endif 18
+
+@writeln   `2(`0Y`2) Pay his debt - give up 1 gem
+@writeln   `2(`0N`2) Decline - your gems are your own
+@writeln
+@choice YN   `0[`0YN`2]
+@case response 7
+Y: @begin
+    @set &Pge to -1
+    @writeln
+    @writeln   `2You place the gem on the stump. It glows, rises, and
+    @writeln   vanishes into the fog!
+    @writeln
+    @writeln   `2The ghost stands! He's `0taller `2suddenly! Brighter!
+    @writeln   His cards dissolve into blue sparks!
+    @writeln
+    @writeln   `0"`%FREE! After four hundred years!! Thank you, hero!
+    @writeln   Take everything I have - I won't need it where I'm going!`2"
+    @writeln
+    @math &N14 = &Plv * 60
+    @set &N14 to +100
+    @writeln   `%You gain &N14 gold, 1 charm, and 1 forest fight!
+    @set &Pgo to +&N14
+    @set &Pch to +1
+    @set &Pff to +1
+    @goto GAMBLER_END
+   @end
+N: @begin
+    @writeln
+    @writeln   `0"`%Fair enough. Can't blame a living person for being selfish.
+    @writeln   I was the same way. Look where it got me!`2"
+    @goto GAMBLER_END
+   @end
+@endcase 7
+
+; --- ROB THE GRAVE ---
+@label GAMBLER_ROB
+@writeln
+@writeln   `2You eye the mossy headstone behind the ghost.
+@writeln   `2There might be something buried there...
+@writeln
+@writeln   `0"`%Hey. HEY! That's MY grave! Don't you DARE!`2"
+@writeln
+@writeln   `2(`0D`2) Dig anyway - what's he gonna do, haunt you?
+@writeln   `2(`0S`2) Stop - this feels wrong
+@writeln
+@choice DS   `0[`0DS`2]
+@case response 8
+D: @begin
+    @math &N15 = &rnd4
+    @writeln
+    @writeln   `2You dig! The ghost screams! Spectral cards fly everywhere!
+    @case &N15 8
+    1: @begin
+        @math &N16 = &Plv * 40
+        @set &N16 to +80
+        @writeln
+        @writeln   `2Under the dirt, you find a rusted chest with `%&N16 gold!
+        @writeln   `%You gain &N16 gold!
+        @set &Pgo to +&N16
+        @writeln
+        @writeln   `4But the ghost curses you! You lose 2 charm!
+        @set &Pch to -2
+       @end
+    2: @begin
+        @writeln
+        @writeln   `2The ghost grabs your ankle with freezing fingers!
+        @writeln   Cold shoots through your body like ice water through veins!
+        @writeln   `4You lose half your hit points!
+        @math &N17 = &Pht / 2
+        @set &Pht to -&N17
+        @if &Pht < 1 19
+         @set &Pht to 1
+        @endif 19
+        @writeln
+        @writeln   `2But you find a gem in the dirt!
+        @writeln   `%You gain 1 gem!
+        @set &Pge to +1
+       @end
+    3: @begin
+        @writeln
+        @writeln   `2The grave is `4empty`2! The ghost howls with laughter!
+        @writeln   `0"`%Did you think I'd be buried with my WINNINGS?!
+        @writeln   I lost everything! THAT'S WHY I'M DEAD!!`2"
+        @writeln   `4You lose 1 forest fight digging for nothing!
+        @set &Pff to -1
+       @end
+    4: @begin
+        @writeln
+        @writeln   `2The ground `4erupts`2! Spectral fire burns your hands!
+        @writeln   The ghost's curse hits you like a frozen wall!
+        @writeln   `4YOUR HP DROPS TO 1!
+        @set &Pht to 1
+        @writeln
+        @writeln   `2...but among the scattered bones, a single gem gleams!
+        @writeln   `%You gain 1 gem!
+        @set &Pge to +1
+       @end
+    @endcase 8
+    @goto GAMBLER_END
+   @end
+S: @begin
+    @writeln
+    @writeln   `2You step back. The ghost relaxes.
+    @writeln   `0"`%Thank you. I may be dead but I still have `$dignity`0.
+    @writeln   Sort of. A little. Not much.`2"
+    @writeln
+    @writeln   `2He tosses you a spectral coin that solidifies in your hand!
+    @math &N18 = &Plv * 20
+    @set &N18 to +40
+    @writeln   `%You gain &N18 gold!
+    @set &Pgo to +&N18
+    @goto GAMBLER_END
+   @end
+@endcase 8
+
+; --- LEAVE ---
+@label GAMBLER_LEAVE
+@writeln
+@writeln   `0"`%LEAVING?! But I shuffled and EVERYTHING!`2" `2the ghost
+@writeln   wails! `0"`%Fine! FINE! Go live your precious LIFE with
+@writeln   your precious HEARTBEAT and your precious BODY TEMPERATURE!
+@writeln   See if I care!!`2"
+@writeln
+@writeln   `2You hear him sobbing as you walk away.
+@writeln   It's hard to feel sorry for someone who's been dead for
+@writeln   four centuries and still won't shut up about cards.
+
+@label GAMBLER_END
+@writeln
+@hitakey
+@endquest

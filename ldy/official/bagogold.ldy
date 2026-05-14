@@ -1,0 +1,28 @@
+@#INSTALL
+@eventname BAGOGOLD
+@author Seth Able
+@authid BAGOGOLD1
+@codebegin
+@runsub BAGOGOLD &filename
+@codeend
+@target forest
+
+@#UNINSTALL
+
+
+@#BAGOGOLD
+@verreq 407
+@writeln `c  `%Event In The Forest`0
+@writeln `l
+@writeln
+; yeah, this looks funny. but its the original math for it.
+@math &N1 = &rnd500 + 250
+@math &N1 = &N1 * &Plv
+@math &N1 = &N1 * &Plv
+@writeln   `2You find a sack with `%&N1 `2gold in it!
+@set &Pgo to +&N1
+@writeln
+@hitakey
+@clrscr
+@endquest
+

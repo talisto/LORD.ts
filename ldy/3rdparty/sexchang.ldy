@@ -1,0 +1,102 @@
+@#INSTALL
+@eventname Sex Change
+@author Gordon Lewicky
+@authid SexChange117
+@codebegin
+@runsub SEXCHANGE &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+; =============================================================
+; Sex Change v1.17
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+;
+; Goofy events by Gordon Lewicky. Supported by Donald Tidmore.
+; This event was written and tested using Lord v4.07á 31 Mar/02 but
+; any commands/vars are from previous LORD's. This supports v4.05 & up.
+;
+; SEXCHANGE  - You come across the faeries but this time they are really angry.
+;              They change your sex for spying on them again.
+; =============================================================
+
+@#SEXCHANGE
+@display
+`c  `%Weird Happening In The Forest`0
+`l
+
+  `2Wandering along, you come across a large group of playful faeries,
+  cavorting in the flowers. You try to sneak away, but they see you.
+
+  `9"Hey there human!! We told you we do not like you spying on us!
+  Mayhaps we should teach you a lesson. What do you think Mischievious?"
+
+  "Most definately, Misdemeanor, most definately. Lemme think on it a bit."
+
+  `2You try to run away, but the faeries completely surround you!
+
+@enddisplay
+@hitakey
+@clrscr
+@if &Psx is true 1
+  @begin
+    @writeln
+    @writeln `2Mischievious looks you over, then breaks into a gleeful laugh.
+    @writeln
+    @writeln `9"Ooooo you are much too ugly to be a woman!" `2She throws some dust on you.
+    @set &Psx to false
+  @end
+@else 1             ; 04/12/05: added identifier 1. DGT.
+  @begin
+    @writeln `2Mischievious looks you over, then breaks into a gleeful laugh.
+    @writeln
+    @writeln `9"Ooooo you are much too pretty to be a man!" `2She throws some dust on you.
+    @set &Psx to true
+  @end
+@endif 1
+
+; end of event
+@writeln `2
+@writeln You sneeze and then suddenly start feeling very strange.
+@writeln
+@writeln `@"Arggggggg"`2, you scream as you look down at your new body.
+@writeln
+@writeln Mischievious giggles, while Misdemeanor dances with glee.
+@writeln
+@writeln `9"I think you better go back to town and change your clothes. Hee hee..."
+@writeln `2
+@writeln And Misdemeanor pipes in laughing...
+@writeln `9
+@if &Psx is true 2
+  @begin
+  @writeln "I think your &Par should have two bumps up there on your chest!
+  @writeln It sure looks like it is an awfully tight fit right now, and very,
+  @writeln very, uncomfortable, I would guess! Hee hee..."
+  @end
+@else 2                ; 04/12/05: added identifier 2. DGT.
+  @begin
+  @writeln "I don't think your &Par should have those two bumps on your chest!
+  @writeln It sure makes you look silly. And it looks like you need more room
+  @writeln down below. It must be awfully tight there, right now! Hee hee..."
+  @end
+@endif 2    ; 04/12/05: changed to use identifier 2. DGT.
+
+@writeln `$
+@hitakey
+@clrscr
+@endquest
+
+;  ===========================================================
+;  This script was created by Gordon Lewicky. It is supported by
+;  Donald Tidmore following Gordon's death in July 2006.
+;
+;  Version 1.10: Added number identifiers to ELSE entries. 04/12/05.
+;  Version 1.15: 10/18/06: Added INSTALL and UNINSTALL code.
+;  10/18/06: Created SEXCHANG.LDY using goofy1.ldy script code.
+;  ===========================================================
+
+; 05/31/07: v1.17: Revised Email/WWW info;  Changed version #.
+
+

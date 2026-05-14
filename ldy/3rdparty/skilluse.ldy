@@ -1,0 +1,116 @@
+@#INSTALL
+@eventname New Skill Use Point
+@author Donald Tidmore
+@authid NEW-SKILL-USE-POINT-106
+@codebegin
+@runsub SKILLUSE &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+; ==============================================================
+; New Skill Use Point v1.06.  Script Event by Donald Tidmore.
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+; Requires LORD v4.05+.
+; ==============================================================
+;
+@#SKILLUSE   ; 07/24/05: changed from Use-Point to SkillUse.
+@display
+`c        `!Event In The Forest`0
+`l
+  `%Suddenly you hear a voice come from the sky.  "O warrior, I have
+  witnessed your struggle to rid this forest of its accursed monsters.
+
+  To aid you, I am granting you `$ONE `%new `#Skill Use point `%today.
+@enddisplay
+
+@if &Pcl = 1 1
+  @begin                 ; Handle the Warriors:
+    @math &N3 = &Plw + 0      ; Store current DK Uses for day.
+    @writeln
+    @writeln   `%The great `9Belgarion `%smiles upon thee, `#Warrior.
+    @writeln
+    @writeln     `$Thou are awarded `#1 `$new `9Death Knight `$use point.
+    @math &N4 = &N3 + 1       ; Give player ONE DK use point.
+    @set &Plw to &N4          ; Save reset DK Uses variable.
+  @end
+@endif 1
+
+@if &Pcl = 2 2
+  @begin
+    @math &N3 = &Plm + 0      ; Store current Mystic Uses for day.
+    @writeln
+    @writeln   `%The great `2Belgarion `%smiles upon thee, `#Wizard.
+    @writeln
+    @writeln     `$Thou are awarded `#1 `$new `9Mystic Skills `$use point.
+    @math &N4 = &N3 + 1       ; Give player ONE Mystic use point.
+    @set &Plm to &N4          ; Save reset Mystic Uses variable.
+  @end
+@endif 2
+
+@if &Pcl = 3 3
+  @begin                 ; Handle the Thieves:
+    @math &N3 = &Plt + 0      ; Store current Thief Uses for day.
+    @writeln
+    @writeln   `%The great `$Belgarion `%smiles upon thee, `#Thief.
+    @writeln
+    @writeln     `$Thou are awarded `#1 `$new `9Thief `$use point.
+    @math &N4 = &N3 + 1       ; Give player ONE Thief use point.
+    @set &Plt to &N4          ; Save reset Thief Uses variable.
+  @end
+@endif 3
+
+; --------------------------------------------------------------------
+@if &Plw > 100 4
+  @begin                 ; 12/27/03: Reset DK Uses value to 100 points.
+    @set &Plw to 100
+    @set &N4 to 100
+  @end
+@endif 4
+
+@if &Plm > 100 5
+  @begin                 ; 12/27/03: Reset Mystic Uses value to 100 points.
+    @set &Plm to 100
+    @set &N4 to 100
+  @end
+@endif 5
+
+@if &Plt > 100 6
+  @begin                 ; 12/27/03: Reset Thief Uses value to 100 points.
+    @set &Plt to 100
+    @set &N4 to 100
+  @end
+@endif 6
+; -----------------------------------------------------------------------
+
+@writeln
+@if &Pcl = 1 7
+  @writeln   `!You are studying the ways of the `@Death Knights.
+@endif 7
+
+@if &Pcl = 2 8
+  @writeln   `!You are studying the arcane knowledge of `@Wizards.
+@endif 8
+
+@if &Pcl = 3 9
+  @writeln   `!You are studying the sneaky ways of the `@Thieves Guild.
+@endif 9
+        
+@writeln     `%You now have `$&N4 `%Use points today. `$Use them `!WISELY.
+
+@writeln
+@hitakey  ; Needed for viewing screen under LORD 4.06.
+@endquest
+
+; ==============================================================
+; Released April 20, 2002.
+; Tested under LORD 4.07 thoroughly. Briefly tested under LORD 4.06.
+;
+; v1.04: 12/27/2003. Prevents Skill use points from exceeding 100 points.
+;
+; 07/24/05: Added INSTALL and UNINSTALL sections to script.
+; 05/31/07: v1.06: Revised Email/WWW info;  Changed version #.
+
+

@@ -1,0 +1,934 @@
+@#INSTALL
+@eventname The Gnome #2
+@author Donald Tidmore
+@authid DT_Gnome112
+@codebegin
+@runsub DT_GNOME &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+@DEBUG SUPER ON    ; added 04/16/06 for script debugging
+
+;=============================================================
+; Doofus The Gnome #2 v1.12:  Revision by Donald Tidmore.
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+; ----------------------------------------------------------
+;
+; Gnome event by Gordon Lewicky, Sysop - Milky Way, 1:153/307
+; Modified copy for Donald Tidmore's usage.
+: Purpose:  Gives higher chance of success when player tries
+; to pick Doofus's pocket.
+; ============================================================
+;
+@#GNOME
+; N1 is gems in hand
+@math &N1 = &Pge + 0
+@set &N10 to 0
+@display
+`c  `%Sooper Dooper Event In The Forest`0
+`l
+
+  `2You hear rustling off to your right. You peer in that direction.
+
+  `7"Psssst... psssst... over here. Quietly now, behind dis bush."
+
+  `2You sneak over on your tippy-toes behind the bush and see a small little
+  gnome, dressed in black, with an infectious grin under his huge mustache.
+
+  `7"Hey there &nick, glad to see ye. I be Doofus, Trader Gnome Supreme."
+
+  "I love gems, can't get enuff of 'em. Wanna trade? Cost ya 1 gem to look."
+
+  `2You think about it for awhile, fingering the`% &N1 gems `2in your pocket.
+
+@enddisplay
+@writeln
+
+@if &N1 = 0 1
+ @begin
+  @writeln `0"Nah, I'm broke. Maybe next time."`2 you groan.
+  @goto outfast
+  @end
+@endif 1
+
+@choice YN `$Do you give Doofus the gem? (Y/n)
+@case response 1
+Y: @begin
+   @math &N1 = &N1 - 1
+   @set &Pge to &N1
+   @runsub LOOK dt_gnome.ldy
+   @end
+
+N: @goto outfast
+@endcase 1
+
+@label outfast
+@writeln `$
+@hitakey
+@clrscr
+@closequest
+@endquest
+
+@#LOOK
+@label look1
+@clrscr
+@math &N1 = &Pge + 0
+@math &N21 = &Phx + 0
+@math &N22 = &Psr + 0
+@math &N23 = &Pde + 0
+@math &N24 = &Pch + 0
+
+@writeln `7"OK here's the deal. for just `%1 `7gem ye gets `%3 `7of any of what ye see."
+@writeln "Whatcha want?"`2...
+@writeln
+@writeln `2On the table you see:
+@writeln
+@writeln `2A - Max hit points      You currently have `%&N21
+@writeln `2B - Strength            You currently have `%&N22
+@writeln `2C - Defense             You currently have `%&N23
+@writeln `2D - Charm               You currently have `%&N24
+@writeln
+@writeln `2S - Secret Deals (cost `%2 `7gems to see)
+@writeln
+@writeln `2P - Pick his pocket
+@writeln
+@writeln `%You now have &N1 gems in your pocket.
+@writeln `$
+@choice QABCDSP `$(Q exits), otherwise choose one.
+
+@case response 1
+Q: @goto outslow
+
+A: @begin
+   @if &n1 = 0 2
+     @begin
+     @goto nogems
+     @end
+   @endif 2
+   @goto buyhp
+   @end
+
+B: @begin
+   @if &n1 = 0 2
+     @begin
+     @goto nogems
+     @end
+   @endif 2
+   @goto buyst
+   @end
+
+C: @begin
+   @if &n1 = 0 2
+     @begin
+     @goto nogems
+     @end
+   @endif 2
+   @goto buyde
+   @end
+
+D: @begin
+   @goto buych
+   @if &n1 = 0 2
+     @begin
+     @goto nogems
+     @end
+   @endif 2
+   @end
+
+S: @begin
+   @if &n1 < 2 2
+     @begin
+     @writeln `7"Ya bonehead!! Ye not got `%2 `7gems!!"`2, Doofus laffs at you.
+     @writeln `$
+     @hitakey
+     @goto look1
+     @end
+   @endif 2
+   @math &N1 = &N1 - 2
+   @set &Pge to &N1
+   @runsub SECRET dt_gnome.ldy
+   @end
+
+P: @goto pickpock
+@endcase 1
+
+@label nogems
+@writeln
+@writeln `7"Ya bonehead!! Ye not got no gems!!"`2, Doofus laffs at you.
+@writeln `$
+@hitakey
+@goto look1
+
+; N30 is the flag for which display line to use in the "howmany" goto
+@label buyhp
+@set &N30 to 1
+@goto howmany
+
+@label buyst
+@set &N30 to 2
+@goto howmany
+
+@label buyde
+@set &N30 to 3
+@goto howmany
+
+@label buych
+@set &N30 to 4
+@goto howmany
+
+@label pickpock
+; N39 is num gems one gets if successful at picking his pocket, min 20
+; N40 is 1 in 10 chance of being successful, 5 being successful
+@set &N37 to &rnd5
+@set &N38 to &rnd20
+
+@if &N37 = 0 1
+  @begin
+  @set &N37 to 1
+  @end
+@endif 1
+
+@if &N38 = 0 1
+  @begin
+  @set &N38 to 1
+  @end
+@endif 1
+@math &N39 = &N37 * &N38
+
+@if &N39 < 20 1
+  @begin
+  @set &N39 to 20
+  @end
+@endif 1
+@set &N40 to &rnd9
+@clrscr
+@writeln `2You pretend to look over the items on the table trying to make up
+@writeln your mind. All the while keeping an eye on Doofus. You see him turn
+@writeln around and you take your chance. Quickly, but as lighty as a feather,
+@writeln your hand sneaks out to his gem purse, and you reach into it...
+@writeln
+@writeln `$
+@hitakey
+
+; @set &N40 to 5     ; DEBUG LINE REMOVED: was making pickpocketing always succeed
+
+@if &N40 = 5 1
+  @begin
+  @math &N1 = &N1 + &N39
+  @set &Pge to &N1
+  @clrscr
+  @writeln `0"Yahoo..."`2 ,you silently scream. You did it!!
+  @writeln
+  @writeln You've managed to snatch`%&N39 `2gems from Doofus' gem purse.
+  @writeln
+  @writeln `0"Damn I'm good." `2You're feeling pretty smug about yourself.
+  @writeln You silently pocket the gems and go back to looking over the items.
+  @writeln
+  @writeln `!Doofus turns back to look at you queerly, wiggles his huge mustache,
+  @writeln then grins again.
+  @writeln
+  @writeln `7"Well... gonna look all day? There be others in need of me services."
+  @writeln `$
+  @hitakey
+  @goto look1
+  @end
+@else 1
+  @begin
+  @clrscr
+  @writeln `!Just before your fingers reach his purse, Doofus suddenly turns
+  @writeln arounds and clasps his extremely strong hand about your wrist. You
+  @writeln attempt to pull it back but it's held fast, as if it were in a vise!
+  @writeln
+  @writeln With his other hand, Doofus reaches under the table and pulls out a
+  @writeln massive spiked club. He gives you the evil eye and raises the club
+  @writeln high over his head and swings it furiously...
+  @writeln `$
+  @set &Pht to 1
+  @set &N1 to 0
+  @set &Pge to &N1
+  @hitakey
+  @goto fight
+  @end
+@endif 1
+@goto look1
+
+
+@label howmany
+; N2 is user's entry for num gems asked to trade
+; N3 is gem cost
+; N10 is bought flag, 0=nothing bought, 1=something bought
+; N30 is type bought 1=Max HP, 2=Str, 3=Def, 4=Charm
+
+@clrscr
+@writeln `%You have &N1 gems in your pocket.
+@writeln
+
+@if &N30 = 1 1
+  @begin
+  @writeln `7"Ah... be max hit points yer after. Good choice. No better deal. 3 per gem"
+  @end
+@endif 1
+
+@if &N30 = 2 1
+  @begin
+  @writeln `7"Ah... be strength yer after. Good choice. No better deal. 3 per gem"
+  @end
+@endif 1
+
+@if &N30 = 3 1
+  @begin
+  @writeln `7"Ah... be defense yer after. Good choice. No better deal. 3 per gem"
+  @end
+@endif 1
+
+@if &N30 = 4 1
+  @begin
+  @writeln `7"Ah... be charm yer after. Good choice. No better deal. `%3 `7per gem"
+  @end
+@endif 1
+
+@writeln
+@writeln "So how many gems ye be wanting to give me?"
+@writeln
+@promptn 2 5
+@math &N3 = &N2 * 1
+@math &N4 = &N2 * 3
+@writeln
+@goto checkit
+
+@label checkit
+; N3 is item cost in gems
+; N4 is amt to be awarded
+; N11 is fight flag
+; N12 is Y/N flag, 1 = yes
+@set &N11 to 0
+@set &N12 to 0
+@choice YN `7"So ye be wanting to spend `%&N2 `7jems" `$[Y/n]
+
+@case response 1
+Y: @set &N12 to 1
+N: @set &N12 to 0
+@endcase 1
+;
+@if &N12 = 0 1
+  @begin
+  @writeln
+  @writeln `7"Aw geez... make up yer mind, ya silly nit!"
+  @writeln
+  @hitakey
+  @goto look1
+  @end
+@endif 1
+;
+@writeln
+@writeln `7"Alrighty then, done! Ye won't be sorry."
+@writeln "Here's de goodies. Now hand me over dem `%&N3 `7gems, please."
+@writeln
+@hitakey
+;
+@set &N11 to 0
+
+@if &N2 > &N1 1
+  @begin
+  @set &N11 to 1
+  @goto beginfight
+  @end
+@endif 1
+;
+@case &N30 1
+1: @begin
+   @writeln `7"Enjoy yer `%&N4 `7extra max hit points."
+   @math &N7 = &Phx + 0
+   @math &N8 = &N7 + &N4
+   @set &Phx to &N8
+   @end
+
+2: @begin
+   @writeln `7"Enjoy yer `%&N4 `7extra strength."
+   @math &N7 = &Psr + 0
+   @math &N8 = &N7 + &N4
+   @set &Psr to &N8
+   @end
+
+3: @begin
+   @writeln `7"Enjoy yer `%&N4 `7extra defense."
+   @math &N7 = &Pde + 0
+   @math &N8 = &N7 + &N4
+   @set &Pde to &N8
+   @end
+
+4: @begin
+   @writeln `7"Enjoy yer `%&N4 `7extra charm."
+   @math &N7 = &Pch + 0
+   @math &N8 = &N7 + &N4
+   @set &Pch to &N8
+   @end
+@endcase 1
+;
+@goto donebuy
+;
+@label donebuy
+@writeln
+@writeln "Use dem in good health. Thank ye kindly fer yer `%&N3 `7gems."
+@writeln
+@math &N1 = &N1 - &N3
+@set &Pge to &N1
+@set &N10 to 1
+@hitakey
+@goto look1
+
+@label beginfight
+@writeln
+@writeln `7"Hey ye no good scum! Ye not be having `%&N3 `7gems!"
+@writeln "Ye be trying to hoodwink me, nay, SWINDLE me, ya varmit!"
+@set &Pht to 1
+@set &N11 to 1
+
+@case &N30 1
+1: @begin
+   @writeln "I'll larn ye fer that! Not only will I take dem `%&N4 `7max hit points"
+   @math &N6 = &Phx - &N4
+   @set &Phx to &N6
+
+   @if &N6 < 1 2
+     @begin
+     @set &Phx to 1
+     @end
+   @endif 2
+   @end
+
+2: @begin
+   @writeln "I'll larn ye fer that! Not only will I take dem `%&N4 `7strength"
+   @math &N6 = &Psr - &N4
+   @set &Psr to &N6
+
+   @if &N6 < 1 2
+      @begin
+      @set &Psr to 1
+      @end
+   @endif 2
+   @end
+
+3: @begin
+   @writeln "I'll larn ye fer that! Not only will I take dem `%&N4 `7defense"
+   @math &N6 = &Pde - &N4
+   @set &Pde to &N6
+
+   @if &N6 < 1 2
+      @begin
+      @set &Pde to 1
+      @end
+   @endif 2
+   @end
+
+4: @begin
+   @writeln "I'll larn ye fer that! Not only will I take dem `%&N4 `7charm"
+   @math &N6 = &Pch - &N4
+   @set &Pch to &N6
+
+   @if &N6 < 1 2
+      @begin
+      @set &Pch to 1
+      @end
+   @endif 2
+   @end
+@endcase 1
+
+@writeln `7"from ye, but I be teaching ye a lesson as well!"
+@writeln
+@writeln `7"When are yews stupid humans ever gonna larn?"
+@writeln
+@hitakey
+@goto fight
+
+@label fight
+@set &Pge to 0
+@display
+`c  `%Doofus Teaches You A Lesson!`0
+`l
+
+  `@BANG CRUNCH SMACK THWACK THWACK CRUNCH CRUNCH BANG BANG
+
+  `7"Why ya low down, no good, two faced, scum of the earth, weasel!!"
+
+  `@CRUNCH THWACK SMACK THWACK BANG CRUNCH THWACK BANG SMACK
+
+  `7"Think ye can swindle me or pick me pocket, git me stuff?? Think agin!!"
+
+  `@CRUNCH SMACK THWACK BANG THWACK CRUNCH CRUNCH BANG CRUNCH
+
+  `7"Get outta here and go cry to yer mommy, ya snivelling little baby!!"
+
+  `2He releases you and you manage to crawl away, bruised, bleeding and broken.
+  You are hurting bad, very very very bad, and Doofus now has all your gems!
+  `%You vow never again to cross Doofus, *IF* you can make it to the healers!
+@enddisplay
+@goto outfast1
+
+@label outslow1
+@set &Pge to &N1
+@clrscr
+@writeln
+@writeln `7"Thank ye fer yer sparkly gems. Come back soon, I'll be around."
+@writeln
+@label outfast1
+@writeln `$
+@hitakey
+@clrscr
+@closequest
+@endquest
+
+
+
+@#SECRET
+@label secret1
+@math &N1 = &Pge + 0
+@math &N25 = &Pki + 0
+@set &N26 to 0
+
+@if &Pho is true 1
+  @begin
+  @set &N26 to 1
+  @end
+@endif 1
+
+@clrscr
+@writeln `7"Ahhh... ye be wanting the secret deals... good choice!"
+@writeln "Just take a look at these and drool! Whatcha want?"`2...
+@writeln `2
+
+@if &Pki = 1 2
+  @begin
+  @writeln `2A - Get an Orphan for `%4 `2gems   Currently you have `%&N25 `2kid
+  @end
+@else 2
+  @begin
+  @writeln `2A - Get an Orphan for `%4 `2gems   Currently you have `%&N25 `2kids
+  @end
+@endif 2  ; 04/12/05: changed identifier to 2.
+
+@if &Pho is true 3
+@begin
+  @writeln `2B - Get an Horse for `%10 `2gems    Currently you have `%a horse
+@end
+@else 3
+@begin
+  @writeln `2B - Get an Horse for `%10 `2gems    Currently you have `%no horse
+@end
+@endif 3  ; 04/12/05: changed identifier to 3.
+
+@writeln
+@writeln `%You now have &N1 gems in your pocket.
+@writeln `$
+@choice QAB `$(Q exits back to table), otherwise choose one.
+
+@case response 1
+Q: @runsub LOOk dt_gnome.ldy
+
+A: @begin
+   @if &n1 = 0 2
+     @begin
+     @goto nogems2
+     @end
+   @endif 2
+
+   @if &Pki > 10 2
+     @begin
+     @goto toomanykids
+     @end
+   @endif 2
+   @goto buyor
+   @end
+
+B: @begin
+   @if &n1 = 0 2
+     @begin
+     @goto nogems2
+     @end
+   @endif 2
+   @goto buyho
+   @end
+@endcase 1
+@goto secret1
+
+@label toomanykids
+@clrscr
+@writeln `7"Ahhhh... ye be having a fine family I see! &Pki kids, that be a lot!"
+@writeln
+@writeln `2Just then, a crows flys over and caws in Doofus' ear. His eyebrows go up
+@writeln and his bushy mustache twitches.
+@writeln
+@writeln `7"Ya don't say!... Really??... Oh, what a shame... Tsk, tsk, tsk..."
+@writeln
+@writeln `2The crow flys off and Doofus turns back to you with a sad look in his eyes.
+@writeln
+@writeln `7"Seems Grizelda went on a rampage. Nobody loving her. She be wanting love.
+@writeln `7She done went to the schoolhouse and stole some kids to mother over
+@writeln `7and be loved in return. I be afraid ye be missing some of your kids."
+@writeln
+@writeln `7"She be also stealing all my orphans as well. Gots none to sells ye, it seems
+@writeln `7Ahhhh well, ye be having too many anyways and I be needing to find some more."
+@writeln
+
+@set &Pki to 10
+@math &N25 = &N25 - 10
+@math &N26 = &Pff - &N25
+
+@if &N26 < 1 2
+  @begin
+  @set &N26 to 1
+  @end
+@endif 2
+@set &Pff to &N26
+@hitakey
+@goto secret1
+
+@label nogems2
+@writeln
+@writeln `7"Ya bonehead!! Ye not got no gems!!"`2, Doofus laffs at you.
+@writeln `$
+@hitakey
+@goto secret1
+
+@label buyor
+@set &N30 to 5
+@goto howmany1
+
+@label buyho
+@set &N30 to 6
+@goto howmany1
+
+@label howmany1
+; N2 is user's entry for num bought
+; N3 is gem cost
+; N9 is multi/single item flag 0=multi item, 1=single item
+; N10 is bought flag, 0=nothing bought, 1=something bought
+; N30 is type bought 5=Kids, 6=Horse
+; N35 is over/under payment amount
+@clrscr
+@set &N9 to 0
+@set &N35 to 0
+@writeln `%You have &N1 gems in your pocket.
+@writeln
+;
+@if &N30 = 5 1
+  @begin
+  @writeln `7"Ah... be darlin' lil' orphans yer after. Good choice. No better deal."
+  @writeln "Only `%4 `7gems per kid. But remember, ya gots to feed da munchins!"
+  @end
+@endif 1
+
+@if &N30 = 6 1
+  @begin
+  @writeln `7"Ah... be a trusty steed yer after. Good choice. No better deal."
+  @writeln "Only `%10 `7gems. But remember, ya gots to feed da critter!"
+  @end
+@endif 1
+
+@writeln
+@writeln "So how many gems ye be wanting to give me?"
+@writeln
+;
+; wait for user entry and put in N2
+@promptn 2 5
+;
+; say something goofy if entered gems is 0
+@if &N2 = 0 1
+  @begin
+  @writeln
+  @writeln `7"Oh yah... big spender! Do I look to be a fool?"
+  @writeln `7"Try agin, but this time... spend some real sparklies!"
+  @writeln `7"Mumble grumble...dang, dumb, stupid human..."
+  @writeln `$
+  @hitakey
+  @goto secret1
+  @end
+@endif 1
+
+; calcing entry for kids
+;
+@if &N30 = 5 1
+  @begin
+; accept the gems regardless of whether the math works out
+  @math &N3 = &N2 + 0
+; calculate the num of kids the entered gems works out to.
+  @math &N4 = &N2 / 4
+; calculate over/under payment
+  @math &N35 = &N4 * 4
+  @math &N35 = &N2 - &N35
+  @end
+@endif 1
+@goto checkit1
+;
+; calcing entry for horse
+;
+@if &N30 = 6 1
+  @begin
+; buying a horse
+  @math &N3 = &N2 + 0
+  @math &N35 = &N2 - 10
+  @set &N4 to 0
+
+  @if &N2 > 9 2
+    @begin
+;   enuff to buy a horse
+    @set &N4 to 1
+    @end
+  @endif 2
+  @end
+@endif 1
+@writeln
+@goto checkit1
+;
+@label checkit1
+; N3 is item cost in gems
+; N4 is amt to be awarded
+; N11 is fight flag
+; N12 is yes/no flag 1 = yes
+; N35 is remainder flag for overpayment
+@set &N12 to 0
+@writeln
+@choice YN `7"So ye be wanting to spend `%&N2 `7jems" `$[Y/n]
+
+@case response 1
+Y: @set &N12 to 1
+N: @set &N12 to 0
+@endcase 1
+
+@if &N12 = 0 1
+  @begin
+  @writeln
+  @writeln `7"Aw geez... make up yer mind, ya silly nit!"
+  @writeln
+  @hitakey
+  @goto secret1
+  @end
+@endif 1
+;
+; accept gems
+;
+@writeln
+@writeln `7"Alrighty then, done! Ye won't be sorry."
+@writeln "Here's de goodies. Now hand me over dem `%&N2 `7gems, please."
+@writeln
+@hitakey
+;
+@case &N30 1
+5: @goto kids
+6: @goto horse
+@endcase 1
+
+@label kids
+;
+; check if entry is more then gems in hand and set the fight flag
+;
+@set &N11 to 0
+@if &N2 > &N1 1
+  @begin
+  @set &N11 to 1
+  @goto startfight
+  @end
+@endif 1
+;
+; do buy for kids and/or food
+;
+@if &N4 = 1 1
+  @begin
+  @writeln `7"Enjoy yer `%&N4 `7extra kid."
+  @end
+@else 1   ; 04/12/05: added 1 identifier.
+  @begin
+  @writeln `7"Enjoy yer `%&N4 `7extra kids."
+  @end
+@endif 1
+@math &N7 = &Pki + 0
+@math &N8 = &N7 + &N4
+@set &Pki to &N8
+
+@if &N35 > 0 1
+  @begin
+  @writeln
+  @writeln `7"Hmmm... ye be giving me `%&N35 `7gems more then needed."
+  @writeln `7"Here be a voucher from McDragons to feed da munchins."
+  @end
+@endif 1
+;
+@goto donebuy1
+;
+;
+@label horse
+;
+; check entry for more then gems in hand and set the fight flag
+@set &N11 to 0
+
+@if &N2 > &N1 1
+  @begin
+  @set &N11 to 1
+  @goto startfight
+  @end
+@endif 1
+;
+; do buy for horse and/or food for horse
+@if &Pho is true 1
+  @begin
+  @set &Pho to true
+  @writeln `7"Hey now... ye be already having a horse."
+  @writeln
+  @writeln `7"But I be taking yer `%&N2 `7gems anywho. Here be a brand new feed bag"
+  @writeln `7"and some fresh oats to feed dat critter dat ye already gots!"
+  @end
+@endif 1
+;
+@if &Pho is false 1
+  @begin
+  @if &N2 < 10 2
+    @begin
+    @set &Pho to false
+    @writeln `7"Hey now! That be not enough fer a horse. But I'll take yer"
+    @writeln "`%&N2 `7gems anywho. Here be a new feedbag and some fresh oats"
+    @writeln "sews ye can feed the steed when ye gets one."
+    @end
+  @endif 2
+
+  @if &N2 > 9 2
+    @begin
+    @writeln `7"Enjoy yer new horse. Ye be treating him well, ya hear!"
+    @set &Pho to true
+
+    @if &n2 > 10 3
+      @begin
+      @math &N35 = &N2 - 10
+      @writeln `7"Hmmm... ye be giving me too much. Horse only cost `%10 `7gems"
+      @writeln "But I be taking da extra `%&N35 `7gems anywho and be giving"
+      @writeln "ye a brand new feed bag and fresh oats to feed dat mighty beast."
+      @end
+    @endif 3
+    @end
+  @endif 2
+  @end
+@endif 1
+@goto donebuy1
+;
+@label donebuy1
+@math &N1 = &N1 - &N2
+@set &Pge to &N1
+@set &N10 to 1
+@writeln
+@writeln `7"Use dem in good health. Thank ye kindly fer yer `%&N2 `7gems."
+@writeln
+@hitakey
+@goto secret1
+
+@label startfight
+@writeln
+@writeln `7"Hey ye no good scum! Ye not be having `%&N3 `7gems!"
+@writeln "Ye be trying to hoodwink me, nay, SWINDLE me, ya varmit!"
+@set &N11 to 1
+
+@case &N30 1
+5: @begin
+   @writeln "I'll larn ye fer that! Not only will I take dem `%&N4 `7kids"
+   @math &N8 = &Pki - &N4
+   @set &Pki to &N8
+
+   @if &N8 < 0 2
+     @begin
+     @set &N8 to 0
+     @end
+   @endif 2
+   @end
+
+6: @begin
+   @writeln "I'll larn ye fer that! Not only will I take ye horse"
+   @set &Pho to false
+   @end
+@endcase 1
+@writeln "from ye, but I'll teach ye a lesson as well!"
+@writeln
+@writeln `7"When are yews stupid humans ever gonna larn?"
+@writeln
+@hitakey
+@goto fight1
+
+@label fight1
+@set &Pge to 0
+@set &Pht to 1
+@display
+`c  `%Doofus Teaches You A Lesson!`0
+`l
+
+  `@BANG CRUNCH SMACK THWACK THWACK CRUNCH CRUNCH BANG BANG
+
+  `7"Why ya low down, no good, two faced, scum of the earth, weasel!!"
+
+  `@CRUNCH THWACK SMACK THWACK BANG CRUNCH THWACK BANG SMACK
+
+  `7"Think ye can swindle me or pick me pocket, git me stuff?? Think agin!!"
+
+  `@CRUNCH SMACK THWACK BANG THWACK CRUNCH CRUNCH BANG CRUNCH
+
+  `7"Get outta here and go cry to yer mommy, ya snivelling little baby!!"
+
+  `2He releases you and you manage to crawl away, bruised, bleeding and broken.
+  You are hurting bad, very very very bad, and Doofus now has all your gems!
+  `%You vow never again to cross Doofus, *IF* you can make it to the healers!
+@enddisplay
+@goto outfast2
+
+@label outfast2
+@writeln `$
+@hitakey
+@clrscr
+@closequest
+
+@DEBUG SUPER OFF    ; added 04/16/06 for script debugging
+
+@DEBUG ON           : 04/16/06: restore normal script debugging.
+
+@endquest
+
+; ===============================================================
+; This event was written and tested using Lord v4.07� 31 Mar/02 but
+; any commands/vars are from previous Lords. This supports v4.05 & up.
+;
+; You meet a grinning character called Doofus. He's a gnome. He trades
+; for gems. You need a gem to see his wares, and he has a special
+; deal for 2 gems more.
+;
+; His standard deals are for 1 gem you get 3 of your choice of:
+; Max HP's, Strength, Defense, Charm.
+;
+; Pay him 2 more gems and you get to see his "special" deals.
+; 4 gems gets a kid and 10 gems gets a horse.
+;
+; You can also attempt to pick his pocket for gems but be forwarned,
+; it's only a 1 in 10 chance of doing so, and if he catches you,
+; you'll be very, very sorry!  He'll beat you up to 1 hp of your
+; life and take all your gems. ;)
+;
+; However, if you do manage to pick his pocket, you'll probably
+; find your hand filled with lots of gems. :)
+;
+; Also, if one attemps to ask for more then what they can pay for,
+; Doofus considers that to be an attemt to swindle him, and once again
+; you'll be very, very sorry. He will also beat you up to 1 hp, and take
+; all your gems and also take the equivalent amount of what you asked for
+; leaving you with a minimum of 1 of whatever that was, if you tried
+; to swindle more then what you had to start with. Except for kids. He'll
+; take them all if the deducted amount makes it less then 0.
+;
+; In short do right to Doofus and he'll do right to you.
+; Swindle or steal from him and look-out!
+;
+; There are no checks on user entry for amount, but you can always see
+; how many gems you have, so it's up to the user to do the simple math
+; and keep their eyes open. :)
+; ===============================================================
+;
+; 07/24/05: Added INSTALL and UNINSTALL sections to script.
+; 05/31/07: v1.12: Revised Email/WWW info;  Changed version #.
+
+

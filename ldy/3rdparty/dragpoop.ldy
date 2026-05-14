@@ -1,0 +1,211 @@
+@#INSTALL
+@eventname DragonPoop #2
+@author Donald Tidmore
+@authid DragonPoop2-110
+@codebegin
+@runsub DRAGPOOP2 &filename
+@codeend
+@target FOREST
+
+@#UNINSTALL
+
+; ================================================================
+; DragonPoop #2 v1.10: Original script by Gordon Lewicky.
+;      Fairy code modification prepared/written by Donald Tidmore.
+;
+;   Email: ktidmore@bellsouth.net.   Fidonet:  1:123/450
+;   WWW: http://camelot.legendarydragons.com/.  As of mid-June 2007.
+;
+; For usage ONLY with DOS LORD v4.07 or DOS LORD v4.08 Beta.
+; ================================================================
+;
+@#DRAGPOOP2
+@verreq 407
+;  Variation of the DragonPoop script by Donald Tidmore.
+;  10/23/2002: Allows player to survive death if they have a Fairy.
+;
+@display
+`c  `%Event In The Forest`0
+`l
+
+  `2Wandering along, your foot suddenly slips on some greasy,
+  slimey, stinky `@dragon poop`2. Your feet go flying out from under
+  you as you flip in the air and land on your back with a splat!
+@enddisplay
+@hitakey
+
+@set &N1 to &rnd5
+@case &N1 1
+0: @begin
+     @math &N2 = &Pex - 0
+     @math &N3 = &N2 / 10
+     @math &N4 = &N2 + &N3
+     @set &Pex to &N4
+     @writeln
+     @writeln   `2You land with a wooof, but are otherwise unharmed.
+     @writeln   You also landed away from the poop so a lesson was learned.
+     @writeln
+     @writeln   `9Watch your step in the forest at all times.
+     @writeln   The `@dragon `9is always nearby. Even his `@poop `9is dangerous!
+     @writeln
+     @writeln   `0 You gain `!&N3 `%Experience Points.  ;06/18/06: color code tweaking
+   @end
+
+1: @begin
+     @math &N2 = &Pff - 0
+     @math &N3 = &N2 - 5     ;06/18/06: take 5 FFs instead of just 1.
+
+     @if &N3 < 0 1
+       @begin
+         @set &N3 to 0
+       @end
+     @endif 1
+
+     @set &Pff to &N3
+     @writeln
+     @writeln   `2You land with a splat right in the `@dragon poop`2!
+     @writeln   You reek and are covered with guk. You wander over to a
+     @writeln   stream to wash away the stench and crap.
+     @writeln
+     @writeln   `0You `@lose `$5 `%Forest Fights `0cleaning yourself up.  ;06/18/06: color code tweaking
+   @end
+
+2: @begin
+     @math &N2 = &Pht - 1
+     @math &N3 = &N2 / 10
+     @math &N4 = &N2 - &N3
+     @set &Pht to &N4
+     @writeln
+     @writeln   `2You land with a crunch, and sprain your arm!
+     @writeln
+     @writeln   `0You `@lose `!&N3 `%Hit-points!  ;06/18/06: color code tweaking
+   @end
+
+3: @begin
+     @math &N2 = &Pht - 0
+     @math &N3 = &N2 / 10
+     @math &N4 = &N3 * 2
+     @math &N5 = &N2 - &N4
+     @set &Pht to &N5
+     @writeln
+     @writeln   `2You land with a crunch, and sprain both ankles!
+     @writeln
+     @writeln   `0You `@lose `!&N4 `%Hit-points!  ;06/18/06: color code tweaking
+     @end
+
+4: @begin
+     @math &N2 = &Pht - 0
+     @math &N3 = &N2 / 10
+     @math &N4 = &N3 * 3
+     @math &N5 = &N2 - &N4
+     @set &Pht to &N5
+     @writeln
+     @writeln   `2You land with a crunch, and break your arm!
+     @writeln
+     @writeln   `0You `@lose `!&N4 `%Hit-points!  ;06/18/06: color code tweaking
+   @end
+
+5: @begin
+     @set &Pht to 0
+     @set &Pdd to true
+     @writeln
+     @writeln   `2You land, striking a rock with your head. Your neck breaks!
+     @writeln   `#You find yourself above, looking down at your broken body.
+     @writeln
+     @writeln    `0  Suddenly you realize that you are dead!
+     @writeln    `2  Your ghost cries out, `#"Damn you `@Red Dragon, `#and your slimey poop!"
+     @writeln
+     @hitakey
+
+     @if &pfa is true 2
+       @begin
+         @writeln
+         @goto DRAGPOOP_FAIRY       ; Note requires user to have LORD v4.07
+       @end
+     @else 2                  ; Modification added 01/29/2003.
+       @begin
+         @writeln
+         @goto DRAGPOOP_ANGEL       ; Requires Lord 4.05pb, 4.06, or 4.07 beta.
+     @endif 2           ; Rescue from death by angel confirmed to work 01/29/03.
+   @end                 ; Works only for Levels 1 through 4.  
+@endcase 1
+@goto DRAGPOOP_END
+
+
+@LABEL DRAGPOOP_FAIRY
+@display
+    `@ - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - 
+   `$Just then, there is a bright flash of light!!!
+
+   `#Your `9Fairy `#appears and says, `0"Ah hah! So the `@Red Dragon `0got another 
+   `0one with his poop.  This is your `%LUCKY `#day."  He taps you with a
+   `#little `2Green Emerald `#crystal wand, `#and then flies away, to freedom.
+@enddisplay
+
+@set &Pht to &Phx
+@set &Pfa to false          ; Fairy is bye-bye now.
+@set &Pdd to false          ; Reset Player to Alive status.
+
+@writeln
+@writeln    `%You have been `$HEALED. `!An eerie voice from the sky says,
+@writeln                    ;  added blank line 06/18/06
+
+@writeln    `!"I've been watching you today.  `0You know, It is `#PRETTY stupid
+@writeln    `0to wander around this forest near death, with that `@Troll `0around!"
+@writeln
+@writeln    `%Agreeing with the ghostly voice, you vow to be smarter.
+@writeln
+@goto DRAGPOOP_END
+
+
+; ================================================================
+@LABEL DRAGPOOP_ANGEL
+@if &Plv < 5 3
+  @begin
+    @display
+    `@ - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - 
+   `$Just then, you hear a loud noise ...
+
+   `#A guardian angel appears before you and says, `0"Another unfortunate
+   victim of the `@Red Dragon's `0poop, I see.  This is your `0LUCKY `#day."
+
+   `%"Because you have been good lately, you are granted life again.
+   He taps you with a `9Blue Sapphire `%crystal wand, and then vanishes.
+    @enddisplay
+
+    @set &Pht to &Phx           ; Restore Hitpoints to full health.
+    @set &Pdd to false          ; Reset Player to Alive status.
+  @end
+@endif 3
+@goto DRAGPOOP_END
+
+
+@LABEL DRAGPOOP_END
+; end of event
+@writeln `2
+@hitakey           ; needed for viewing screen under LORD v4.06.
+
+@endquest
+
+; ============================================================
+;  v1.02.  Modify to prevent death if player is Level 1-4, even if they
+;          do not have a Fairy. Salvation is handled by a Guardian Angel.
+;          May NOT be modified without my permission!  This is ONLY to
+;          give NEW players a break.  So this modification may NOT be
+;          changed without my approval.
+;  v1.03.  Placed Fairy rescue and Angel rescue code in separate Label
+;          sections.
+;  v1.04:  12/05/04: Changed script version to 1.04.
+;
+; 12/05/04: Renamed script label FAIRY_RESCUE to DRAGPOOP_FAIRY.
+;           Renamed script label ANGEL_RESCUE to DRAGPOOP_ANGEL.
+; ============================================================
+
+; 04/12/05: Added number identifier to the @else statements.
+; 04/12/05:  changed version to 1.06. Donald.
+; 07/24/05: Added INSTALL and UNINSTALL sections to script.
+; 06/18/06: v1.08. Code tweaking. Tested with LORD v4.07 off. release.
+
+; 05/31/07: v1.10: Revised Email/WWW info;  Changed version #.
+
+
