@@ -4,7 +4,7 @@ A multi-platform port of **Legend of the Red Dragon (LORD)**, the classic BBS do
 
 This version is ported from the [Synchronet BBS](https://github.com/SynchronetBBS/sbbs/tree/master/xtrn/lord) version (GPL-licensed), but heavily modified. The Synchronet version was one monolithic procedural JavaScript file; this version is fully refactored into TypeScript with a modular object-oriented architecture.
 
-It is playable from a CLI, telnet, or a web browser (with full RIPscrip graphics support, and some additional modern flourishes). It also includes a "door kit" supporting various drop files to allow it to be used with some modern BBSs.
+It is playable from a CLI, telnet (with RIPscrip graphics in supported clients), or a web browser (with full RIPscrip graphics support, and some additional modern flourishes). It also includes a "door kit" supporting various drop files to allow it to be used with some modern BBSs.
 
 The original DOS version's LDY scripting language for random events has been incorporated with the actual LDY files from the original DOS game (Synchronet's version does not). It also supports ported In-Game Modules (IGMs), including maintenance utilities such as NPCLord and LordEvent.
 
@@ -66,13 +66,7 @@ Inside the god console, use the up and down arrow keys to cycle through commands
 
 ### Web Mode (Browser)
 
-The included webclient is a minimal static HTML/CSS/JS terminal that connects to the game server via WebSocket. It supports ANSI text mode and RIPscrip graphics.
-
-```bash
-docker compose up --build
-```
-
-Open [http://localhost:80](http://localhost:80) in your browser. Authentication is handled through the in-game ANSI terminal (no HTML login forms).
+The included webclient is a minimal static HTML/CSS/JS terminal that connects to the game server via WebSocket. It supports ANSI text mode and RIPscrip graphics. Docker required to start the server:
 
 #### Docker Compose (Development)
 
@@ -88,10 +82,12 @@ Open [http://localhost:8080](http://localhost:8080). Server code hot-reloads via
 docker compose up --build
 ```
 
+Open [http://localhost:80](http://localhost:80) in your browser.
+
 Starts two services:
 
 - **Caddy**: serves the browser client and reverse-proxies WebSocket connections
-- **Server**: runs the game logic and handles WebSocket sessions
+- **Server**: node.js runs the game logic and handles WebSocket sessions
 
 Game state persists in the bind-mounted `runtime/` directory.
 
@@ -101,7 +97,7 @@ A built-in Telnet server lets classic terminal/BBS clients connect directly.
 
 - Default port: `2323` (configurable via `TELNET_PORT` env var)
 - Connect: `telnet 127.0.0.1 2323`
-- Recommended clients: SyncTERM, NetRunner, PuTTY (telnet mode)
+- Recommended clients: SyncTERM (full RIP mode!), NetRunner, PuTTY
 
 ### BBS Door Mode
 
@@ -411,7 +407,7 @@ lord-ts/
 
 ## Database
 
-Default storage backend: SQLite at `runtime/lord.db` (WAL mode). `runtime/3rdparty.dat` stores IGM enable/disable state. Alternative backends are documented below.
+Default storage backend: SQLite at `runtime/lord.db` (WAL mode). Alternative backends are documented below.
 
 ### Tables
 
@@ -426,45 +422,7 @@ Default storage backend: SQLite at `runtime/lord.db` (WAL mode). `runtime/3rdpar
 | `config` | DB-level config overrides (takes precedence over `data/` files) |
 | `users` | Web authentication: username, password hash, optional email |
 | `sessions` | Web authentication: session tokens |
-
-### Record tables (`players`, `state`)
-
-Each logical record type gets its own table with the same schema:
-
-```sql
-CREATE TABLE players (
-    idx  INTEGER PRIMARY KEY,   -- 0-based record index
-    data TEXT    NOT NULL       -- JSON-serialized record
-);
-```
-
-`DbRecordFile` (in `src/storage/BaseStorage.ts`) is the drop-in replacement for the old flat-file `BinaryRecordFile`. It wraps a single storage table and provides the same record-oriented API. `SqliteStorage` and `DatStorage` both implement the `IStorage` interface via the `BaseStorage` abstract base class.
-
-### `game_log`
-
-```sql
-CREATE TABLE game_log (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    day        TEXT    NOT NULL DEFAULT 'today',
-    line       TEXT    NOT NULL,
-    created_at INTEGER NOT NULL
-);
-```
-
-During daily maintenance, `'today'` rows become `'yesterday'` and old `'yesterday'` rows are deleted.
-
-### `mail`
-
-```sql
-CREATE TABLE mail (
-    id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    to_record  INTEGER NOT NULL,
-    line       TEXT    NOT NULL,
-    created_at INTEGER NOT NULL
-);
-```
-
-Mail is stored as individual lines; a single message may consist of multiple rows.
+| `winner_history` | Info/stats on players who have won the game (game reset) |
 
 ---
 
@@ -550,7 +508,7 @@ IGM state (records) is stored in the `igm_data` table in `lord.db`, not on the f
 
 ## RIP Graphics
 
-The web client supports **RIPscrip v1.54** graphics, replicating LORD's original graphical mode. RIP mode is optional; the game works fully in text-only (ANSI) mode.
+The telnet server and web client both support **RIPscrip** graphics, replicating LORD's original graphical mode. RIP mode is optional; the game works fully in text-only (ANSI) mode.
 
 - RIP section data is loaded from `data/LORDRIP.DAT` (same `@#SECTIONNAME` format as `LORDTXT.DAT`)
 - The server sends RIP sections to the browser as JSON over WebSocket
@@ -679,19 +637,6 @@ history plus per-account win totals for charts or leaderboards.
 
 Tournament mode uses the `tournament_*` settings in `data/settings.json` and
 can be overridden through the normal `LORD_TOURNAMENT_*` environment variables:
-
-```json
-{
-  "tournament_enabled": false,
-  "tournament_days": 0,
-  "tournament_winstat": 0,
-  "tournament_xp": 0,
-  "tournament_dkills": 0,
-  "tournament_pkills": 0,
-  "tournament_level": 0,
-  "tournament_lays": 0
-}
-```
 
 | Field | Description |
 |-------|-------------|
