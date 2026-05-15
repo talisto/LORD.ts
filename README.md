@@ -212,76 +212,76 @@ All game settings use the `LORD_` prefix in SCREAMING_SNAKE_CASE. Server-level s
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LORD_SYSTEM_NAME` | `The Realm` | BBS/realm name shown to players |
-| `LORD_TIMEZONE` | `UTC` | IANA timezone for day boundaries |
-| `LORD_TIMEOUT` | `900` | Inactivity timeout in seconds (0 = no timeout) |
-| `LORD_FOREST_FIGHTS` | `15` | Forest fights per day |
-| `LORD_PVP_FIGHTS_PER_DAY` | `3` | PvP fights per day |
-| `LORD_PVP_GOLD_LOOT_CAP_FACTOR` | `0` | Cap PvP gold rewards to `floor(attacker forest-gold average * factor)`; `0` keeps the stock full-loot reward |
-| `LORD_PVP_GEM_LOOT_CAP` | `0` | Cap PvP gem rewards after the stock half-gem calculation; `0` keeps the full stock reward |
-| `LORD_RES_DAYS` | `3` | Days before resurrection is allowed |
-| `LORD_INACTIVE_PLAYER_POLICY` | `delete` | What to do with inactive accounts after `delete_days`: `delete` or `hide` |
-| `LORD_INACT_RES_SPREAD_MINS` | `0` | Spread inactive-player resurrections across this many minutes after day rollover; `0` keeps the immediate behavior |
-| `LORD_DELETE_DAYS` | `15` | Days before inactive accounts are deleted (0 = never) |
-| `LORD_AUTH_RUNTIME_DIR` | _(same as `LORD_RUNTIME_DIR`)_ | Separate local runtime directory for auth users/sessions |
-| `LORD_AUTH_REQUIRE_EMAIL` | `false` | Require an email address on auth accounts; new registrations must provide one and older accounts are prompted before play continues |
-| `LORD_DEL_1XP` | `true` | Delete players with only 1 XP during cleanup |
-| `LORD_WIN_DEEDS` | `3` | Dragon kills required to win |
-| `LORD_TOURNAMENT_ENABLED` | `false` | Enable tournament mode |
-| `LORD_TOURNAMENT_DAYS` | `0` | End the tournament after this many game-days; `0` switches to stat-based mode |
-| `LORD_TOURNAMENT_WINSTAT` | `0` | Ranking stat for time-based tournaments: `0=exp`, `1=drag_kills`, `2=pvp_kills`, `3=level`, `4=lays` |
-| `LORD_TOURNAMENT_XP` | `0` | Minimum EXP required for a stat-based tournament win |
-| `LORD_TOURNAMENT_DKILLS` | `0` | Minimum dragon kills required for a stat-based tournament win |
-| `LORD_TOURNAMENT_PKILLS` | `0` | Minimum PvP kills required for a stat-based tournament win |
-| `LORD_TOURNAMENT_LEVEL` | `0` | Minimum level required for a stat-based tournament win |
-| `LORD_TOURNAMENT_LAYS` | `0` | Minimum lays required for a stat-based tournament win |
-| `LORD_BANK_INTEREST` | `10` | Daily bank interest percentage |
-| `LORD_TRANSFERS_ON` | `true` | Allow gold transfers between players |
-| `LORD_TRANSFERS_PER_DAY` | `2` | Gold transfers allowed per day |
-| `LORD_TRANSFER_AMOUNT` | `2000000` | Max gold per transfer |
-| `LORD_BANK_XFER_GOLD_CAP` | `0` | Maximum total gold a player may send by bank transfer in one day; `0` disables the cap |
-| `LORD_BANK_XFER_GOLD_RESET_KILL` | `false` | Reset the daily bank-transfer gold cap when a player kills the dragon |
-| `LORD_CLEAN_MODE` | `false` | Filter profanity from chat |
-| `LORD_NOCHAT` | `false` | Disable chat system entirely |
-| `LORD_NO_IGMS_ALLOWED` | `false` | Disable all In-Game Modules |
-| `LORD_OLIVIA` | `true` | Enable Olivia encounters |
-| `LORD_FUNKY_FLOWERS` | `true` | Enable funky garden flowers |
-| `LORD_FLOWER_BG_COLORS` | `true` | Allow flower garden background color codes |
-| `LORD_FOREST_L1_ABOVE_L1` | `true` | Keep level 1 monsters in higher-level mixed forest pools |
-| `LORD_FOREST_POWER_MOVES` | `true` | Allow generic forest monsters to use enemy power moves |
-| `LORD_BAR_NPC_CHATTER_PROB` | `0.5` | Probability that the daily NPC bar responder posts chatter |
-| `LORD_BLANK_MAIL_DEFAULT_MSG` | `true` | Send the stock canned line when the first entered mail line is blank |
-| `LORD_PLAYER_BLOCKING` | `false` | Allow players to block direct mail, PvP targeting, and bank transfers from specific players |
-| `LORD_SHARED_IP_WINDOW_DAYS` | `0` | Number of recent game days to consider when checking whether two players shared an IP; `0` disables the restriction |
-| `LORD_SHARED_IP_BLOCK_PVP` | `false` | Block PvP between players who recently shared an IP |
-| `LORD_SHARED_IP_BLOCK_BANK_XFER` | `false` | Block bank transfers between players who recently shared an IP |
-| `LORD_SHARED_IP_BLOCK_ROMANCE` | `false` | Block only the romantic-mail branch between players who recently shared an IP |
-| `LORD_SHARED_IP_IGNORE_PRIVATE` | `true` | Ignore RFC1918, loopback, and link-local addresses when recording shared-IP history |
-| `LORD_ANNOUNCEMENT_MAX_LINES` | `0` | Maximum number of lines per announcement; `0` keeps the stock blank-line loop |
+| `LORD_ANN_MAX_CHARS_LINE` | `75` | Maximum characters accepted per announcement line |
 | `LORD_ANN_MAX_PER_PLAYER_DAY` | `0` | Maximum announcements a single player can make per day; `0` disables the cap |
 | `LORD_ANN_MAX_TOTAL_DAY` | `0` | Maximum announcements the realm can accept per day; `0` disables the cap |
-| `LORD_ANN_MAX_CHARS_LINE` | `75` | Maximum characters accepted per announcement line |
-| `LORD_MAINT_WINDOW_SECONDS` | `0` | Midnight maintenance window length in seconds for the web/telnet server scheduler; `0` disables scheduled maintenance mode |
-| `LORD_MAINT_FORCE_DISCONNECT` | `false` | Disconnect active web/telnet sessions during the maintenance window so scheduled maintenance can run |
+| `LORD_ANNOUNCEMENT_MAX_LINES` | `0` | Maximum number of lines per announcement; `0` keeps the stock blank-line loop |
+| `LORD_AUTH_REQUIRE_EMAIL` | `false` | Require an email address on auth accounts; new registrations must provide one and older accounts are prompted before play continues |
+| `LORD_AUTH_RUNTIME_DIR` | _(same as `LORD_RUNTIME_DIR`)_ | Separate local runtime directory for auth users/sessions |
 | `LORD_AUTO_RESET_WON_ROUND` | `false` | Reset a completed round automatically when scheduled maintenance runs, or when `lordctl maint` runs the same headless maintenance path |
-| `LORD_SHOP_LIMIT` | `true` | Require the usual strength and defense thresholds when buying weapons and armour; `false` removes those stat gates |
-| `LORD_SHOP_BUYBACK_ENABLED` | `false` | Allow buying back a just-sold shop item during the same shop visit |
-| `LORD_SHOP_RESTORE_ITEM_ON_FAIL` | `false` | Restore the just-sold shop item when an upgrade purchase fails |
-| `LORD_OLD_SKILL_POINTS` | `false` | Use the legacy 5-skill-point rule for Death Knight and thief daily uses, unless the explicit divisor settings override it |
-| `LORD_DK_USE_POINT_DIVISOR` | `4` | Skill lessons required per extra daily Death Knight use |
-| `LORD_THIEF_USE_POINT_DIVISOR` | `4` | Skill lessons required per extra daily thief use |
-| `LORD_DEF_FOR_PK` | `false` | Award `+3` defense after killing another player |
-| `LORD_STR_FOR_PK` | `false` | Award `+2` strength after killing another player |
-| `LORD_DK_DAMAGE_MULTIPLIER` | `3.0` | Multiplier applied to Death Knight power-attack damage |
-| `LORD_DRAGON_HORSE_SAC_DAMAGE` | `0` | Damage dealt to the dragon when a horse dies intercepting its attack |
-| `LORD_DK_BOOST` | `false` | Legacy alias for a `3.3x` Death Knight damage multiplier when the explicit multiplier is left at stock |
-| `LORD_BLOCK_PVP_IF_IN_BATTLE` | `false` | Block offline PvP targeting when the victim is already in battle |
-| `LORD_BLOCK_LOGIN_PEND_BATTLE` | `false` | Refuse login while a player is still tied to an unresolved offline PvP battle |
-| `LORD_SLEEP_DRAGON` | `false` | Anti-camping dragon wake-up: eligible high-level sleepers can be dragged into an immediate Red Dragon fight |
-| `LORD_OLD_STEAL` | `true` | Use the old thief fairy bank-steal payout formula; `true` uses `level^3`, `false` uses linear level scaling |
+| `LORD_BANK_INTEREST` | `10` | Daily bank interest percentage |
+| `LORD_BANK_XFER_GOLD_CAP` | `0` | Maximum total gold a player may send by bank transfer in one day; `0` disables the cap |
+| `LORD_BANK_XFER_GOLD_RESET_KILL` | `false` | Reset the daily bank-transfer gold cap when a player kills the dragon |
+| `LORD_BAR_NPC_CHATTER_PROB` | `0.5` | Probability that the daily NPC bar responder posts chatter |
 | `LORD_BEEF_UP` | `false` | After you have dragon kills, some monsters can gain extra HP and strength based on your dragon-kill count |
+| `LORD_BLANK_MAIL_DEFAULT_MSG` | `true` | Send the stock canned line when the first entered mail line is blank |
+| `LORD_BLOCK_LOGIN_PEND_BATTLE` | `false` | Refuse login while a player is still tied to an unresolved offline PvP battle |
+| `LORD_BLOCK_PVP_IF_IN_BATTLE` | `false` | Block offline PvP targeting when the victim is already in battle |
+| `LORD_CLEAN_MODE` | `false` | Filter profanity from chat |
+| `LORD_DEF_FOR_PK` | `false` | Award `+3` defense after killing another player |
+| `LORD_DEL_1XP` | `true` | Delete players with only 1 XP during cleanup |
+| `LORD_DELETE_DAYS` | `15` | Days before inactive accounts are deleted (0 = never) |
+| `LORD_DK_BOOST` | `false` | Legacy alias for a `3.3x` Death Knight damage multiplier when the explicit multiplier is left at stock |
+| `LORD_DK_DAMAGE_MULTIPLIER` | `3.0` | Multiplier applied to Death Knight power-attack damage |
+| `LORD_DK_USE_POINT_DIVISOR` | `4` | Skill lessons required per extra daily Death Knight use |
+| `LORD_DRAGON_HORSE_SAC_DAMAGE` | `0` | Damage dealt to the dragon when a horse dies intercepting its attack |
+| `LORD_FLOWER_BG_COLORS` | `true` | Allow flower garden background color codes |
+| `LORD_FOREST_FIGHTS` | `15` | Forest fights per day |
+| `LORD_FOREST_L1_ABOVE_L1` | `true` | Keep level 1 monsters in higher-level mixed forest pools |
+| `LORD_FOREST_POWER_MOVES` | `true` | Allow generic forest monsters to use enemy power moves |
+| `LORD_FUNKY_FLOWERS` | `true` | Enable funky garden flowers |
+| `LORD_INACT_RES_SPREAD_MINS` | `0` | Spread inactive-player resurrections across this many minutes after day rollover; `0` keeps the immediate behavior |
+| `LORD_INACTIVE_PLAYER_POLICY` | `delete` | What to do with inactive accounts after `delete_days`: `delete` or `hide` |
+| `LORD_MAINT_FORCE_DISCONNECT` | `false` | Disconnect active web/telnet sessions during the maintenance window so scheduled maintenance can run |
+| `LORD_MAINT_WINDOW_SECONDS` | `0` | Midnight maintenance window length in seconds for the web/telnet server scheduler; `0` disables scheduled maintenance mode |
+| `LORD_NO_IGMS_ALLOWED` | `false` | Disable all In-Game Modules |
+| `LORD_NOCHAT` | `false` | Disable chat system entirely |
+| `LORD_OLD_SKILL_POINTS` | `false` | Use the legacy 5-skill-point rule for Death Knight and thief daily uses, unless the explicit divisor settings override it |
+| `LORD_OLD_STEAL` | `true` | Use the old thief fairy bank-steal payout formula; `true` uses `level^3`, `false` uses linear level scaling |
+| `LORD_OLIVIA` | `true` | Enable Olivia encounters |
+| `LORD_PLAYER_BLOCKING` | `false` | Allow players to block direct mail, PvP targeting, and bank transfers from specific players |
+| `LORD_PVP_FIGHTS_PER_DAY` | `3` | PvP fights per day |
+| `LORD_PVP_GEM_LOOT_CAP` | `0` | Cap PvP gem rewards after the stock half-gem calculation; `0` keeps the full stock reward |
+| `LORD_PVP_GOLD_LOOT_CAP_FACTOR` | `0` | Cap PvP gold rewards to `floor(attacker forest-gold average * factor)`; `0` keeps the stock full-loot reward |
+| `LORD_RES_DAYS` | `3` | Days before resurrection is allowed |
 | `LORD_SAFE_NODE` | `true` | When a login reuses a node slot, mark any stale previous occupant on that node offline before claiming it |
+| `LORD_SHARED_IP_BLOCK_BANK_XFER` | `false` | Block bank transfers between players who recently shared an IP |
+| `LORD_SHARED_IP_BLOCK_PVP` | `false` | Block PvP between players who recently shared an IP |
+| `LORD_SHARED_IP_BLOCK_ROMANCE` | `false` | Block only the romantic-mail branch between players who recently shared an IP |
+| `LORD_SHARED_IP_IGNORE_PRIVATE` | `true` | Ignore RFC1918, loopback, and link-local addresses when recording shared-IP history |
+| `LORD_SHARED_IP_WINDOW_DAYS` | `0` | Number of recent game days to consider when checking whether two players shared an IP; `0` disables the restriction |
+| `LORD_SHOP_BUYBACK_ENABLED` | `false` | Allow buying back a just-sold shop item during the same shop visit |
+| `LORD_SHOP_LIMIT` | `true` | Require the usual strength and defense thresholds when buying weapons and armour; `false` removes those stat gates |
+| `LORD_SHOP_RESTORE_ITEM_ON_FAIL` | `false` | Restore the just-sold shop item when an upgrade purchase fails |
+| `LORD_SLEEP_DRAGON` | `false` | Anti-camping dragon wake-up: eligible high-level sleepers can be dragged into an immediate Red Dragon fight |
+| `LORD_STR_FOR_PK` | `false` | Award `+2` strength after killing another player |
+| `LORD_SYSTEM_NAME` | `The Realm` | BBS/realm name shown to players |
+| `LORD_THIEF_USE_POINT_DIVISOR` | `4` | Skill lessons required per extra daily thief use |
+| `LORD_TIMEOUT` | `900` | Inactivity timeout in seconds (0 = no timeout) |
+| `LORD_TIMEZONE` | `UTC` | IANA timezone for day boundaries |
+| `LORD_TOURNAMENT_DAYS` | `0` | End the tournament after this many game-days; `0` switches to stat-based mode |
+| `LORD_TOURNAMENT_DKILLS` | `0` | Minimum dragon kills required for a stat-based tournament win |
+| `LORD_TOURNAMENT_ENABLED` | `false` | Enable tournament mode |
+| `LORD_TOURNAMENT_LAYS` | `0` | Minimum lays required for a stat-based tournament win |
+| `LORD_TOURNAMENT_LEVEL` | `0` | Minimum level required for a stat-based tournament win |
+| `LORD_TOURNAMENT_PKILLS` | `0` | Minimum PvP kills required for a stat-based tournament win |
+| `LORD_TOURNAMENT_WINSTAT` | `0` | Ranking stat for time-based tournaments: `0=exp`, `1=drag_kills`, `2=pvp_kills`, `3=level`, `4=lays` |
+| `LORD_TOURNAMENT_XP` | `0` | Minimum EXP required for a stat-based tournament win |
+| `LORD_TRANSFER_AMOUNT` | `2000000` | Max gold per transfer |
+| `LORD_TRANSFERS_ON` | `true` | Allow gold transfers between players |
+| `LORD_TRANSFERS_PER_DAY` | `2` | Gold transfers allowed per day |
 | `LORD_USE_FANCY_MORE` | `true` | Erase the ANSI `MORE` prompt in place after Continue; `false` leaves a blank line instead |
+| `LORD_WIN_DEEDS` | `3` | Dragon kills required to win |
 
 ---
 
