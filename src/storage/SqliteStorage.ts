@@ -58,6 +58,7 @@ export class SqliteStorage extends BaseStorage {
     db: Database.Database;
     private _knownTables?: Set<string>;
     private _stmtCache?: Record<string, PreparedStatements>;
+    private _malformedRecordWarnings = new Set<string>();
 
     get filename(): string {
         return path.basename(this.db.name);
@@ -183,6 +184,29 @@ export class SqliteStorage extends BaseStorage {
         return this._stmtCache[tableName];
     }
 
+    private _warnMalformedRecord(tableName: string, index: number, reason: string): void {
+        const warningKey = tableName + ':' + index + ':' + reason;
+        if (this._malformedRecordWarnings.has(warningKey)) {
+            return;
+        }
+        this._malformedRecordWarnings.add(warningKey);
+        console.error(`[storage] Ignoring malformed ${tableName} record idx=${index}: ${reason}`);
+    }
+
+    private _parseStoredRecord(tableName: string, index: number, data: string): Record<string, unknown> | null {
+        try {
+            const parsed: unknown = JSON.parse(data);
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                this._warnMalformedRecord(tableName, index, 'stored JSON value is not an object');
+                return null;
+            }
+            return parsed as Record<string, unknown>;
+        } catch {
+            this._warnMalformedRecord(tableName, index, 'invalid JSON');
+            return null;
+        }
+    }
+
     // ── IRecordFileFactory ──────────────────────────────────────────────
 
     create(name: string, fieldDefs: RecordFieldDef[]): IRecordFile {
@@ -196,7 +220,7 @@ export class SqliteStorage extends BaseStorage {
         const stmts = this._getStatements(tableName);
         const row = stmts.get.get(index) as DataRow | undefined;
         if (!row) return null;
-        return JSON.parse(row.data) as Record<string, unknown>;
+        return this._parseStoredRecord(tableName, index, row.data);
     }
 
     putRecord(tableName: string, index: number, data: Record<string, unknown>): void {
@@ -220,7 +244,14 @@ export class SqliteStorage extends BaseStorage {
     getAllRecords(tableName: string): Array<{ idx: number; data: Record<string, unknown> }> {
         const stmts = this._getStatements(tableName);
         const rows = stmts.all.all() as RecordRow[];
-        return rows.map((r: RecordRow) => ({ idx: r.idx, data: JSON.parse(r.data) as Record<string, unknown> }));
+        const records: Array<{ idx: number; data: Record<string, unknown> }> = [];
+        for (const row of rows) {
+            const data = this._parseStoredRecord(tableName, row.idx, row.data);
+            if (data !== null) {
+                records.push({ idx: row.idx, data });
+            }
+        }
+        return records;
     }
 
     // ── Game log ────────────────────────────────────────────────────────
@@ -322,7 +353,7 @@ export class SqliteStorage extends BaseStorage {
     getIgmData(igmName: string, index: number): Record<string, unknown> | null {
         const row = this.db.prepare('SELECT data FROM igm_data WHERE igm_name = ? AND idx = ?').get(igmName, index) as DataRow | undefined;
         if (!row) return null;
-        return JSON.parse(row.data) as Record<string, unknown>;
+        return this._parseStoredRecord('igm_data:' + igmName, index, row.data);
     }
 
     setIgmData(igmName: string, index: number, data: Record<string, unknown>): void {
@@ -342,7 +373,14 @@ export class SqliteStorage extends BaseStorage {
 
     getAllIgmData(igmName: string): Array<{ idx: number; data: Record<string, unknown> }> {
         const rows = this.db.prepare('SELECT idx, data FROM igm_data WHERE igm_name = ? ORDER BY idx').all(igmName) as RecordRow[];
-        return rows.map((r: RecordRow) => ({ idx: r.idx, data: JSON.parse(r.data) as Record<string, unknown> }));
+        const records: Array<{ idx: number; data: Record<string, unknown> }> = [];
+        for (const row of rows) {
+            const data = this._parseStoredRecord('igm_data:' + igmName, row.idx, row.data);
+            if (data !== null) {
+                records.push({ idx: row.idx, data });
+            }
+        }
+        return records;
     }
 
     clearIgmData(igmName: string): void {
