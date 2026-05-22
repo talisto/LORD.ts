@@ -14,6 +14,7 @@ import type { ISession } from '../types';
 import type { IStorage } from '@lordts/storage/IStorage';
 import type AuthManager from './AuthManager';
 import AuthHandler from './AuthHandler';
+import { SessionLogger } from './SessionLogger';
 
 import * as Sentry from '@sentry/node';
 
@@ -176,6 +177,12 @@ export class SessionManager {
             });
         }
 
+        // ── Debug session logger (opt-in via DEBUG_LEVEL + DEBUG_PLAYERS env vars) ──
+        const sessionLogger = SessionLogger.create(ctx.runtimeDir, username, ctx.events);
+        if (sessionLogger) {
+            sessionLogger.info('ip=' + remoteIp + ' node=' + nodeId + ' rip=' + ripEnabled + ' ui=' + uiEnabled);
+        }
+
         // Wire up RIP sender for JSON-based transports
         if (ctx.rip) {
             ctx.fileUtils.buildRipIndex();
@@ -246,7 +253,7 @@ export class SessionManager {
         });
 
         // ── Run the game (async) ─────────────────────────────────────
-        void this._runGameLoop(ctx, adapter, conn, username);
+        void this._runGameLoop(ctx, adapter, conn, username, sessionLogger);
     }
 
     private _getPlayerStats(ctx: GameContext) {
@@ -316,7 +323,7 @@ export class SessionManager {
         adapter.deliverKeys(str);
     }
 
-    private async _runGameLoop(ctx: GameContext, adapter: ISession, conn: IConnection, username: string): Promise<void> {
+    private async _runGameLoop(ctx: GameContext, adapter: ISession, conn: IConnection, username: string, sessionLogger: SessionLogger | null): Promise<void> {
         try {
             await ctx.game.start();
         } catch (e: unknown) {
@@ -331,6 +338,7 @@ export class SessionManager {
                 }
             }
         } finally {
+            sessionLogger?.close();
             ctx.markPlayerOffline();
 
             while (ctx.cleanupFiles.length) {
