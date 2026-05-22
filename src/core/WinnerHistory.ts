@@ -13,6 +13,29 @@ import type { LoadedPlayerRecord } from './types';
 export const WINNER_HISTORY_TABLE = 'winner_history';
 export const LEGACY_LAST_WINNER_CONFIG_KEY = 'last_winner';
 
+const WINNER_HISTORY_FIELDS = [
+    'account_username',
+    'name',
+    'record',
+    'won_at',
+    'win_type',
+    'win_stat',
+    'win_stat_value',
+    'round_days',
+    'level',
+    'exp',
+    'drag_kills',
+    'pvp_kills',
+    'lays',
+    'gold',
+    'bank',
+    'gems',
+    'clss',
+    'sex',
+] as const;
+
+const reportedMalformedWinnerRows = new Set<string>();
+
 export type WinnerHistoryWinType = 'dragon' | 'tournament_time' | 'tournament_stat' | 'reset_backfill' | 'legacy_backfill';
 
 export interface WinnerHistoryEntry {
@@ -80,14 +103,16 @@ function normalizeNumber(value: unknown): number {
     return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
-function normalizeWinType(value: unknown): WinnerHistoryWinType {
-    if (
-        value === 'dragon'
+function isWinnerHistoryWinType(value: unknown): value is WinnerHistoryWinType {
+    return value === 'dragon'
         || value === 'tournament_time'
         || value === 'tournament_stat'
         || value === 'reset_backfill'
-        || value === 'legacy_backfill'
-    ) {
+        || value === 'legacy_backfill';
+}
+
+function normalizeWinType(value: unknown): WinnerHistoryWinType {
+    if (isWinnerHistoryWinType(value)) {
         return value;
     }
     return 'legacy_backfill';
@@ -107,47 +132,79 @@ function normalizeWinStat(value: string | undefined): string {
 function readWinStatValue(player: WinnerHistorySource, winStat: string): number {
     switch (winStat) {
         case 'exp':
-            return player.exp;
+            return normalizeNumber(player.exp);
         case 'drag_kills':
-            return player.drag_kills;
+            return normalizeNumber(player.drag_kills);
         case 'pvp':
-            return player.pvp;
+            return normalizeNumber(player.pvp);
         case 'level':
-            return player.level;
+            return normalizeNumber(player.level);
         case 'laid':
-            return player.laid;
+            return normalizeNumber(player.laid);
         default:
             return 0;
     }
 }
 
+function normalizeRequiredWinnerName(value: unknown): string {
+    const name = normalizeString(value);
+    if (!name.trim()) {
+        throw new Error('[WinnerHistory] Cannot record winner without a character name');
+    }
+    return name;
+}
+
+function missingWinnerFields(data: Record<string, unknown>): string[] {
+    return WINNER_HISTORY_FIELDS.filter((field) => !(field in data));
+}
+
+function reportMalformedWinnerRow(id: number, reason: string, data: Record<string, unknown>): void {
+    const warningKey = id + ':' + reason;
+    if (reportedMalformedWinnerRows.has(warningKey)) {
+        return;
+    }
+    reportedMalformedWinnerRows.add(warningKey);
+    console.error(`[WinnerHistory] Detected malformed ${WINNER_HISTORY_TABLE} row idx=${id}: ${reason}`, data);
+}
+
 function buildWinnerEntry(id: number, player: WinnerHistorySource, options: RecordWinnerOptions): WinnerHistoryEntry {
     const winStat = normalizeWinStat(options.winStat);
+    const name = normalizeRequiredWinnerName(player.name);
     const accountUsername = typeof player.real_name === 'string' && player.real_name !== '' && player.real_name !== 'X'
         ? player.real_name
-        : player.name;
-    const wonAt = normalizeUnixSeconds(options.wonAt ?? Date.now());
+        : name;
+    const record = normalizeNumber(player.Record);
+    if (!Number.isInteger(record) || record < 0) {
+        throw new Error('[WinnerHistory] Cannot record winner without a valid player record number');
+    }
+    const wonAt = normalizeUnixSeconds(normalizeNumber(options.wonAt ?? Date.now()));
+    if (wonAt <= 0) {
+        throw new Error('[WinnerHistory] Cannot record winner without a valid win timestamp');
+    }
+    if (!isWinnerHistoryWinType(options.winType)) {
+        throw new Error('[WinnerHistory] Cannot record winner with an invalid win type: ' + String(options.winType));
+    }
 
     return {
         id,
         account_username: accountUsername,
-        name: player.name,
-        record: player.Record,
+        name,
+        record,
         won_at: wonAt,
         win_type: options.winType,
         win_stat: winStat,
-        win_stat_value: options.winStatValue ?? readWinStatValue(player, winStat),
-        round_days: options.roundDays ?? 0,
-        level: player.level,
-        exp: player.exp,
-        drag_kills: player.drag_kills,
-        pvp_kills: player.pvp,
-        lays: player.laid,
-        gold: player.gold,
-        bank: player.bank,
-        gems: player.gem,
-        clss: player.clss,
-        sex: player.sex,
+        win_stat_value: options.winStatValue === undefined ? readWinStatValue(player, winStat) : normalizeNumber(options.winStatValue),
+        round_days: normalizeNumber(options.roundDays),
+        level: normalizeNumber(player.level),
+        exp: normalizeNumber(player.exp),
+        drag_kills: normalizeNumber(player.drag_kills),
+        pvp_kills: normalizeNumber(player.pvp),
+        lays: normalizeNumber(player.laid),
+        gold: normalizeNumber(player.gold),
+        bank: normalizeNumber(player.bank),
+        gems: normalizeNumber(player.gem),
+        clss: normalizeNumber(player.clss),
+        sex: normalizeString(player.sex) || 'M',
     };
 }
 
@@ -158,7 +215,7 @@ function writeWinnerEntry(storage: IStorage, entry: WinnerHistoryEntry): WinnerH
         ...entry,
         id,
     };
-    storage.putRecord(WINNER_HISTORY_TABLE, id, {
+    const storageData = {
         account_username: storedEntry.account_username,
         name: storedEntry.name,
         record: storedEntry.record,
@@ -177,14 +234,26 @@ function writeWinnerEntry(storage: IStorage, entry: WinnerHistoryEntry): WinnerH
         gems: storedEntry.gems,
         clss: storedEntry.clss,
         sex: storedEntry.sex,
-    });
+    };
+    const missingFields = missingWinnerFields(storageData);
+    if (missingFields.length > 0) {
+        throw new Error('[WinnerHistory] Refusing to write incomplete winner_history row idx=' + id + ': missing ' + missingFields.join(', '));
+    }
+    storage.putRecord(WINNER_HISTORY_TABLE, id, storageData);
     return storedEntry;
 }
 
 function parseWinnerEntry(id: number, data: Record<string, unknown>): WinnerHistoryEntry | null {
+    const missingFields = missingWinnerFields(data);
     const name = normalizeString(data.name);
-    if (!name) {
+    if (!name.trim()) {
+        const missingReason = missingFields.length > 0 ? '; missing fields: ' + missingFields.join(', ') : '';
+        reportMalformedWinnerRow(id, 'missing required name; row skipped' + missingReason, data);
         return null;
+    }
+
+    if (missingFields.length > 0) {
+        reportMalformedWinnerRow(id, 'missing fields: ' + missingFields.join(', ') + '; default values applied', data);
     }
 
     return {
@@ -345,8 +414,8 @@ export function summarizeWinnerAccounts(storage: IStorage): WinnerAccountSummary
     }
 
     return Array.from(grouped.entries())
-        .map(([account_username, summary]) => ({
-            account_username,
+        .map(([accountUsername, summary]) => ({
+            account_username: accountUsername,
             wins: summary.wins,
             last_won_at: summary.last_won_at,
             latest_name: summary.latest_name,

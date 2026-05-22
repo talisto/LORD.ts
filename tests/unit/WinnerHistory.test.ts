@@ -1,11 +1,13 @@
-import { getLastWinner, listWinnerHistory, recordWinner, summarizeWinnerAccounts } from '@lordts/core/WinnerHistory';
+import { getLastWinner, listWinnerHistory, recordWinner, summarizeWinnerAccounts, WINNER_HISTORY_TABLE } from '@lordts/core/WinnerHistory';
+import { SqliteStorage } from '@lordts/storage/SqliteStorage';
 import { TestHarness } from '../harness';
 
 describe('WinnerHistory', () => {
-    let harness: TestHarness;
+    let harness: TestHarness | undefined;
 
     afterEach(() => {
-        harness.cleanup();
+        harness?.cleanup();
+        harness = undefined;
     });
 
     test('records winner snapshots and groups wins by account', () => {
@@ -108,5 +110,65 @@ describe('WinnerHistory', () => {
                 player_names: ['Rival'],
             },
         ]);
+    });
+
+    test('logs malformed stored winner-history rows while keeping readable snapshots', () => {
+        harness = TestHarness.create();
+        const storage = harness.context.storage as SqliteStorage;
+        const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+        try {
+            storage.putRecord(WINNER_HISTORY_TABLE, 1, {
+                account_username: 'HeroUser',
+                name: 'Hero',
+                record: 0,
+                won_at: 1_700_000_100,
+            });
+            storage.putRecord(WINNER_HISTORY_TABLE, 2, {
+                account_username: 'NamelessUser',
+                won_at: 1_700_000_101,
+            });
+            storage.db.prepare(`INSERT INTO ${WINNER_HISTORY_TABLE} (idx, data) VALUES (?, ?)`).run(0, 'yesterday');
+
+            expect(listWinnerHistory(storage)).toHaveLength(1);
+            expect(getLastWinner(storage)).toMatchObject({
+                name: 'Hero',
+                account_username: 'HeroUser',
+            });
+            expect(consoleSpy.mock.calls.map(([message]) => String(message))).toEqual(expect.arrayContaining([
+                expect.stringContaining('[storage] Ignoring malformed winner_history record idx=0: invalid JSON'),
+                expect.stringContaining('[WinnerHistory] Detected malformed winner_history row idx=1: missing fields:'),
+                expect.stringContaining('[WinnerHistory] Detected malformed winner_history row idx=2: missing required name; row skipped'),
+            ]));
+        } finally {
+            consoleSpy.mockRestore();
+        }
+    });
+
+    test('rejects invalid winner snapshots before writing malformed rows', () => {
+        harness = TestHarness.create();
+
+        expect(() => recordWinner(harness!.context.storage, {
+            Record: 0,
+            real_name: 'HeroUser',
+            name: '',
+            level: 12,
+            exp: 40000,
+            drag_kills: 2,
+            pvp: 5,
+            laid: 1,
+            gold: 5000,
+            bank: 20000,
+            gem: 12,
+            clss: 1,
+            sex: 'M',
+        }, {
+            winType: 'dragon',
+            winStat: 'drag_kills',
+            roundDays: 42,
+            wonAt: 1_700_000_100,
+        })).toThrow('[WinnerHistory] Cannot record winner without a character name');
+
+        expect(listWinnerHistory(harness.context.storage)).toEqual([]);
     });
 });
