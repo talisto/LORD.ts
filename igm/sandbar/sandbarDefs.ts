@@ -144,11 +144,15 @@ function canAfford(ctx: SandBarContext, cost: number): boolean {
 function spendBarCoins(ctx: SandBarContext, amount: number): void {
     ctx.barcoins -= amount;
     if (ctx.barcoins < 0) ctx.barcoins = 0;
+    ctx.record.barcoins = ctx.barcoins;
+    ctx.record.put();
 }
 
 function earnBarCoins(ctx: SandBarContext, amount: number): void {
     ctx.barcoins += amount;
     if (ctx.barcoins > 2000000000) ctx.barcoins = 2000000000;
+    ctx.record.barcoins = ctx.barcoins;
+    ctx.record.put();
 }
 
 export {
