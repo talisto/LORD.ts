@@ -116,6 +116,8 @@ class SandBar {
         await io.lln('`2You stumble down the path to Sandtiger\'s bar.');
         await io.sln();
 
+        io.events?.emitNavigation('enter', 'sandbar');
+
         // Flavor text
         if (random(2) === 0) {
             await io.lln('`2You see Sandtiger himself give a bearhug to one of his waitresses and drag her upstairs.');
@@ -179,6 +181,7 @@ class SandBar {
     }
 
     private saveAndExit(): void {
+        this.ctx.io.events?.emitNavigation('leave', 'sandbar');
         this.record.barcoins = this.ctx.barcoins;
         this.record.put();
         this.deps.player.put();
@@ -262,6 +265,9 @@ class SandBar {
             player.gold -= goldCost;
             if (player.gold < 0) player.gold = 0;
             earnBarCoins(this.ctx, amount);
+            io.events?.emitEconomy('purchase', amount, 'barcoins', {
+                source: 'sandbar', gold_spent: goldCost, barcoins_total: this.ctx.barcoins,
+            });
 
             await io.lln(`\`2OK, mister.  You're down to \`$${prettyInt(player.gold)} \`2gold.`);
         }

@@ -168,8 +168,19 @@ class RescueThePrincess {
         await this.io.more();
         // Re-randomize the target castle for the next rescue event
         if (castle === this.whichCastle) {
+            this.io.events?.emitForest('event', {
+                type: 'rescue_success',
+                castle: this.castles[castle].name,
+                level: this.player.level,
+                exp_before: this.player.exp,
+            });
             await this._rescueSuccess(lad);
         } else {
+            this.io.events?.emitForest('event', {
+                type: 'rescue_fail',
+                chosen: this.castles[castle].name,
+                target: this.castles[this.whichCastle].name,
+            });
             switch (random(2)) {
                 case 0:
                     await this._hollEncounter();

@@ -107,7 +107,16 @@ class Forest {
     }
 
     private async rescueThePrincess(): Promise<void> {
-        await new RescueThePrincess(this.io, this.player, this.settings, this.castles, this.log, this.dailyMaint, () => this.whichCastle, (v: number) => { this.whichCastle = v; }).run();
+        await new RescueThePrincess(
+            this.io,
+            this.player,
+            this.settings,
+            this.castles,
+            this.log,
+            this.dailyMaint,
+            () => this.whichCastle,
+            (v: number) => { this.whichCastle = v; },
+        ).run();
     }
 
     async olivia(): Promise<void> {
@@ -472,7 +481,14 @@ class Forest {
         this.io.sclrscr();
         this.io.events?.emitForest('search');
         if (random(5) === 1) {
-            switch (random(15 + (this.player.horse ? 1 : 0))) {
+            const eventRoll = random(15 + (this.player.horse ? 1 : 0));
+            this.io.events?.emitForest('event', {
+                roll: eventRoll,
+                forest_fights: this.player.forest_fights,
+                exp: this.player.exp,
+                level: this.player.level,
+            });
+            switch (eventRoll) {
                 case 0:
                     if (random(2) === 1) {
                         if (this.rip) await this.io.showRip("W5"); // flower garden has Y/N prompt

@@ -31,7 +31,7 @@ function makeContext(keys: string[]): SandBarContext {
         config: {
             skillChangeCost: 25,
         } as SandBarContext['config'],
-        record: {} as SandBarContext['record'],
+        record: { barcoins: 0, put: jest.fn() } as unknown as SandBarContext['record'],
         file: {} as SandBarContext['file'],
         barcoins: 100,
     };

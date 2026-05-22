@@ -592,6 +592,10 @@ class Olivia {
         await this.io.sln();
         await this.io.lln("`2Olivia nudges herself to a better speaking position.");
         await this.io.sln();
+        this.io.events?.emitForest('event', {
+            type: 'olivia_castle_hint',
+            castle: this.castles[this.whichCastle].name,
+        });
         if (random(2) === 0) {
             await this.io.lln('`0"I was just thinking about my past.  I grew up in a great palace. I was pampered and treated like a queen.  In fact, I would have been queen too - if not for the evil Duke of..`%' + this.castles[this.whichCastle].name + '`0 was it?  Something like that.  And then.."');
             await this.io.sln();

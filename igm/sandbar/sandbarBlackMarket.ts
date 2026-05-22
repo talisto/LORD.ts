@@ -314,9 +314,15 @@ class SandBarBlackMarket {
         if (ch === 'F') {
             player.forest_fights += amount;
             this.ctx.record.forestFightsBoughtToday += amount;
+            this.ctx.io.events?.emitEconomy('purchase', amount, 'forest_fights', {
+                source: 'sandbar', barcoins_spent: amount * cost, barcoins_remaining: this.ctx.barcoins,
+            });
         } else {
             player.pvp_fights += amount;
             this.ctx.record.pvpFightsBoughtToday += amount;
+            this.ctx.io.events?.emitEconomy('purchase', amount, 'pvp_fights', {
+                source: 'sandbar', barcoins_spent: amount * cost, barcoins_remaining: this.ctx.barcoins,
+            });
         }
         this.ctx.record.put();
 
@@ -367,9 +373,15 @@ class SandBarBlackMarket {
         if (ch === 'E') {
             player.exp += amount;
             if (player.exp > 2000000000) player.exp = 2000000000;
+            this.ctx.io.events?.emitEconomy('purchase', amount, 'experience', {
+                source: 'sandbar', barcoins_spent: amount * cost, barcoins_remaining: this.ctx.barcoins,
+            });
         } else {
             player.gem += amount;
             if (player.gem > 32000) player.gem = 32000;
+            this.ctx.io.events?.emitEconomy('purchase', amount, 'gems', {
+                source: 'sandbar', barcoins_spent: amount * cost, barcoins_remaining: this.ctx.barcoins,
+            });
         }
 
         await io.lln('`0Sold!');
