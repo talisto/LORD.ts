@@ -8,12 +8,12 @@ Olodrin's Orphanage allows players to adopt, sell, and catch children, as well a
 
 ### Features
 
-- **Adopt Kids**: Purchase children for adoption
-- **Give Up for Adoption**: Sell children back to the orphanage
-- **Catch Feral Children**: Hunt down wild children in the fields (with risk of failure and injury)
-- **Trade for Horses**: Exchange children for horses
+- **Adopt Kids**: Purchase children for adoption, with the price doubling for each child you already have
+- **Give Up for Adoption**: Sell children back to the orphanage for a fixed low payout that cannot be farmed into a level-scaling profit loop
+- **Catch Feral Children**: Hunt down wild children in the fields (with risk of failure and injury), but only childless players can gain a child from this route
+- **Trade for Horses**: Exchange children for horses, with the trade requirement capped alongside the orphanage household limit
 - **Unique Backstories**: Each child has a randomly generated name, guardian relationship, and story of how their previous guardian died
-- **Level Scaling**: All costs scale with player level to prevent abuse
+- **Household Limit**: The orphanage refuses to place more than 12 children with the same player
 
 ## Original Credits
 
@@ -32,6 +32,8 @@ Olodrin's Orphanage allows players to adopt, sell, and catch children, as well a
 ## Porting Information
 
 This TypeScript version was ported from the Synchronet BBS JavaScript version.
+
+This port intentionally rebalances the original child economy. The original IGM used only level-based pricing and had no practical child limit, which made it unsafe once children started feeding forest fights, bank income, and other systems in lord-ts.
 
 **This is an unofficial port.** It was created without the permission of the original author. The original author is not affiliated with this project and should not be contacted for support regarding this port. For issues with this version, please use the lord-ts project's issue tracker.
 

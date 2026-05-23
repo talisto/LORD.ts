@@ -5,7 +5,7 @@
 'use strict';
 
 import * as path from 'path';
-import { random } from '@lordts/util/Util';
+import { prettyInt, random } from '@lordts/util/Util';
 import { File } from '@lordts/util/FileUtils';
 import type { IgmDeps } from '@lordts/igm/IgmDeps';
 
@@ -44,6 +44,10 @@ const badcatch: string[] = [
     "You feel an impact in the back of the head and see stars",
     "After feeling pain, you stop biting yourself and take stock"
 ];
+
+const OORPHANS_MAX_KIDS = 12;
+const OORPHANS_SELL_PRICE = 250;
+const OORPHANS_MAX_PRICE = 2000000000;
 
 interface OrphanGuardian {
     title: string;
@@ -106,6 +110,28 @@ class Oorphans {
         await this.io.lln('`r0`0`2`c  `%' + str, 0);
         await this.io.lln('`0-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-', 0);
         await this.io.sln();
+    }
+
+    private getAdoptionPrice(): number {
+        let price = Math.max(1000, Math.round((this.player.level * this.player.level) * 1000));
+        for (let i = 0; i < this.player.kids; i++) {
+            if (price >= Math.floor(OORPHANS_MAX_PRICE / 2)) {
+                return OORPHANS_MAX_PRICE;
+            }
+            price *= 2;
+        }
+        return price;
+    }
+
+    private getHorseTradeCost(): number {
+        return Math.min(this.player.level * this.player.level, OORPHANS_MAX_KIDS);
+    }
+
+    private async showTooManyKidsMessage(): Promise<void> {
+        await this.io.sln();
+        await this.io.lln('`!Olodrin `2glares at the parade of rugrats behind you.', 1);
+        await this.io.lln('`0"No more, nit! `2You already have `$' + prettyInt(this.player.kids) + ' `2children to feed."', 1);
+        await this.io.moreNoMail();
     }
 
     private getboynames(): void {
@@ -204,14 +230,17 @@ class Oorphans {
     }
 
     private async buyOrphans(): Promise<void> {
-        const orphanprice = Math.round((this.player.level * this.player.level)*1000);
-        const forphanprice = String(orphanprice).replace(/(.)(?=(\d{3})+$)/g,'$1,');
+        const orphanprice = this.getAdoptionPrice();
         this.io.sclrscr();
         await this.getHead('Get yourself a waif!');
+        if (this.player.kids >= OORPHANS_MAX_KIDS) {
+            await this.showTooManyKidsMessage();
+            return;
+        }
         const newname = await this.orphanDescription();
         await this.io.moreNoMail();
         await this.io.sln();
-        await this.io.lln("It will cost you `$" + forphanprice + " gold `2 to adopt this child.", 1);
+        await this.io.lln("It will cost you `$" + prettyInt(orphanprice) + " gold `2 to adopt this child.", 1);
         await this.io.sln();
         await this.io.sln();
         const ch = await this.io.prompt(
@@ -237,8 +266,7 @@ class Oorphans {
     }
 
     private async sellOrphans(): Promise<void> {
-        const orphanprice = Math.round(((this.player.level * this.player.level)*1000)/14);
-        const forphanprice = String(orphanprice).replace(/(.)(?=(\d{3})+$)/g,'$1,');
+        const orphanprice = OORPHANS_SELL_PRICE;
         if (this.player.kids < 1) {
             await this.io.sln();
             await this.io.sln();
@@ -253,7 +281,7 @@ class Oorphans {
             this.io.sclrscr();
             await this.getHead('Sell your rugrats');
             await this.io.lln("`2'Hmmm...' says `!Olodrin, `2looking over the youngster you push forward.", 1);
-            await this.io.lln("`2I will give you `$" + forphanprice + "`2 for this child.", 1);
+            await this.io.lln("`2I will give you `$" + prettyInt(orphanprice) + "`2 for this child.", 1);
             const ch = await this.io.prompt(
                 " Do it? [y/N]:",
                 [{ key: 'Y', label: 'Yes' }, { key: 'N', label: 'No' }],
@@ -276,8 +304,7 @@ class Oorphans {
     }
 
     private async tradeOrphansForHorse(): Promise<void> {
-        const orphanstotrade = (this.player.level * this.player.level);
-        const forphanstotrade = String(orphanstotrade).replace(/(.)(?=(\d{3})+$)/g,'$1,');
+        const orphanstotrade = this.getHorseTradeCost();
         if (this.player.horse) {
             await this.io.sln();
             await this.io.sln();
@@ -289,7 +316,7 @@ class Oorphans {
             this.io.sclrscr();
             await this.getHead('Trade ragamuffins for a Steed!');
             await this.io.lln("`!Olodrin `2opens his mouth to speak:", 1);
-            await this.io.lln("For you, I will give you a horse in exchange for `$" + forphanstotrade + " `2children.", 1);
+            await this.io.lln("For you, I will give you a horse in exchange for `$" + prettyInt(orphanstotrade) + " `2children.", 1);
             const ch = await this.io.prompt(
                 " Do it? [y/N]:",
                 [{ key: 'Y', label: 'Yes' }, { key: 'N', label: 'No' }],
@@ -331,6 +358,19 @@ class Oorphans {
         // 1/7 lose exp, 1/7 lose gems (50-74%)
         const resultselect = random(7);
         if ((resultselect == 1) || (resultselect == 6)) {
+            if (this.player.kids >= OORPHANS_MAX_KIDS) {
+                await this.io.lln('`2You lunge forward, but the little brat takes one look at your brood and bolts!', 1);
+                await this.io.lln('`!Olodrin `2howls with laughter. `0"No more, nit! `2Your house is full already!"', 1);
+                await this.io.moreNoMail();
+                return;
+            }
+            if (this.player.kids > 0) {
+                await this.io.lln('`2You nearly snatch the little guttersnipe by the collar...', 1);
+                await this.io.lln('`2but the brat spots the child already hanging on you and tears off laughing!', 1);
+                await this.io.lln('`!Olodrin `2cackles. `0"One at a time, nit! `2Take that one home first."', 1);
+                await this.io.moreNoMail();
+                return;
+            }
             await this.io.lln("`2" + goodcatch[random(goodcatch.length)], 1);
             await this.io.moreNoMail();
             this.player.kids += 1;

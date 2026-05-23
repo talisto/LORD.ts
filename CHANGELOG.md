@@ -7,6 +7,12 @@ originally created by Seth Able Robinson.
 
 ## [Unreleased]
 
+## [1.4.5] - 2026-05-23
+
+### Changed
+
+- Olodrin's Orphanage now caps households at 12 children, doubles adoption prices for each child already owned, pays a fixed low resale value, caps the child-for-horse trade at the same limit, and no longer grants extra feral-child gains once the player already has a child
+
 ## [1.4.4] - 2026-05-22
 
 ### Fixed
