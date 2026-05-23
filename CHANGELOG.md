@@ -7,6 +7,12 @@ originally created by Seth Able Robinson.
 
 ## [Unreleased]
 
+## [1.4.4] - 2026-05-22
+
+### Fixed
+
+- session debug logger now sanitizes filenames derived from account usernames with `filenamify` before creating files under `runtime/logs`, preventing path traversal or unsafe filename issues from crafted usernames
+
 ## [1.4.3] - 2026-05-22
 
 ### Fixed

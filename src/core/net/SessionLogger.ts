@@ -19,6 +19,7 @@
 
 'use strict';
 
+import filenamify from 'filenamify';
 import * as fs from 'fs';
 import * as path from 'path';
 import type { GameEvent, GameEventListener } from '../GameEvents';
@@ -33,6 +34,12 @@ const LEVEL_RANK: Record<DebugLevel, number> = {
     debug: 3,
 };
 
+const WINDOWS_RESERVED_LOG_NAMES = new Set([
+    'con', 'prn', 'aux', 'nul',
+    'com1', 'com2', 'com3', 'com4', 'com5', 'com6', 'com7', 'com8', 'com9',
+    'lpt1', 'lpt2', 'lpt3', 'lpt4', 'lpt5', 'lpt6', 'lpt7', 'lpt8', 'lpt9',
+]);
+
 /** Read DEBUG_LEVEL from env, default to 'none'. */
 function getDebugLevel(): DebugLevel {
     const raw = (process.env.DEBUG_LEVEL || '').toLowerCase().trim();
@@ -46,6 +53,19 @@ function getDebugPlayers(): string | string[] | null {
     if (!raw) return null;
     if (raw === '*') return '*';
     return raw.split(',').map(s => s.trim().toLowerCase()).filter(s => s.length > 0);
+}
+
+export function buildSessionLogFilename(username: string): string {
+    const safeStem = filenamify(username, { replacement: '_' }) || 'user';
+    if (WINDOWS_RESERVED_LOG_NAMES.has(safeStem.toLowerCase())) {
+        return '_' + safeStem + '.log';
+    }
+
+    return safeStem + '.log';
+}
+
+export function buildSessionLogPath(runtimeDir: string, username: string): string {
+    return path.join(runtimeDir, 'logs', buildSessionLogFilename(username));
 }
 
 export class SessionLogger {
@@ -71,7 +91,7 @@ export class SessionLogger {
             fs.mkdirSync(logDir, { recursive: true });
         }
 
-        const logFile = path.join(logDir, this._username + '.log');
+        const logFile = buildSessionLogPath(this._runtimeDir, this._username);
         this._stream = fs.createWriteStream(logFile, { flags: 'a' });
 
         this._writeRaw('--- SESSION START (level=' + this._level + ') ---');

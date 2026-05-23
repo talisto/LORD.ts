@@ -1,6 +1,6 @@
 {
   "name": "lord-ts",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Legend of the Red Dragon - Typescript / Node.js port",
   "main": "server.js",
   "engines": {
@@ -50,6 +50,7 @@
   "dependencies": {
     "@sentry/node": "^10.41.0",
     "better-sqlite3": "^12.6.2",
+    "filenamify": "^7.0.1",
     "handlebars": "^4.7.8",
     "nodemailer": "^8.0.3",
     "tsx": "^4.0.0",
@@ -75,13 +76,16 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "transform": {
-      "^.+\\.tsx?$": [
+      "^.+\\.[jt]sx?$": [
         "ts-jest",
         {
           "tsconfig": "tests/tsconfig.json"
         }
       ]
     },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(filenamify|filename-reserved-regex)/)"
+    ],
     "moduleFileExtensions": [
       "ts",
       "js",

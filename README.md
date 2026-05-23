@@ -198,6 +198,8 @@ All game settings use the `LORD_` prefix in SCREAMING_SNAKE_CASE. Server-level s
 | `HTTP_PORT` | `80` | HTTP/WebSocket listener for `/api/*` and `/ws` (set to empty/false/null to disable) |
 | `TELNET_PORT` | `2323` | Telnet server port (set to empty/false/null to disable) |
 | `SENTRY_DSN` | _(none)_ | Sentry error reporting DSN |
+| `DEBUG_LEVEL` | `none` | Session debug logging level: `none`, `error`, `info`, or `debug` |
+| `DEBUG_PLAYERS` | _(none)_ | Which session usernames to log: `*` for all, or a comma-separated list such as `player1,player2` |
 | `SMTP_HOST` | _(none)_ | SMTP server hostname |
 | `SMTP_PORT` | `587` | SMTP server port |
 | `SMTP_SECURE` | `false` | Use TLS for SMTP connection |
@@ -207,6 +209,35 @@ All game settings use the `LORD_` prefix in SCREAMING_SNAKE_CASE. Server-level s
 | `SMTP_TO` | _(none)_ | Recipient email address for notifications |
 
 **Note:** SMTP settings are currently used only to send a notification to the operator when the game ends. Configure these settings if you want to receive automated email alerts for game-end events.
+
+### Debug Session Logging
+
+Structured per-session logging is opt-in and configured entirely with environment variables. When enabled, LORD.ts writes one log file per selected session username to `runtime/logs/`.
+
+`DEBUG_LEVEL` controls verbosity:
+
+- `none`: logging disabled (default)
+- `error`: only abnormal conditions such as unexpected session failures and malformed stored rows
+- `info`: session lifecycle, navigation, economy, combat outcomes, and forest events
+- `debug`: full tracing, including prompts, event rolls, and attack-by-attack combat details
+
+`DEBUG_PLAYERS` controls which usernames are logged. Set it to `*` to log every session, or provide a comma-separated list of usernames. Matching is case-insensitive.
+
+Log filenames are sanitized with `filenamify` before they are created. Ordinary usernames keep the readable `runtime/logs/<username>.log` pattern, while usernames containing filesystem-unsafe characters are rewritten to a safe filename.
+
+Examples:
+
+```bash
+# Log all sessions at info level
+DEBUG_LEVEL=info
+DEBUG_PLAYERS=*
+
+# Trace one or two specific users very verbosely
+DEBUG_LEVEL=debug
+DEBUG_PLAYERS=player1,player2
+```
+
+The session logger is file-based only. It does not change normal game output or what players see in the client.
 
 ### Game Settings
 
