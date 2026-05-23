@@ -5,6 +5,25 @@ All notable changes to Legend of the Red Dragon (LORD) are documented in this fi
 This project is a Node.js / TypeScript port of the classic BBS door game LORD v4.08,
 originally created by Seth Able Robinson.
 
+## [Unreleased]
+
+## [1.4.3] - 2026-05-22
+
+### Fixed
+
+- **Sandbar disconnect exploit**: BarCoin balance is now persisted immediately on every spend/earn, preventing players from disconnecting mid-session to keep purchased stats (forest fights, XP, gems) while retaining unspent BarCoins
+
+### Added
+
+- **Session debug logger**: per-player activity logging. Set `DEBUG_LEVEL=debug` and `DEBUG_PLAYERS=*` (or comma-separated names) to log all game events to `runtime/logs/<username>.log`. Levels: `none` (default), `error`, `info`, `debug`
+- Forest event instrumentation: rescue success/fail outcomes, Olivia castle hint reveals, and event roll details are now emitted as game events (visible in debug logs and WebSocket clients)
+- Sandbar economy events: gold-to-BarCoin exchanges, fight/XP/gem purchases now emit structured economy events
+
+### Changed
+
+- SQLite-backed record stores now log and skip malformed non-JSON record rows instead of silently dropping them or crashing winner-history reads such as `/api/server-info`
+- winner-history now rejects invalid winner snapshots before writing incomplete rows, and logs incomplete persisted winner snapshots when it has to apply default values for missing fields
+
 ## [1.4.2] - 2026-05-13
 
 ### Changed in 1.4.2
