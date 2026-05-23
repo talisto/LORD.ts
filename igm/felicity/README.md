@@ -13,9 +13,15 @@ Felicity's Temple adds a new temple location to LORD with multiple interactive a
 - **Fountain**: Interact with a magical fountain (once per day)
 - **Behind the Temple**: Search for hidden treasures
 - **Prayer Rooms**: Spiritual interactions with various effects
-- **Secret Areas**: Janitor's Room (help the janitor, search lost & found) and a hidden Storage Room
+- **Secret Areas**: Janitor's Room (help the janitor, search lost & found) and a hidden Storage Room with a rebalanced nursery economy
 - **Arcade**: Warrior's Revenge game with top-ten score tracking
 - **NPC Interactions**: Daily-limited encounters with stat and resource effects
+
+### Nursery Balance
+
+- **Household Limit**: The nursery refuses to place more than 12 children with the same player
+- **Escalating Adoption Cost**: The adoption price doubles for each child you already have
+- **Fixed Resale Value**: Giving up a child always pays 250,000 gold instead of scaling upward with player wealth or progression
 
 ## Original Credits
 
@@ -33,6 +39,8 @@ Felicity's Temple adds a new temple location to LORD with multiple interactive a
 ## Porting Information
 
 This TypeScript version was reverse-engineered from the original DOS executable, a Borland Pascal binary. The decompiled output and original documentation served as references for the port.
+
+This port intentionally rebalances the nursery economy. The original child-related rewards combine with lord-ts systems such as daily forest fights and Seth child-support bank deposits, so the nursery now limits household size and raises costs sharply as families grow.
 
 **This is an unofficial port.** It was created without the permission of the original author. The original author is not affiliated with this project and should not be contacted for support regarding this port. For issues with this version, please use the lord-ts project's issue tracker.
 

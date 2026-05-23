@@ -9,7 +9,7 @@ import type IO from '@lordts/core/io/IO';
 import type Player from '@lordts/core/Player';
 import type Log from '@lordts/core/Log';
 import type { Settings } from '@lordts/core/types';
-import { skillClassName, skillFieldName, skillUseFieldName } from './data';
+import { MAX_KIDS_TOTAL, skillClassName, skillFieldName, skillUseFieldName } from './data';
 
 /** Sentinel thrown to abort RHP execution cleanly */
 export class RhpExit extends Error { constructor() { super('RhpExit'); this.name = 'RhpExit'; } }
@@ -492,8 +492,9 @@ export class RhpEngine {
             newVal = currentVal + delta;
         }
 
-        const diff = newVal - currentVal;
         this.setStatNum(stat, newVal);
+        const appliedVal = this.getStatNum(stat);
+        const diff = appliedVal - currentVal;
 
         // Notify player (not in mail recording, not for variables)
         if (this.state.recording === 'none' && !stat.startsWith('VARIABLE')) {
@@ -548,7 +549,7 @@ export class RhpEngine {
         case 'SEARCH': this.caveSearches = Math.max(0, Math.min(128, val)); break;
         case 'FOREST': p.forest_fights = val; break;
         case 'FIGHTS': p.pvp_fights = val; break;
-        case 'KIDS': p.kids = val; break;
+        case 'KIDS': p.kids = Math.min(val, MAX_KIDS_TOTAL); break;
         case 'DEFENCE': case 'DEFENSE': p.def = val; break;
         case 'STRENGTH': p.str = val; break;
         case 'EXPERIENCE': p.exp = val; break;

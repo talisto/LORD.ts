@@ -52,6 +52,7 @@
 `7(`43`7) `8Lady Muerte
 @PROMPT@ 123
 @##1
+@IF@ KIDS>15 @GOTO@ @#ChildCap
 `7You tenderly embrace Lady Deedtree and share a passionate kiss.  You
 `7cherish each other and enjoy a night of tender love.  You wish morning
 `7would never come.  With regret you leave her only to be surprised a few
@@ -116,6 +117,7 @@
 `7(`43`7) `8Lord Muerte
 @PROMPT@ 123
 @##1
+@IF@ KIDS>15 @GOTO@ @#ChildCap
 `7You tenderly embrace Lord Malthos and share a passionate kiss.  You
 `7cherish each other and enjoy a night of tender love.  You wish morning
 `7would never come.  With regret you leave him only to be surprised a few
@@ -150,6 +152,15 @@
 @##C
 `4CRIPES GIRL!  NO WONDER YOU CAN'T EVER GET A DATE!
 @CHARM@ -5
+@GOTO@ @#Ending
+@#ChildCap
+`7Months later, word reaches you that a child was born from your passionate
+`7night together.  Your heart leaps, but then you remember the new `#Town Law.
+`7It says no household may take in more than `#16 `7children.  With a heavy
+`7heart, you arrange for the `#King's Orphanage `7to place the child with a
+`7good family.  It isn't the ending you wanted, but at least the child will
+`7be loved.
+@LAYS@ 1
 @GOTO@ @#Ending
 @#Ending
 `7You make your way back to the main tunnel.

@@ -11,6 +11,7 @@ L.O.R.D. Cavern is a random-event exploration IGM where players venture into a c
 - **14 Random Event Types**: Including the Voice, Falls, Bats, River crossings, Skeleton encounters, Monster battles, the Riddler, a Bridge Keeper (Troll), and more
 - **Interactive Puzzles**: Bridge Keeper riddles and the Riddler's questions test player knowledge
 - **Kid Adoption**: Find and adopt Oliver (up to 4 kids per visit)
+- **Child Reward Limits**: Both Oliver and scripted child-award encounters now honor the cave's 16-child family cap
 - **Equipment Trading**: Exchange weapons and armor with Skeleton encounters
 - **Magical Events**: Fairy saves, horses appearing on exit, shiny river discoveries
 - **Configurable**: 10–15 cave searches per day (sysop configurable)
@@ -53,6 +54,8 @@ L.O.R.D. Cavern is a random-event exploration IGM where players venture into a c
 ## Porting Information
 
 This TypeScript version was reverse-engineered from the original DOS executable, a Borland Pascal binary.
+
+This port intentionally keeps LordCave's child-granting encounters aligned with its built-in family cap. Scripted `@KIDS@` rewards are clamped to the same 16-child limit used by the main Oliver adoption event.
 
 **This is an unofficial port.** It was created without the permission of the original author(s). The original author(s) are not affiliated with this project and should not be contacted for support regarding this port. For issues with this version, please use the lord-ts project's issue tracker.
 

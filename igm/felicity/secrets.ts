@@ -3,9 +3,14 @@
  * Storage Room (stable, fairy pool, kids) and Janitor's Room.
  * Original by Lloyd Hannesson (1995-2002), Tech'N Software Group.
  */
-import { random } from '@lordts/util/Util';
+import { prettyInt, random } from '@lordts/util/Util';
 import type { FelicityBase } from './felicityBase';
 import { LOST_AND_FOUND, JANITOR_HELP } from './felicityDefs';
+
+const FELICITY_NURSERY_MAX_KIDS = 12;
+const FELICITY_NURSERY_BASE_PRICE = 1000000;
+const FELICITY_NURSERY_SELL_PRICE = 250000;
+const FELICITY_NURSERY_MAX_PRICE = 2000000000;
 
 /* ═══════════════════════════════════════════
    Storage Room
@@ -233,6 +238,22 @@ async function kidsArea(ctx: FelicityBase): Promise<void> {
     await ctx.pressAKey();
 }
 
+function getNurseryAdoptionPrice(kids: number): number {
+    let price = FELICITY_NURSERY_BASE_PRICE;
+    for (let i = 0; i < kids; i++) {
+        if (price >= Math.floor(FELICITY_NURSERY_MAX_PRICE / 2)) {
+            return FELICITY_NURSERY_MAX_PRICE;
+        }
+        price *= 2;
+    }
+    return price;
+}
+
+async function showNurseryFullMessage(ctx: FelicityBase): Promise<void> {
+    await ctx.io.lln('`0"Whoa there! You already have `%' + prettyInt(ctx.player.kids) + ' `0kids!!! What do you think this is, your own orphanage!?"');
+    await ctx.io.lln('`2The Man folds his arms and refuses to hand you another brat.');
+}
+
 async function _giveUpChild(ctx: FelicityBase): Promise<void> {
     if (ctx.player.kids <= 0) {
         await ctx.io.lln('`0"You don\'t have a kid! How could you put one up for adoption!?"');
@@ -244,9 +265,9 @@ async function _giveUpChild(ctx: FelicityBase): Promise<void> {
         await ctx.io.sln();
         if (confirm === 'Y') {
             await ctx.io.lln('`0"Ok well I\'ll take a kid off your hands."');
-            await ctx.io.lln('`2The Man pays you your 250,000 gold. You feel different somehow!');
+            await ctx.io.lln('`2The Man pays you your ' + prettyInt(FELICITY_NURSERY_SELL_PRICE) + ' gold. You feel different somehow!');
             ctx.player.kids -= 1;
-            ctx.goldCheck(250000);
+            ctx.goldCheck(FELICITY_NURSERY_SELL_PRICE);
             // Selling a kid: -5 charm penalty (guard prevents going below 0)
             if (ctx.player.cha > 4) {
                 ctx.charmCheck(-5);
@@ -256,14 +277,20 @@ async function _giveUpChild(ctx: FelicityBase): Promise<void> {
 }
 
 async function _adoptChild(ctx: FelicityBase): Promise<void> {
-    await ctx.io.lln('`0"So you want to adopt eh??? Well I\'ll let you skip all the legal crap, and I\'ll give you this kid for 1,000,000 gold!');
+    if (ctx.player.kids >= FELICITY_NURSERY_MAX_KIDS) {
+        await showNurseryFullMessage(ctx);
+        return;
+    }
+
+    const adoptionPrice = getNurseryAdoptionPrice(ctx.player.kids);
+    await ctx.io.lln('`0"So you want to adopt eh??? Well I\'ll let you skip all the legal crap, and I\'ll give you this kid for ' + prettyInt(adoptionPrice) + ' gold!');
     await ctx.io.lw('`2So how about it? Is it a deal? `0[`2Y`0/`2N`0] `2: ');
     ctx.io.emitPrompt('felicity_adopt_kid', [{ key: 'Y', label: 'Yes' }, { key: 'N', label: 'No' }]);
     const adopt = (await ctx.io.getkey()).toUpperCase();
     await ctx.io.sln();
     if (adopt === 'Y') {
-        if (ctx.player.gold >= 1000000) {
-            ctx.goldCheck(-1000000);
+        if (ctx.player.gold >= adoptionPrice) {
+            ctx.goldCheck(-adoptionPrice);
             await ctx.io.lln('`2You hand over the gold...');
             await ctx.io.lln('`0"Thanx! I didn\'t think anyone would take one of these brats, ahh I mean nice children off my hands!!');
 
@@ -284,7 +311,7 @@ async function _adoptChild(ctx: FelicityBase): Promise<void> {
             }
             ctx.player.kids += 1;
         } else {
-            await ctx.io.lln('`0"You don\'t have 1,000,000 gold on hand!!! Get a job!');
+            await ctx.io.lln('`0"You don\'t have ' + prettyInt(adoptionPrice) + ' gold on hand!!! Get a job!');
         }
     }
 }

@@ -7,6 +7,13 @@ originally created by Seth Able Robinson.
 
 ## [Unreleased]
 
+## [1.4.6] - 2026-05-23
+
+### Changed
+
+- Felicity's Temple nursery now caps households at 12 children, doubles adoption prices for each child already owned, and keeps child resale at a fixed 250,000 gold so wealthy players cannot use the nursery to stockpile children for daily forest-fight and bank-income abuse
+- LordCave's `women.rhp` child-award encounter now respects the cave's 16-child family cap, and the RHP engine clamps all scripted `@KIDS@` rewards to the same limit so custom scripts cannot silently bypass it
+
 ## [1.4.5] - 2026-05-23
 
 ### Changed

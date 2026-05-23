@@ -1,6 +1,6 @@
 {
   "name": "lord-ts",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Legend of the Red Dragon - Typescript / Node.js port",
   "main": "server.js",
   "engines": {
