@@ -7,6 +7,10 @@ originally created by Seth Able Robinson.
 
 ## [Unreleased]
 
+### Fixed
+
+- IGM child processes now load the already-authenticated caller record directly instead of rerunning the interactive login flow, preventing launches from crashing when battle-coordinator dependencies are unavailable
+
 ## [1.4.6] - 2026-05-23
 
 ### Changed
