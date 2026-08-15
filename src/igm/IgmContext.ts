@@ -214,9 +214,12 @@ export class IgmContext {
         // Load game state
         await this.state.getState(false);
 
-        // INFO.<node> carries the caller's record number. Load that specific
-        // player row so the child IGM sees the same character as the parent.
-        await this.player.loadPlayer(false);
+        // INFO.<node> carries the caller's record number. An IGM is entered
+        // from an already-authenticated parent session, so it must load that
+        // exact row directly rather than run Player.loadPlayer(). The latter
+        // is an interactive login path and expects Game and
+        // IBattleCoordinator dependencies that do not exist in this child
+        // context.
         const record = this.player.playerGet(accountNumber);
         if (!record) {
             throw new Error(`Player record ${accountNumber} not found in database`);
